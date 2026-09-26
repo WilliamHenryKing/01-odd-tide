@@ -106,6 +106,20 @@ export class Pipeline {
 
     this.ao = new GTAOPass(scene, camera, 1, 1);
     this.ao.blendIntensity = 0.85;
+    // GTAO's pre-pass is a full renderer.render(), which would redraw every shadow map (the
+    // 4096² sun map and the six-face interior cube) a second time each frame. The scene pass
+    // has already drawn them.
+    const aoRender = this.ao.render.bind(this.ao);
+    this.ao.render = ((...args: Parameters<GTAOPass["render"]>) => {
+      const shadows = this.renderer.shadowMap;
+      const auto = shadows.autoUpdate;
+      shadows.autoUpdate = false;
+      try {
+        aoRender(...args);
+      } finally {
+        shadows.autoUpdate = auto;
+      }
+    }) as GTAOPass["render"];
     this.ao.updateGtaoMaterial({
       radius: 0.6,
       distanceExponent: 1.4,

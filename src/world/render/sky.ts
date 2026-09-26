@@ -208,7 +208,10 @@ export class SkyDome {
     this.mesh = new Mesh(new SphereGeometry(1, 48, 24), this.material);
     this.mesh.name = "sky";
     this.mesh.frustumCulled = false;
-    this.mesh.renderOrder = -1000;
+    // Drawn after all opaque geometry (and before the blended sea and glass) so the depth test
+    // rejects every pixel the island or seabed already covers: the ray-marched atmosphere is
+    // the most expensive shader in the scene and must only run where the sky is visible.
+    this.mesh.renderOrder = 1000;
     this.mesh.scale.setScalar(20_000);
   }
   apply(sky: Celestial, time: number, ambient: SkyAmbient) {

@@ -21,13 +21,23 @@ const debugMode = import.meta.env.DEV
 
 export type TerrainSets = { rock: PbrSet; rockAlt: PbrSet; sand: PbrSet; turf: PbrSet };
 
-export function createTerrainMaterial(sets: TerrainSets, shared: TerrainUniforms) {
+export function createTerrainMaterial(
+  sets: TerrainSets,
+  shared: TerrainUniforms,
+  /**
+   * Sand-only variant for flat seabed: the same shading as full terrain where sand covers it,
+   * with 3 texture fetches instead of 21 (no rock or turf triplanar work).
+   */
+  options: { flatSand?: boolean } = {},
+) {
+  const flatSand = options.flatSand === true;
   const material = new MeshStandardMaterial({
-    name: "terrain",
+    name: flatSand ? "terrain-flat-sand" : "terrain",
     roughness: 1,
     metalness: 0,
     vertexColors: true,
   });
+  if (flatSand) material.defines = { TERRAIN_FLAT_SAND: "" };
   const maps: Record<string, { value: Texture }> = {
     rockColour: { value: sets.rock.colour },
     rockNormal: { value: sets.rock.normal },
@@ -125,6 +135,15 @@ export function createTerrainMaterial(sets: TerrainSets, shared: TerrainUniforms
         float bakedAo = vColor.r;
         float variation = vColor.a;
 
+        vec2 topUv = P.xz;
+        vec3 sandAlbedo = texture2D(sandColour, topUv * 0.42).rgb;
+        vec3 sandArmV = texture2D(sandArm, topUv * 0.42).rgb;
+        #ifdef TERRAIN_FLAT_SAND
+        float sandMask = 1.0;
+        vec3 albedo = sandAlbedo;
+        vec3 arm = sandArmV;
+        vec3 terrainN = topNormal(sandNormal, topUv * 0.42, N);
+        #else
         // Sandstone: two scans blended by a slow macro field; bedding bands tint by height.
         vec4 rockA = tri(rockColour, P, W, 0.33);
         vec4 rockB = tri(rockAltColour, P, W, 0.29);
@@ -140,9 +159,6 @@ export function createTerrainMaterial(sets: TerrainSets, shared: TerrainUniforms
         rockAlbedo = mix(vec3(rockLuma), rockAlbedo, 0.62) * vec3(1.16, 1.05, 0.86);
         rockAlbedo *= strata * mix(0.9, 1.08, variation);
 
-        vec2 topUv = P.xz;
-        vec3 sandAlbedo = texture2D(sandColour, topUv * 0.42).rgb;
-        vec3 sandArmV = texture2D(sandArm, topUv * 0.42).rgb;
         // Spring turf on the art direction's low-saturation olive, not dry soil.
         vec3 turfAlbedo = texture2D(turfColour, topUv * 0.36).rgb * mix(0.85, 1.1, macro) * vec3(0.92, 1.08, 0.78);
         vec3 turfArmV = texture2D(turfArm, topUv * 0.36).rgb;
@@ -159,6 +175,7 @@ export function createTerrainMaterial(sets: TerrainSets, shared: TerrainUniforms
         vec3 terrainN = triNormal(rockNormal, P, N, W, 0.33);
         terrainN = normalize(mix(terrainN, topNormal(sandNormal, topUv * 0.42, N), sandMask));
         terrainN = normalize(mix(terrainN, topNormal(turfNormal, topUv * 0.36, N), turfMask));
+        #endif
 
         // Intertidal zone: rock below the high-water mark is darker, algae-stained in hollows.
         float intertidal = 1.0 - smoothstep(HIGH_WATER - 0.25, HIGH_WATER + 0.3, P.y + (macro - 0.5) * 0.35);
@@ -216,6 +233,7 @@ export function createTerrainMaterial(sets: TerrainSets, shared: TerrainUniforms
         #include <opaque_fragment>`,
       );
   };
-  material.customProgramCacheKey = () => "odd-tide-terrain-v1";
+  material.customProgramCacheKey = () =>
+    flatSand ? "odd-tide-terrain-v1-flat-sand" : "odd-tide-terrain-v1";
   return material;
 }

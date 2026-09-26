@@ -121,6 +121,12 @@ export function createIsland(
   interiorShadow.shadow.camera.near = 0.05;
   interiorShadow.shadow.camera.far = 7;
   interiorShadow.shadow.bias = -0.002;
+  // Six faces a frame is the costliest shadow in the scene; the frame loop redraws it only
+  // while the lamp is lit and something that shapes it has changed. It must still render once:
+  // an unallocated shadow map leaves shadow samplers bound to the wrong texture type and the
+  // draws that sample it fail.
+  interiorShadow.shadow.autoUpdate = false;
+  interiorShadow.shadow.needsUpdate = true;
   scene.add(interiorShadow);
   const interiorPractical = rig.registerPractical(interiorShadow, 0);
 
@@ -599,7 +605,11 @@ async function buildWorld(context: WorldContext): Promise<World> {
     }
   });
   root.add(terrainGltf.scene);
-  root.add(farSeabed(terrainMaterial));
+  root.add(
+    farSeabed(
+      createTerrainMaterial({ rock, rockAlt, sand, turf }, terrainUniforms, { flatSand: true }),
+    ),
+  );
   const seaUniforms = { time: { value: 0 }, level: { value: 0.5 } };
   const seaSun: SeaSun = {
     direction: { value: new Vector3(0, 1, 0) },
@@ -786,6 +796,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
   root.add(bird);
 
   const tmp = new Vector3();
+  let interiorShadowKey = "";
   return {
     frame(hour, time, animated) {
       const state = context.getState();
@@ -802,6 +813,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
       const interior = clamp01((hour - 17.75) / 0.5);
       const walkOn = (order: number) => clamp01((hour - 18 - order * 0.05) / 0.25);
       const open = context.getOpen();
+      let interiorKey = "off";
       for (const id of Object.keys(stays) as StayId[])
         stays[id].setOpen(id === state.selected ? open : 0);
       for (const stay of stayLights) {
@@ -815,9 +827,15 @@ async function buildWorld(context: WorldContext): Promise<World> {
             context.interiorShadow.position.copy(tmp);
             context.interiorPractical.candela = stays[stay.id].lights[0]?.candela ?? 20;
             context.interiorPractical.on = interior;
+            if (interior > 0)
+              interiorKey = `${stay.id}|${open.toFixed(3)}|${tmp.x.toFixed(3)},${tmp.y.toFixed(3)},${tmp.z.toFixed(3)}`;
           }
         });
         for (const glow of stay.glows) glow.on = 0.02 + interior;
+      }
+      if (interiorKey !== interiorShadowKey) {
+        if (interiorKey !== "off") context.interiorShadow.shadow.needsUpdate = true;
+        interiorShadowKey = interiorKey;
       }
       legacyGlow.on = 0.03 + interior;
       for (const light of bathLights) light.on = interior;
@@ -882,7 +900,7 @@ function clamp01(value: number) {
   return Math.max(0, Math.min(1, value));
 }
 
-/** Flat seabed ring beyond the baked terrain, shaded by the same terrain material (sand). */
+/** Flat seabed ring beyond the baked terrain, shaded as sand by the terrain material's flat variant. */
 function farSeabed(material: Material) {
   // Starts well inside the baked rectangle (which ends 22 m out toward the camera) and sits
   // just under its edge depth, so the two seabeds overlap instead of leaving a gap.

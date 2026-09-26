@@ -1,0 +1,4 @@
+[
+  { "id": "scene-1", "kind": "island", "fullHD": true, "warmup": 10, "seconds": 60 },
+  { "id": "scene-2", "kind": "island", "fullHD": true, "warmup": 10, "seconds": 60 }
+]

@@ -128,12 +128,16 @@ export class LightingRig {
     return emissive;
   }
 
-  /** Brings sky, key light, environment, haze and practicals to the given hour. */
-  apply(hour: number, time: number, camera: PerspectiveCamera, forceBake = false): Celestial {
+  /**
+   * Brings sky, key light, environment, haze and practicals to the given hour. 'exact' skips
+   * the rebake throttle so a captured or benchmarked frame never shows a stale environment; the
+   * environment depends only on the hour, so an unchanged hour never rebakes.
+   */
+  apply(hour: number, time: number, camera: PerspectiveCamera, exact = false): Celestial {
     const sky = celestial(hour);
     this.sky_state = sky;
     const p = sky.preExposure;
-    if (forceBake || Math.abs(hour - this.ambientHour) > 0.004) {
+    if ((exact && hour !== this.ambientHour) || Math.abs(hour - this.ambientHour) > 0.004) {
       this.ambient = skyAmbient(sky);
       this.ambientHour = hour;
     }
@@ -165,8 +169,8 @@ export class LightingRig {
 
     const now = performance.now();
     if (
-      forceBake ||
       !this.environment ||
+      (exact && hour !== this.bakedHour) ||
       (Math.abs(hour - this.bakedHour) > 0.004 && now - this.lastBake > 110)
     ) {
       this.environment = this.baker.bake(sky, time, this.ambient);
