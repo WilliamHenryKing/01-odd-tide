@@ -143,7 +143,8 @@ export function createTerrainMaterial(sets: TerrainSets, shared: TerrainUniforms
         vec2 topUv = P.xz;
         vec3 sandAlbedo = texture2D(sandColour, topUv * 0.42).rgb;
         vec3 sandArmV = texture2D(sandArm, topUv * 0.42).rgb;
-        vec3 turfAlbedo = texture2D(turfColour, topUv * 0.36).rgb * mix(0.85, 1.1, macro);
+        // Spring turf on the art direction's low-saturation olive, not dry soil.
+        vec3 turfAlbedo = texture2D(turfColour, topUv * 0.36).rgb * mix(0.85, 1.1, macro) * vec3(0.92, 1.08, 0.78);
         vec3 turfArmV = texture2D(turfArm, topUv * 0.36).rgb;
 
         // Height-aware blending: sand fills rock hollows first, turf thins over rock highs.

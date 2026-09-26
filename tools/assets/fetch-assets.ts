@@ -39,6 +39,8 @@ type ModelJob = {
   alpha?: string[];
   /** Target triangle ratio for gltf-transform simplify (1 = none). */
   simplify?: number;
+  /** Ship only the scan's colour map and alpha (for card textures), not its geometry. */
+  textureOnly?: boolean;
 };
 
 export const JOBS: (TextureJob | ModelJob)[] = [
@@ -97,6 +99,53 @@ export const JOBS: (TextureJob | ModelJob)[] = [
     res: "1k",
     role: "cliff-base kitbash rock (layered sandstone scan)",
     title: "Rock Face 02",
+    author: "Poly Haven",
+  },
+  // Vegetation (C4): alpha-tested cards; the glTFs omit their alpha maps, fetched separately.
+  {
+    kind: "model",
+    id: "shrub_03",
+    res: "1k",
+    role: "coastal scrub and stone-pine canopy clusters",
+    title: "Shrub 03",
+    author: "Poly Haven",
+    alpha: ["shrub_03_alpha_1k.png"],
+  },
+  {
+    kind: "model",
+    id: "shrub_02",
+    res: "1k",
+    role: "leaf texture for procedural scrub and canopy card clusters",
+    title: "Shrub 02",
+    author: "Poly Haven",
+    alpha: ["shrub_02_alpha_1k.png"],
+    textureOnly: true,
+  },
+  {
+    kind: "model",
+    id: "fern_02",
+    res: "1k",
+    role: "sheltered ferns by buildings",
+    title: "Fern 02",
+    author: "Poly Haven",
+    alpha: ["fern_02_alpha_1k.png"],
+  },
+  {
+    kind: "model",
+    id: "grass_medium_02",
+    res: "1k",
+    role: "turf clumps and rim tussocks (simplified)",
+    simplify: 0.35,
+    title: "Grass Medium 02",
+    author: "Poly Haven",
+    alpha: ["grass_medium_02_alpha_1k.png"],
+  },
+  {
+    kind: "texture",
+    id: "bark_brown_02",
+    res: "1k",
+    role: "procedural tree trunks and branches",
+    title: "Bark Brown 02",
     author: "Poly Haven",
   },
   // Architecture (C3)
@@ -280,10 +329,54 @@ for (const job of JOBS) {
       await download(`${HOST}/Models/jpg/${job.res}/${job.id}/${path.basename(image.uri)}`, local);
       originals[image.uri] = sha(local);
     }
+    const alphaOutputs: { path: string; bytes: number; sha256: string }[] = [];
+    const shipDir = job.textureOnly
+      ? path.join(ROOT, "public", "textures", job.id)
+      : path.join(ROOT, "public", "models");
     for (const alpha of job.alpha ?? []) {
       const local = path.join(srcDir, "textures", alpha);
       await download(`${HOST}/Models/png/${job.res}/${job.id}/${alpha}`, local);
       originals[alpha] = sha(local);
+      const shipped = path.join(shipDir, alpha);
+      mkdirSync(path.dirname(shipped), { recursive: true });
+      copyFileSync(local, shipped);
+      alphaOutputs.push({
+        path: path.relative(ROOT, shipped).replaceAll("\\", "/"),
+        bytes: statSync(shipped).size,
+        sha256: sha(shipped),
+      });
+    }
+    if (job.textureOnly) {
+      const diff = `${job.id}_diff_${job.res}.jpg`;
+      const shipped = path.join(shipDir, diff);
+      copyFileSync(path.join(srcDir, "textures", diff), shipped);
+      const outputs = [
+        {
+          path: path.relative(ROOT, shipped).replaceAll("\\", "/"),
+          bytes: statSync(shipped).size,
+          sha256: sha(shipped),
+        },
+        ...alphaOutputs,
+      ];
+      upsert({
+        id: `polyhaven-${job.id}`,
+        title: `${job.title} (${job.res} leaf colour + alpha)`,
+        sourceUrl: `https://polyhaven.com/a/${job.id}`,
+        author: job.author,
+        license: "CC0 1.0",
+        retrievalDate: RETRIEVED,
+        originalSha256: originals,
+        processingSteps: [
+          "Downloaded glTF, shared binary, 1k textures and alpha from the Poly Haven download host",
+          "Shipped only the colour map and alpha mask (unmodified) for procedural leaf cards; geometry not shipped",
+        ],
+        outputFiles: outputs,
+        bytesPerTier: { existing: outputs.reduce((n, o) => n + o.bytes, 0) },
+        status: "sourced; pending look-dev and review",
+        role: job.role,
+      });
+      console.log(`textures ${job.id} → ${outputs.map((o) => o.path).join(", ")}`);
+      continue;
     }
     const out = path.join(ROOT, "public", "models", `${job.id}.glb`);
     const npx = process.platform === "win32" ? "npx.cmd" : "npx";
@@ -335,8 +428,11 @@ for (const job of JOBS) {
           bytes: statSync(out).size,
           sha256: sha(out),
         },
+        ...alphaOutputs,
       ],
-      bytesPerTier: { existing: statSync(out).size },
+      bytesPerTier: {
+        existing: statSync(out).size + alphaOutputs.reduce((n, o) => n + o.bytes, 0),
+      },
       status: "sourced; pending look-dev and review",
       role: job.role,
     });

@@ -73,7 +73,7 @@ export interface Island {
  * Visual reset stages. Each concern lands (and is reviewed) as its own change:
  * C2 coast & tide, C3 architecture, C4 vegetation. Legacy pieces fill in until replaced.
  */
-const STAGE = { architecture: true, vegetation: false };
+const STAGE = { architecture: true, vegetation: true };
 /** Floor level above the rock for each rebuilt stay (piers and posts make up the difference). */
 const FLOOR_LIFT: Record<StayId, number> = {
   "weather-house": 0.55,
@@ -765,6 +765,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
       ],
     });
     vegetation.add(plants.group);
+    aoHidden.push(...plants.cutouts);
   } else {
     const noise = random(870);
     for (let i = 0; i < 40; i++) {

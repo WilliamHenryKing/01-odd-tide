@@ -911,6 +911,216 @@
       },
       "status": "sourced; pending look-dev and review",
       "role": "pale interior lining and furniture grain"
+    },
+    {
+      "id": "polyhaven-grass_bermuda_01",
+      "title": "Grass Bermuda 01 (glTF 1k)",
+      "sourceUrl": "https://polyhaven.com/a/grass_bermuda_01",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "grass_bermuda_01_1k.gltf": "a1e5bb7fcf33721dc4844d7acacab80759fccec659f1ea643f8701afc542e207",
+        "grass_bermuda_01.bin": "b98be48b43afb9d57f6c722d918a49996635064b829b16dc14ef4a48c0f04dae",
+        "textures/grass_bermuda_01_nor_gl_1k.jpg": "4475b37d6e4d217ce03547216f62d1ef6e65cafda2355fd0cb2aeb6d919b9338",
+        "textures/grass_bermuda_01_diff_1k.jpg": "ef202eeb8f8fb3312446009acecc87e5679a7d612e4dee859d8a849e00af5fcb",
+        "textures/grass_bermuda_01_arm_1k.jpg": "38190d342fe951c33ff8c37dd2e3de37aca4cc7633e91be8b0d1c1f71057a641"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary and 1k textures from the Poly Haven download host",
+        "gltf-transform dedup",
+        "gltf-transform prune",
+        "gltf-transform meshopt --level medium"
+      ],
+      "outputFiles": [],
+      "bytesPerTier": {
+        "existing": 0
+      },
+      "status": "evaluated; not shipped — a 10 cm tuft; scaled to read at distance it becomes crumpled dark leaves",
+      "role": "turf grass clumps (instanced)"
+    },
+    {
+      "id": "polyhaven-shrub_03",
+      "title": "Shrub 03 (glTF 1k)",
+      "sourceUrl": "https://polyhaven.com/a/shrub_03",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "shrub_03_1k.gltf": "b76d7c14bc027e834e82d3f984c32b5d060e62908aa90ff9420a637ca253a8ea",
+        "shrub_03.bin": "bf4df21e6d2a2bc5f00b4c9142f776171fe7da00cf960001825748067af542b6",
+        "textures/shrub_03_nor_gl_1k.jpg": "ff856bacfce859b8a7555dd9a3b92fbd36b2e775d486be71df485afb4235d6c9",
+        "textures/shrub_03_diff_1k.jpg": "3cadc7aba46d3aabbd7d6d2b1d04aa32e2a7da0bc87c2d38ef3cb1ee42cb03ec",
+        "textures/shrub_03_arm_1k.jpg": "3e2b16812a623037138eedace958210c5f3443a827bbe69663045bba5612f815",
+        "shrub_03_alpha_1k.png": "daef00278879a024fd05216aaa1376067a5f25f1b911d08d9bbdc50fda4a0d66"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary and 1k textures from the Poly Haven download host",
+        "gltf-transform dedup",
+        "gltf-transform prune",
+        "gltf-transform meshopt --level medium"
+      ],
+      "outputFiles": [],
+      "bytesPerTier": {
+        "existing": 0
+      },
+      "status": "evaluated; not shipped — the scan is a 22×40 cm plant, too small for scrub or canopies; replaced by shrub_02",
+      "role": "coastal scrub and stone-pine canopy clusters"
+    },
+    {
+      "id": "polyhaven-fern_02",
+      "title": "Fern 02 (glTF 1k)",
+      "sourceUrl": "https://polyhaven.com/a/fern_02",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "fern_02_1k.gltf": "33974295ee19670af4877705fc7d91f33f42d6302f0d44a625e072271223031f",
+        "fern_02.bin": "fe1abb762bcbbc7ad9e86925c8080437a62add257d9280e9142fdc85c226e64c",
+        "textures/fern_02_nor_gl_1k.jpg": "45bce132c6e96a0864bc89ab5da51361ab3f4afa83a6669ae499ab5ca811f621",
+        "textures/fern_02_diff_1k.jpg": "a828a6e7b4c01c826911e2eac4b3afc7457dab7b3b392a31c681ed88b7d50029",
+        "textures/fern_02_arm_1k.jpg": "ebfb5d76ce9cbdaec20bcd22dce9b755f0b1b8650ef29ca13555e3e6961025d7",
+        "fern_02_alpha_1k.png": "ea3c64284c7ebdeedf484d2d816eae92825ec526140c3bb83859ddc7a64001f9"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary and 1k textures from the Poly Haven download host",
+        "gltf-transform dedup",
+        "gltf-transform prune",
+        "gltf-transform meshopt --level medium"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/models/fern_02.glb",
+          "bytes": 1042276,
+          "sha256": "77d9b7779ff69511294192b7b4a0048f7cc25be7b5c38e61b5fd3ce0c244495d"
+        },
+        {
+          "path": "public/models/fern_02_alpha_1k.png",
+          "bytes": 114589,
+          "sha256": "ea3c64284c7ebdeedf484d2d816eae92825ec526140c3bb83859ddc7a64001f9"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 1156865
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "sheltered ferns by buildings"
+    },
+    {
+      "id": "polyhaven-grass_medium_02",
+      "title": "Grass Medium 02 (glTF 1k)",
+      "sourceUrl": "https://polyhaven.com/a/grass_medium_02",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "grass_medium_02_1k.gltf": "7037f8d2dfc6aeec0bf72f4eeb96cfa3f6b3a5e6c6f0bc5de537c055b2fd5d04",
+        "grass_medium_02.bin": "aa8493bc1544a89e08bf440c7ba361042bfe6ea48b1fefc7e4af2dfff42fdf4a",
+        "textures/grass_medium_02_nor_gl_1k.jpg": "0b464550366ed72a6cad9c357e19ac4c83fc9adc87272771479138129853b300",
+        "textures/grass_medium_02_diff_1k.jpg": "91ae99005b449011aceb207a68a937258fd9bfd66ff367d344c50398b1df389c",
+        "textures/grass_medium_02_arm_1k.jpg": "f0d57bfd95bff7710526b49d47cf2326ee3796e425639d53b983d1472480b57d",
+        "grass_medium_02_alpha_1k.png": "15976877b3dbd22cd496a9549f1eb7d86710846a3631fb87eedbf046519e339f"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary and 1k textures from the Poly Haven download host",
+        "gltf-transform dedup",
+        "gltf-transform prune",
+        "gltf-transform simplify --ratio 0.35 --error 0.001",
+        "gltf-transform meshopt --level medium"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/models/grass_medium_02.glb",
+          "bytes": 628104,
+          "sha256": "bcf323d2dcfef9bf50c22029f20b76e70db63f82d3735808d0b43f6a20646ec4"
+        },
+        {
+          "path": "public/models/grass_medium_02_alpha_1k.png",
+          "bytes": 110617,
+          "sha256": "15976877b3dbd22cd496a9549f1eb7d86710846a3631fb87eedbf046519e339f"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 738721
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "turf clumps and rim tussocks (simplified)"
+    },
+    {
+      "id": "polyhaven-bark_brown_02",
+      "title": "Bark Brown 02 (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/bark_brown_02",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "bark_brown_02_diff_1k.jpg": "920fa0bed0c9d78c1d530e99795113afd532d7db746de440f4a85d7c83ed0f1a",
+        "bark_brown_02_nor_gl_1k.jpg": "0d5e691e8ad8bcd093a3587887fda2a6b4a948b5708a4f256f7919584c6eb857",
+        "bark_brown_02_arm_1k.jpg": "6bd86d37b3b9b40cc30a4b661e382ec41fa7463a8b1144ff44708b19fa675af1"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/bark_brown_02/bark_brown_02_diff_1k.jpg",
+          "bytes": 659592,
+          "sha256": "920fa0bed0c9d78c1d530e99795113afd532d7db746de440f4a85d7c83ed0f1a"
+        },
+        {
+          "path": "public/textures/bark_brown_02/bark_brown_02_nor_gl_1k.jpg",
+          "bytes": 1015623,
+          "sha256": "0d5e691e8ad8bcd093a3587887fda2a6b4a948b5708a4f256f7919584c6eb857"
+        },
+        {
+          "path": "public/textures/bark_brown_02/bark_brown_02_arm_1k.jpg",
+          "bytes": 232742,
+          "sha256": "6bd86d37b3b9b40cc30a4b661e382ec41fa7463a8b1144ff44708b19fa675af1"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 1907957
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "procedural tree trunks and branches"
+    },
+    {
+      "id": "polyhaven-shrub_02",
+      "title": "Shrub 02 (1k leaf colour + alpha)",
+      "sourceUrl": "https://polyhaven.com/a/shrub_02",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "shrub_02_1k.gltf": "99de0a70fe88ad414615cc8d8e020617c8512e2abfe08b911b153a6fcc40d93e",
+        "shrub_02.bin": "5c1b79da1cfdbac90599542ccd1f75ba433a3a4d356b1ea03655adb39b0e2c96",
+        "textures/shrub_02_nor_gl_1k.jpg": "54c24e433365d5410223b7ebd2b33042b80831f80976e10768114db5ef6911d7",
+        "textures/shrub_02_diff_1k.jpg": "9956eff294034d70516d867e9668428a23d782feb3d4c34061dce5e44bacd5a8",
+        "textures/shrub_02_arm_1k.jpg": "7186bf604d5c02f873aef6de2346cc06b6fa48f47d054edbef36d2c3772c0890",
+        "shrub_02_alpha_1k.png": "5c2c31bac311051db77443e1780078403c2df0a832c40fe6ed7bcd982695cdf0"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary, 1k textures and alpha from the Poly Haven download host",
+        "Shipped only the colour map and alpha mask (unmodified) for procedural leaf cards; geometry not shipped"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/shrub_02/shrub_02_diff_1k.jpg",
+          "bytes": 395120,
+          "sha256": "9956eff294034d70516d867e9668428a23d782feb3d4c34061dce5e44bacd5a8"
+        },
+        {
+          "path": "public/textures/shrub_02/shrub_02_alpha_1k.png",
+          "bytes": 91741,
+          "sha256": "5c2c31bac311051db77443e1780078403c2df0a832c40fe6ed7bcd982695cdf0"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 486861
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "leaf texture for procedural scrub and canopy card clusters"
     }
   ]
 }
