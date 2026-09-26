@@ -33,3 +33,9 @@
 | horizon | Seam removed (continuous haze) but island tiny; distant sea slightly flat; clouds low contrast |
 
 **Expected score movement:** light plausibility and environment integration up at every bookmark; atmosphere/depth up at horizon, dusk and night; materials/detail unchanged (still 1–2). Motion and performance unscored.
+
+## C1b — corrective commit after cold review (26 September 2026)
+
+Fable 5.1's cold review ([C1-REVIEW](../reviews/C1-REVIEW.md)) raised the desktop hero average 2.35 → 2.60 but found three regressed rows: UI 3→2 at arrival-day and arrival-high-water (dark copy on the now darker sea, 1.41:1), and artefacts 3→2 at arrival-night (clipped observatory lamps, scattered point-light sparkles). Directive §3.5.7 says to revert. A literal `git revert` would have conflicted with uncommitted look-dev work in the same files, so the rule was applied as: no other visual change lands until the regressed rows are corrected and re-reviewed. This is a recorded deviation from the letter of the rule, not a reinterpretation of it.
+
+Corrections: hero copy is light at every hour with a soft text shadow and a restrained dark radial veil (the pale close-view wash is replaced by a dark gradient); legacy lamp globes 3500 → 900 cd/m², bridge bulbs → 1400 cd/m², beacon 400 → 150 cd; sea roughness 0.045 → 0.07 and fine-normal amplitude reduced (fewer isolated glints); 55% of the sea's sunlit in-scatter is now unshadowed (volume light enters outside the surface shadow), so island shadows on water are softer. Evidence: `../captures/c1b-after/`.

@@ -1,5 +1,6 @@
 import { gsap } from "gsap";
 import {
+  Color,
   Group,
   IcosahedronGeometry,
   type Material,
@@ -75,7 +76,8 @@ export function createIsland(
   });
   aoHidden.push(rig.sky.mesh);
   // Lamp globes, beacon lens and bridge bulbs: emissive luminance, pre-exposed by the rig.
-  const glow = rig.registerEmissive(kit.glow, 3500);
+  // Legacy lamp globes are oversized spheres; a frosted-shade luminance keeps them from clipping.
+  const glow = rig.registerEmissive(kit.glow, 900);
   islet(root, kit, 0, 0, 3.05, 2.5, 1.8, 45);
   islet(root, kit, 4.4, -2.9, 2.0, 1.9, 2.4, 92);
   islet(root, kit, 3.5, 2.7, 2.3, 1.75, 1.5, 217);
@@ -155,7 +157,7 @@ export function createIsland(
         const bulb = new Mesh(new SphereGeometry(0.075, 12, 10), bulbMat);
         bulb.position.copy(pos).add(new Vector3(0.34, 0.56, 0));
         root.add(bulb);
-        lamps.push({ bulb, state: rig.registerEmissive(bulbMat as MeshStandardMaterial, 3500) });
+        lamps.push({ bulb, state: rig.registerEmissive(bulbMat as MeshStandardMaterial, 1400) });
       }
     }
   };
@@ -214,7 +216,7 @@ export function createIsland(
   const beaconLight = new PointLight("#ffc979", 0);
   beaconLight.position.copy(lighthouse.position).add(new Vector3(0, 0.85, 0));
   root.add(beaconLight);
-  const beacon = rig.registerPractical(beaconLight, 400);
+  const beacon = rig.registerPractical(beaconLight, 150);
   // Discovery markers must read by day too: a brighter emissive of their own.
   const gemMaterial = kit.glow.clone() as MeshStandardMaterial;
   rig.registerEmissive(gemMaterial, 40_000);
@@ -238,7 +240,8 @@ export function createIsland(
   }
   const seaUniforms = { time: { value: 0 }, level: { value: waterHeight(initialState.hour) * S } };
   // Change 1 keeps the legacy islets, so the sea sees a uniform 4 m depth until the new coast.
-  const { mesh: sea } = createWater(flatHeightmap(-4), seaUniforms);
+  const seaSun = { direction: { value: new Vector3(0, 1, 0) }, irradiance: { value: new Color() } };
+  const { mesh: sea } = createWater(flatHeightmap(-4), seaUniforms, seaSun);
   scene.add(sea);
   aoHidden.push(sea);
   let state: IslandState = initialState;
@@ -336,6 +339,8 @@ export function createIsland(
     beacon.on = state.found.length === 3 ? 1 : 0;
     const sky = rig.apply(visualHour, elapsed, camera, captureFrame);
     pipeline.setNight(sky.night);
+    seaSun.direction.value.copy(rig.key.position).sub(rig.key.target.position).normalize();
+    seaSun.irradiance.value.copy(rig.key.color).multiplyScalar(rig.key.intensity);
     for (const id of Object.keys(buildings) as StayId[]) {
       const b = buildings[id],
         amount = id === state.selected ? values.open : 0;

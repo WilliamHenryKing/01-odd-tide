@@ -190,34 +190,57 @@ select {
   height: min(770px, calc(100svh - 30px));
   min-height: 680px;
   position: relative;
-  background: #b5d4c8;
+  background: #4d7479;
 }
 .hero.evening {
-  background: #779199;
+  background: #1f3440;
+}
+/* The physically lit sea is a mid-dark teal by day and near-black at night, so the copy over the
+   world is always light, with a soft shadow; close views add a restrained dark veil, never a
+   pale wash that splits the scene into two tones. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse 48% 62% at 18% 38%, rgb(10 32 38 / 0.34), transparent 72%);
+  pointer-events: none;
 }
 .close-view::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #a4c7bb 0%, #a4c7bbcc 20%, transparent 49%);
+  background: linear-gradient(
+    90deg,
+    rgb(10 32 38 / 0.5) 0%,
+    rgb(10 32 38 / 0.28) 26%,
+    transparent 50%
+  );
   pointer-events: none;
 }
 .close-view.evening::after {
-  background: linear-gradient(90deg, #5c8990 0%, #5c8990cc 20%, transparent 49%);
+  background: linear-gradient(
+    90deg,
+    rgb(4 12 18 / 0.45) 0%,
+    rgb(4 12 18 / 0.2) 26%,
+    transparent 50%
+  );
 }
-.evening .hero-copy,
-.evening .island-note {
+.hero-copy,
+.island-note {
+  color: #fbf3d9;
+  text-shadow: 0 1px 14px rgb(8 26 30 / 0.45);
+}
+.hero-copy .text-button {
   color: #fbf3d9;
 }
-.evening .hero-copy .text-button {
-  color: #fbf3d9;
-}
-.evening .hero-copy .button.primary {
+.hero-copy .button.primary {
   background: #f0e8cd;
   color: #204c40;
+  text-shadow: none;
 }
-.evening .hero-copy .coral {
-  color: #efae76;
+.hero-copy .coral {
+  color: #f2b07a;
 }
 .hunt-count {
   font-size: 11px;

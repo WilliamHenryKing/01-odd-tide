@@ -1,5 +1,6 @@
 import {
   CircleGeometry,
+  Color,
   CustomBlending,
   DataTexture,
   DataUtils,
@@ -10,6 +11,7 @@ import {
   OneFactor,
   OneMinusSrcAlphaFactor,
   RedFormat,
+  Vector3,
 } from "three";
 
 // The sea: one physical surface at the domain tide level. Reflections, sun glints and shadows
@@ -65,11 +67,13 @@ export function flatHeightmap(height: number): Heightmap {
 
 export type WaterUniforms = { time: { value: number }; level: { value: number } };
 
-export function createWater(heightmap: Heightmap, shared: WaterUniforms) {
+export type SeaSun = { direction: { value: Vector3 }; irradiance: { value: Color } };
+
+export function createWater(heightmap: Heightmap, shared: WaterUniforms, sun?: SeaSun) {
   const material = new MeshPhysicalMaterial({
     name: "sea",
     color: 0xffffff,
-    roughness: 0.045,
+    roughness: 0.07,
     metalness: 0,
     ior: 1.333,
     specularIntensity: 1,
@@ -87,6 +91,8 @@ export function createWater(heightmap: Heightmap, shared: WaterUniforms) {
       heightTex: { value: heightmap.texture },
       heightMin: { value: heightmap.min },
       heightMax: { value: heightmap.max },
+      seaSunDirection: sun?.direction ?? { value: new Vector3(0, 1, 0) },
+      seaSunIrradiance: sun?.irradiance ?? { value: new Color(0, 0, 0) },
     });
     shader.vertexShader = shader.vertexShader
       .replace("#include <common>", "#include <common>\nvarying vec3 vSeaWorld;")
@@ -104,6 +110,8 @@ export function createWater(heightmap: Heightmap, shared: WaterUniforms) {
         uniform sampler2D heightTex;
         uniform vec2 heightMin;
         uniform vec2 heightMax;
+        uniform vec3 seaSunDirection;
+        uniform vec3 seaSunIrradiance;
         float sHash(vec2 p) { return fract(sin(dot(p, vec2(41.3, 289.1))) * 43758.5453); }
         float sNoise(vec2 p) {
           vec2 i = floor(p), f = fract(p);
@@ -130,7 +138,7 @@ export function createWater(heightmap: Heightmap, shared: WaterUniforms) {
           }
           vec2 q = p * 1.3 + vec2(t * 0.31, t * 0.17);
           float fine = smoothstep(1.2, 0.25, footprint);
-          slope += (vec2(sNoise(q) - 0.5, sNoise(q.yx + 17.3) - 0.5)) * 0.07 * fine;
+          slope += (vec2(sNoise(q) - 0.5, sNoise(q.yx + 17.3) - 0.5)) * 0.04 * fine;
           return slope;
         }`,
       )
@@ -150,11 +158,18 @@ export function createWater(heightmap: Heightmap, shared: WaterUniforms) {
         foam *= step(0.005, seaDepth);
         // Light scattered back by the water column itself grows with depth (teal-blue).
         vec3 inscatterAlbedo = vec3(0.012, 0.092, 0.1) * (1.0 - exp(-seaDepth * 0.55));
-        diffuseColor.rgb = mix(inscatterAlbedo, vec3(0.78, 0.8, 0.8), foam);`,
+        // Sunlight scattered back from the water column enters mostly outside any surface shadow,
+        // so only part of it is shadowed: the rest is added unshadowed below.
+        diffuseColor.rgb = mix(inscatterAlbedo * 0.45, vec3(0.78, 0.8, 0.8), foam);
+        vec3 seaVolumeLight = inscatterAlbedo * (1.0 - foam) * seaSunIrradiance * max(seaSunDirection.y, 0.0) * 0.55 * RECIPROCAL_PI;`,
       )
       .replace(
         "#include <roughnessmap_fragment>",
         "float roughnessFactor = mix(roughness, 0.6, foam);",
+      )
+      .replace(
+        "#include <emissivemap_fragment>",
+        "#include <emissivemap_fragment>\ntotalEmissiveRadiance += seaVolumeLight;",
       )
       .replace(
         "#include <normal_fragment_maps>",
