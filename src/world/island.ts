@@ -1,34 +1,30 @@
 import { gsap } from "gsap";
 import {
-  AgXToneMapping,
-  Color,
-  DirectionalLight,
-  Fog,
   Group,
-  HemisphereLight,
   IcosahedronGeometry,
   type Material,
   Mesh,
   type MeshStandardMaterial,
+  type Object3D,
   OctahedronGeometry,
-  PCFShadowMap,
   PerspectiveCamera,
-  PlaneGeometry,
-  PMREMGenerator,
   PointLight,
   Raycaster,
   Scene,
-  ShaderMaterial,
   SphereGeometry,
   type Texture,
   TorusGeometry,
   Vector2,
   Vector3,
-  WebGLRenderer,
 } from "three";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { type LensId, lensReady, type StayId, waterHeight } from "../domain";
 import { box, cabin, gull, islet, materialKit, random, rod, tree } from "./objects";
+import { Pipeline } from "./render/pipeline";
+import { LightingRig } from "./render/rig";
+import { createWater, flatHeightmap } from "./water";
+
+/** The legacy scene was modelled at one third of a metre per unit; the rig works in metres. */
+const S = 3;
 
 export interface IslandState {
   hour: number;
@@ -58,52 +54,28 @@ export function createIsland(
   onCollect: (id: LensId) => void,
   initialState: IslandState,
 ): Island {
-  const renderer = new WebGLRenderer({
-    antialias: true,
-    alpha: true,
-    powerPreference: "high-performance",
-    preserveDrawingBuffer: true,
-  });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
-  renderer.toneMapping = AgXToneMapping;
-  renderer.toneMappingExposure = 1.12;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = PCFShadowMap;
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(34, 1, 0.3, 30_000);
+  const target = new Vector3(0.8, 0.2, 0).multiplyScalar(S);
+  camera.position.set(15, 13.5, 22).multiplyScalar(S);
+  const aoHidden: Object3D[] = [];
+  const pipeline: Pipeline = new Pipeline(scene, camera, { aoHidden: () => aoHidden });
+  const renderer = pipeline.renderer;
   renderer.domElement.setAttribute("aria-label", "Interactive miniature of the Odd Tide island");
   renderer.domElement.style.touchAction = "pan-y";
   host.append(renderer.domElement);
-  const scene = new Scene();
-  scene.background = new Color("#b5d4c8");
-  scene.fog = new Fog("#b5d4c8", 30, 90);
-  const camera = new PerspectiveCamera(34, 1, 0.1, 400);
-  const target = new Vector3(0.8, 0.2, 0);
-  camera.position.set(15, 13.5, 22);
   const root = new Group();
+  root.scale.setScalar(S);
   scene.add(root);
   const kit = materialKit();
-  const environment = new RoomEnvironment();
-  const pmrem = new PMREMGenerator(renderer);
-  const env = pmrem.fromScene(environment, 0.06);
-  scene.environment = env.texture;
-  scene.environmentIntensity = 0.42;
-  environment.dispose();
-  pmrem.dispose();
-  const hemi = new HemisphereLight("#d7edea", "#324b40", 1.6);
-  scene.add(hemi);
-  const sun = new DirectionalLight("#ffe4b8", 4.1);
-  sun.position.set(-7, 12, 9);
-  sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
-  sun.shadow.camera.left = -11;
-  sun.shadow.camera.right = 11;
-  sun.shadow.camera.top = 10;
-  sun.shadow.camera.bottom = -10;
-  sun.shadow.camera.near = 1;
-  sun.shadow.camera.far = 50;
-  sun.shadow.normalBias = 0.025;
-  sun.shadow.bias = -0.00015;
-  sun.shadow.radius = 4;
-  scene.add(sun, sun.target);
+  const rig: LightingRig = new LightingRig(renderer, scene, {
+    shadowCentre: new Vector3(1.5, 0, 0.5),
+    shadowRadius: 27,
+    shadowMapSize: 2048,
+  });
+  aoHidden.push(rig.sky.mesh);
+  // Lamp globes, beacon lens and bridge bulbs: emissive luminance, pre-exposed by the rig.
+  const glow = rig.registerEmissive(kit.glow, 3500);
   islet(root, kit, 0, 0, 3.05, 2.5, 1.8, 45);
   islet(root, kit, 4.4, -2.9, 2.0, 1.9, 2.4, 92);
   islet(root, kit, 3.5, 2.7, 2.3, 1.75, 1.5, 217);
@@ -113,7 +85,7 @@ export function createIsland(
     "nap-observatory": cabin(kit, "round"),
     "lantern-lodge": cabin(kit, "lodge"),
   };
-  const roomLights: PointLight[] = [];
+  const roomLights: ReturnType<LightingRig["registerPractical"]>[] = [];
   for (const id of Object.keys(buildings) as StayId[]) {
     const item = buildings[id];
     item.group.position.set(...LOCATIONS[id]);
@@ -123,10 +95,10 @@ export function createIsland(
       object.userData.stay = id;
     });
     root.add(item.group);
-    const lamp = new PointLight("#ffc277", 0, 3.5, 2);
+    const lamp = new PointLight("#ffc277", 0);
     lamp.position.set(0, 0.9, 0.1);
     item.group.add(lamp);
-    roomLights.push(lamp);
+    roomLights.push(rig.registerPractical(lamp, 60));
   }
   const bath = new Group();
   bath.position.set(-5.0, 1.2, 2.2);
@@ -162,7 +134,7 @@ export function createIsland(
     root.add(stone);
     stones.push(stone);
   }
-  const lamps: { bulb: Mesh; material: MeshStandardMaterial }[] = [];
+  const lamps: { bulb: Mesh; state: ReturnType<LightingRig["registerEmissive"]> }[] = [];
   const bridge = (from: Vector3, to: Vector3) => {
     const direction = to.clone().sub(from);
     const length = direction.length();
@@ -183,7 +155,7 @@ export function createIsland(
         const bulb = new Mesh(new SphereGeometry(0.075, 12, 10), bulbMat);
         bulb.position.copy(pos).add(new Vector3(0.34, 0.56, 0));
         root.add(bulb);
-        lamps.push({ bulb, material: bulbMat });
+        lamps.push({ bulb, state: rig.registerEmissive(bulbMat as MeshStandardMaterial, 3500) });
       }
     }
   };
@@ -239,9 +211,13 @@ export function createIsland(
   const lens = new Mesh(new SphereGeometry(0.13, 16, 12), kit.glow);
   lens.position.y = 0.85;
   lighthouse.add(lens);
-  const beacon = new PointLight("#ffc979", 0, 8, 2);
-  beacon.position.copy(lighthouse.position).add(new Vector3(0, 0.85, 0));
-  root.add(beacon);
+  const beaconLight = new PointLight("#ffc979", 0);
+  beaconLight.position.copy(lighthouse.position).add(new Vector3(0, 0.85, 0));
+  root.add(beaconLight);
+  const beacon = rig.registerPractical(beaconLight, 400);
+  // Discovery markers must read by day too: a brighter emissive of their own.
+  const gemMaterial = kit.glow.clone() as MeshStandardMaterial;
+  rig.registerEmissive(gemMaterial, 40_000);
   const fragments: { id: LensId; group: Group; gem: Mesh; base: number }[] = [];
   const fragmentPositions: [LensId, number, number, number][] = [
     ["bath", -4.7, 1.5, 2.55],
@@ -251,7 +227,7 @@ export function createIsland(
   for (const [id, x, y, z] of fragmentPositions) {
     const group = new Group();
     group.position.set(x, y, z);
-    const gem = new Mesh(new OctahedronGeometry(0.17), kit.glow);
+    const gem = new Mesh(new OctahedronGeometry(0.17), gemMaterial);
     const ring = new Mesh(new TorusGeometry(0.28, 0.012, 8, 32), kit.brass);
     group.add(gem, ring);
     group.traverse((object) => {
@@ -260,39 +236,11 @@ export function createIsland(
     root.add(group);
     fragments.push({ id, group, gem, base: y });
   }
-  const waterUniforms = {
-    time: { value: 0 },
-    dusk: { value: 0 },
-    colour: { value: new Color("#479f91") },
-    sky: { value: new Color("#b5d4c8") },
-  };
-  const waterMaterial = new ShaderMaterial({
-    uniforms: waterUniforms,
-    transparent: true,
-    depthWrite: false,
-    vertexShader: `varying vec3 vWorld; void main(){ vec4 p=modelMatrix*vec4(position,1.0); vWorld=p.xyz; gl_Position=projectionMatrix*viewMatrix*p; }`,
-    fragmentShader: `uniform float time; uniform float dusk; uniform vec3 colour; uniform vec3 sky; varying vec3 vWorld;
-    float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-    float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}
-    float shelf(vec2 p,vec2 centre,vec2 size){return 1.-smoothstep(.8,1.4,length((p-centre)/size));}
-    void main(){
-      vec2 p=vWorld.xz;
-      float broad=noise(p*.23+time*.018);
-      float swell=sin(p.y*2.8+p.x*.8+noise(p*.6)*5.-time*.45);
-      float crests=smoothstep(.91,.998,swell)*smoothstep(.42,.76,noise(p*vec2(.65,2.1)+time*.03));
-      float shallow=max(shelf(p,vec2(0.),vec2(3.6,3.1)),max(shelf(p,vec2(4.4,-2.9),vec2(2.5,2.4)),max(shelf(p,vec2(3.5,2.7),vec2(2.7,2.2)),shelf(p,vec2(-5.,2.2),vec2(1.5,1.6)))));
-      vec3 c=mix(colour,vec3(.35,.62,.49),shallow*.45);
-      c+=(broad-.5)*.055+crests*.042;
-      c=mix(c,c*vec3(.3,.46,.62),dusk*.8);
-      c=mix(c,sky,smoothstep(28.,95.,distance(vWorld,cameraPosition)));
-      gl_FragColor=vec4(c,.96);
-      #include <tonemapping_fragment>
-      #include <colorspace_fragment>
-    }`,
-  });
-  const sea = new Mesh(new PlaneGeometry(500, 500), waterMaterial);
-  sea.rotation.x = -Math.PI / 2;
-  root.add(sea);
+  const seaUniforms = { time: { value: 0 }, level: { value: waterHeight(initialState.hour) * S } };
+  // Change 1 keeps the legacy islets, so the sea sees a uniform 4 m depth until the new coast.
+  const { mesh: sea } = createWater(flatHeightmap(-4), seaUniforms);
+  scene.add(sea);
+  aoHidden.push(sea);
   let state: IslandState = initialState;
   const values = { hour: initialState.hour, open: initialState.opened ? 1 : 0 };
   let width = 1,
@@ -340,6 +288,8 @@ export function createIsland(
           .add(new Vector3(0, state.opened ? 1.05 : 0.7, 0))
           .addScaledVector(screenRight, portrait ? 0 : -2.5)
       : new Vector3(portrait ? 0.7 : -0.65, 0.4, 0);
+    destination.multiplyScalar(S);
+    aim.multiplyScalar(S);
     gsap.to(camera.position, {
       x: destination.x,
       y: destination.y,
@@ -369,29 +319,23 @@ export function createIsland(
     if (animated && !perfActive) elapsed += delta;
     const visualHour = captureFrame ? state.hour : values.hour;
     const level = waterHeight(visualHour);
-    const dusk = Math.max(0, Math.min(1, (visualHour - 16.5) / 4));
-    sea.position.y = level;
-    waterUniforms.time.value = elapsed;
-    waterUniforms.dusk.value = dusk;
+    sea.position.y = level * S;
+    seaUniforms.level.value = level * S;
+    seaUniforms.time.value = elapsed;
     floatDeck.position.y = level + 0.13;
     buoy.position.y = level + 0.08 + (animated ? Math.sin(elapsed * 1.3) * 0.025 : 0);
     buoy.rotation.z = Math.sin(elapsed) * 0.08;
     for (const stone of stones) stone.visible = level < 0.74;
-    scene.background = new Color("#b5d4c8").lerp(new Color("#5b7883"), dusk);
-    if (scene.fog instanceof Fog) scene.fog.color.copy(scene.background);
-    waterUniforms.sky.value.copy(scene.background);
-    sun.color.set("#ffe4b8").lerp(new Color("#e69373"), dusk);
-    sun.intensity = 4.1 - dusk * 3.95;
-    sun.position.set(-7 - dusk * 3, 12 - dusk * 9, 9);
-    hemi.intensity = 1.6 - dusk * 1.35;
-    scene.environmentIntensity = 0.42 - dusk * 0.3;
-    roomLights.forEach((light) => {
-      light.intensity = dusk * 3;
-    });
-    kit.glow.emissiveIntensity = 0.3 + dusk * 2.6;
+    // Practicals switch on as the day falls; their brightness comes only from exposure.
+    const lampsOn = Math.min(1, Math.max(0, (visualHour - 17.6) / 0.8));
+    for (const light of roomLights) light.on = lampsOn;
+    glow.on = 0.04 + 0.96 * lampsOn;
     lamps.forEach((lamp, i) => {
-      lamp.material.emissiveIntensity = Math.max(0.1, dusk * 4 - i * 0.06);
+      lamp.state.on = Math.min(1, Math.max(0.03, lampsOn * 1.4 - i * 0.05));
     });
+    beacon.on = state.found.length === 3 ? 1 : 0;
+    const sky = rig.apply(visualHour, elapsed, camera, captureFrame);
+    pipeline.setNight(sky.night);
     for (const id of Object.keys(buildings) as StayId[]) {
       const b = buildings[id],
         amount = id === state.selected ? values.open : 0;
@@ -404,7 +348,6 @@ export function createIsland(
     bird.position.x = -1.9 + Math.sin(elapsed * 0.22) * 1.3;
     bird.position.z = -0.2 + Math.cos(elapsed * 0.22) * 0.7;
     bird.rotation.y = -elapsed * 0.22;
-    beacon.intensity = state.found.length === 3 ? 12 : 0;
     for (const fragment of fragments) {
       fragment.group.visible =
         state.discover && !state.found.includes(fragment.id) && lensReady(fragment.id, state.hour);
@@ -413,7 +356,7 @@ export function createIsland(
       fragment.gem.rotation.y = elapsed * 0.4;
     }
     camera.lookAt(target);
-    renderer.render(scene, camera);
+    pipeline.render();
     dirty = false;
     if (animated && !perfActive && visible && !document.hidden) frame = requestAnimationFrame(draw);
   }
@@ -422,7 +365,7 @@ export function createIsland(
     width = rect.width;
     height = rect.height;
     if (!width || !height) return;
-    renderer.setSize(width, height);
+    pipeline.setSize(width, height, window.devicePixelRatio);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     pose(true);
@@ -528,8 +471,8 @@ export function createIsland(
               state = { ...bookmark.state, paused: false, reduced: false };
               pose(true);
               if (bookmark.camera) {
-                camera.position.set(...bookmark.camera.position);
-                target.set(...bookmark.camera.target);
+                camera.position.set(...bookmark.camera.position).multiplyScalar(S);
+                target.set(...bookmark.camera.target).multiplyScalar(S);
               }
               poses.push({ position: camera.position.clone(), target: target.clone() });
             }
@@ -638,8 +581,8 @@ export function createIsland(
           if (item.camera) {
             gsap.killTweensOf(camera.position);
             gsap.killTweensOf(target);
-            camera.position.set(...item.camera.position);
-            target.set(...item.camera.target);
+            camera.position.set(...item.camera.position).multiplyScalar(S);
+            target.set(...item.camera.target).multiplyScalar(S);
           }
           draw(performance.now(), true);
         };
@@ -699,8 +642,7 @@ export function createIsland(
       const previousRatio = renderer.getPixelRatio();
       const previousSize = renderer.getSize(new Vector2());
       try {
-        renderer.setPixelRatio(1);
-        renderer.setSize(1600, 800, false);
+        pipeline.setSize(1600, 800, 1);
         camera.aspect = 2;
         const point = state.selected
           ? new Vector3(...LOCATIONS[state.selected])
@@ -711,19 +653,24 @@ export function createIsland(
             state.selected
               ? new Vector3(state.selected === "weather-house" ? -4 : 5, 4.8, 8)
               : new Vector3(15, 13.5, 22),
-          );
-        camera.lookAt(point.clone().add(new Vector3(0, 0.5, 0)));
+          )
+          .multiplyScalar(S);
+        camera.lookAt(
+          point
+            .clone()
+            .add(new Vector3(0, 0.5, 0))
+            .multiplyScalar(S),
+        );
         camera.updateProjectionMatrix();
-        renderer.render(scene, camera);
+        pipeline.render();
         return renderer.domElement.toDataURL("image/png");
       } finally {
-        renderer.setPixelRatio(previousRatio);
-        renderer.setSize(previousSize.x, previousSize.y, false);
+        pipeline.setSize(previousSize.x, previousSize.y, previousRatio);
         camera.position.copy(previousPosition);
         camera.quaternion.copy(previousRotation);
         camera.aspect = previousAspect;
         camera.updateProjectionMatrix();
-        renderer.render(scene, camera);
+        pipeline.render();
       }
     },
     dispose() {
@@ -758,10 +705,9 @@ export function createIsland(
       }
       for (const t of textures) t.dispose();
       for (const t of kit.textures) if (!textures.has(t)) t.dispose();
-      env.dispose();
-      sun.shadow.dispose();
-      renderer.dispose();
+      rig.dispose();
       renderer.forceContextLoss();
+      pipeline.dispose();
       renderer.domElement.remove();
       scene.clear();
     },
