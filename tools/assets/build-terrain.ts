@@ -8,6 +8,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import {
   CAUSEWAY,
+  FAR_SEABED,
   HEIGHTMAP_SIZE,
   HIGH_WATER,
   ISLETS,
@@ -230,10 +231,10 @@ function beachHeight(x: number, z: number) {
   return 2.45 - Math.max(0, back) * 0.36 + 0.05 * noise3(x * 0.8, 0.5, z * 0.8);
 }
 /** Signed horizontal distance to the cove's footprint (negative inside). */
-function coveFootprint(x: number, z: number) {
-  const dx = (x - COVE_CENTRE[0]) / 4.2;
-  const dz = (z - COVE_CENTRE[1]) / 5.2;
-  return (Math.hypot(dx, dz) - 1) * 4.2 + 0.4 * noise3(x * 0.4, 2.2, z * 0.4);
+function coveFootprint(x: number, z: number, scale = 1) {
+  const dx = (x - COVE_CENTRE[0]) / (4.2 * scale);
+  const dz = (z - COVE_CENTRE[1]) / (5.2 * scale);
+  return (Math.hypot(dx, dz) - 1) * 4.2 * scale + 0.4 * noise3(x * 0.4, 2.2, z * 0.4);
 }
 function applyCove(d: number, x: number, y: number, z: number) {
   const inside = coveFootprint(x, z);
@@ -241,7 +242,10 @@ function applyCove(d: number, x: number, y: number, z: number) {
   // Carve the cliff away above the beach, then lay the sand.
   const air = Math.max(inside, beach - y);
   const carved = smax(d, -air, 0.9);
-  return smin(carved, Math.max(inside + 0.6, y - beach), 0.6);
+  // The beach slope runs on past the cove mouth and melts into the seabed; clipping it to the
+  // cove's footprint left a crisp underwater step along the ellipse.
+  const beachSolid = Math.max(coveFootprint(x, z, 1.9) + 0.6, y - beach);
+  return smin(carved, beachSolid, 1.4);
 }
 function nearestEdge(x: number, z: number) {
   let best = Infinity;
@@ -259,7 +263,15 @@ function seabedHeight(x: number, z: number) {
   // Sand ripples and a few gravel mounds.
   h += 0.06 * Math.sin(x * 2.1 + noise3(x * 0.2, 0, z * 0.2) * 4) * smoothstep(-5, -0.5, h);
   h += 0.25 * fbm3(x * 0.07, 9.1, z * 0.07, 3);
-  return h;
+  // Feather into the far seabed (a flat plane at FAR_SEABED) over the bake's last 5 m, so the
+  // two meet at the same depth instead of printing the bake's rectangle through the water.
+  const boundsEdge = Math.min(
+    x - TERRAIN_BOUNDS.min[0],
+    TERRAIN_BOUNDS.max[0] - x,
+    z - TERRAIN_BOUNDS.min[2],
+    TERRAIN_BOUNDS.max[2] - z,
+  );
+  return FAR_SEABED + (h - FAR_SEABED) * smoothstep(0.5, 5.5, boundsEdge);
 }
 const POOLS: [number, number, number, number][] = []; // x, z, radius, depth
 {

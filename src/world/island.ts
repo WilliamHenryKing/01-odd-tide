@@ -38,6 +38,7 @@ import {
   BATH_SITE,
   CAUSEWAY,
   CAUSEWAY_STONE_TOP,
+  FAR_SEABED,
   LIGHTHOUSE_SITE,
   PATHS,
   STAY_CAMERAS,
@@ -50,6 +51,7 @@ import { Pipeline } from "./render/pipeline";
 import { LightingRig } from "./render/rig";
 import { createTerrainMaterial, type TerrainUniforms } from "./terrain-material";
 import { disposeTextureCache, loadPbrSet } from "./textures";
+import { buildVegetation } from "./vegetation";
 import { createWater, loadHeightmap, type SeaSun } from "./water";
 
 export interface IslandState {
@@ -725,11 +727,46 @@ async function buildWorld(context: WorldContext): Promise<World> {
     };
   });
 
-  // ---- vegetation: legacy trees on the new plateaus until C4
-  const noise = random(870);
+  // ---- vegetation: CC0 coastal planting (C4), kept off buildings, paths and the causeway
   const vegetation = new Group();
   vegetation.name = "vegetation";
-  if (!STAGE.vegetation) {
+  let plants: Awaited<ReturnType<typeof buildVegetation>> | null = null;
+  if (STAGE.vegetation) {
+    const bark = await loadPbrSet("bark_brown_02", "1k");
+    plants = await buildVegetation({
+      loader,
+      ground,
+      bark,
+      keepouts: [
+        ...(Object.keys(STAY_SITES) as StayId[]).map((id) => ({
+          x: STAY_SITES[id].position[0],
+          z: STAY_SITES[id].position[2],
+          r: id === "lantern-lodge" ? 5.6 : 4.2,
+        })),
+        { x: BATH_SITE[0], z: BATH_SITE[2], r: 2.8 },
+        { x: LIGHTHOUSE_SITE[0], z: LIGHTHOUSE_SITE[2], r: 1.4 },
+      ],
+      segments: [
+        ...PATHS.flatMap((path) =>
+          path.points.slice(0, -1).map((point, i) => {
+            const next = path.points[i + 1] ?? point;
+            return {
+              a: [point[0], point[2]] as [number, number],
+              b: [next[0], next[2]] as [number, number],
+              r: path.width * 0.8,
+            };
+          }),
+        ),
+        ...CAUSEWAY.slice(0, -1).map((point, i) => ({
+          a: point,
+          b: CAUSEWAY[i + 1] ?? point,
+          r: 1.2,
+        })),
+      ],
+    });
+    vegetation.add(plants.group);
+  } else {
+    const noise = random(870);
     for (let i = 0; i < 40; i++) {
       const a = i * 2.399;
       const r = 3 + noise() * 8;
@@ -798,6 +835,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
         fragment.gem.rotation.y = time * 0.4;
       }
       for (const stay of Object.values(stays)) stay.update?.(time);
+      plants?.update(time, animated);
       bird.position.set(
         -5.7 + Math.sin(time * 0.22) * 4,
         14 + Math.sin(time * 0.5) * 0.4,
@@ -824,11 +862,13 @@ async function buildWorld(context: WorldContext): Promise<World> {
           ? "borrowed bath"
           : "borrowed bath (legacy)";
       });
-      vegetation.traverse((object) => {
-        object.userData.visualFamily = STAGE.vegetation ? "vegetation" : "legacy foliage";
-      });
+      if (!STAGE.vegetation)
+        vegetation.traverse((object) => {
+          object.userData.visualFamily = "legacy foliage";
+        });
     },
     dispose() {
+      plants?.dispose();
       disposeMaterials(materials);
       terrainMaterial.dispose();
       heightmap.texture.dispose();
@@ -852,7 +892,7 @@ function farSeabed(material: Material) {
   for (let i = 0; i < count; i++) colours.set([235, 255, 0, 128], i * 4);
   geometry.setAttribute("color", new BufferAttribute(colours, 4, true));
   const mesh = new Mesh(geometry, material);
-  mesh.position.y = -6.75;
+  mesh.position.y = FAR_SEABED - 0.02;
   // Under 7 m of water the sun's shadow on the far seabed is invisible, and receiving it
   // printed the shadow frustum's edge as a dark arc on the sea.
   mesh.receiveShadow = false;

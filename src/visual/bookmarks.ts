@@ -77,6 +77,13 @@ export const BOOKMARKS: Bookmark[] = [
     camera: { position: [-19.8, 4.4, 11.4], target: [-16.6, 3.3, 7.6] },
   },
   {
+    id: "planting-close",
+    purpose: "Vegetation and ground contact at arm's length",
+    hero: false,
+    state: { ...base },
+    camera: { position: [-9.6, 7.3, 5.4], target: [-5.6, 5.7, 0.8] },
+  },
+  {
     id: "horizon",
     purpose: "Far atmosphere, silhouettes and fog",
     hero: false,

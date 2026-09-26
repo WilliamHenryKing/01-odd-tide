@@ -55,6 +55,8 @@ export const TERRAIN_BOUNDS = {
   max: [30, 10.5, 22] as [number, number, number],
   voxel: 0.25,
 };
+/** Depth of the flat seabed beyond the bake; the bake feathers into it at its edges. */
+export const FAR_SEABED = -6.75;
 /** Heightmap of the rock/sand top surface for water depth, sampled over the same x/z bounds. */
 export const HEIGHTMAP_SIZE = 256;
 

@@ -13,6 +13,7 @@ import {
   RedFormat,
   Vector3,
 } from "three";
+import { FAR_SEABED } from "./layout";
 
 // The sea: one physical surface at the domain tide level. Reflections, sun glints and shadows
 // come from the shared rig; the seabed seen through it is absorbed in the terrain shader, and
@@ -47,7 +48,7 @@ export async function loadHeightmap(): Promise<Heightmap> {
   const sample = (x: number, z: number) => {
     const u = (x - meta.min[0]) / (meta.max[0] - meta.min[0]);
     const v = (z - meta.min[1]) / (meta.max[1] - meta.min[1]);
-    if (u < 0 || v < 0 || u >= 1 || v >= 1) return -7;
+    if (u < 0 || v < 0 || u >= 1 || v >= 1) return FAR_SEABED;
     const col = Math.min(meta.size - 1, Math.floor(u * meta.size));
     const row = Math.min(meta.size - 1, Math.floor(v * meta.size));
     return heights[row * meta.size + col] ?? -7;
@@ -145,10 +146,11 @@ export function createWater(heightmap: Heightmap, shared: WaterUniforms, sun?: S
       .replace(
         "#include <map_fragment>",
         `vec2 seaUv = (vSeaWorld.xz - heightMin) / (heightMax - heightMin);
-        float ground = (seaUv.x < 0.0 || seaUv.y < 0.0 || seaUv.x > 1.0 || seaUv.y > 1.0) ? -7.0 : texture2D(heightTex, seaUv).r;
+        float ground = (seaUv.x < 0.0 || seaUv.y < 0.0 || seaUv.x > 1.0 || seaUv.y > 1.0) ? ${FAR_SEABED.toFixed(2)} : texture2D(heightTex, seaUv).r;
         float seaDepth = max(seaLevel - ground, 0.0);
         float footprint = length(fwidth(vSeaWorld.xz));
-        vec2 slope = seaSlope(vSeaWorld.xz, seaTime, footprint) * smoothstep(0.0, 0.6, seaDepth);
+        // Shallows keep smaller ripples; fading them to flat drew the depth contour as an edge.
+        vec2 slope = seaSlope(vSeaWorld.xz, seaTime, footprint) * mix(0.35, 1.0, smoothstep(0.0, 2.5, seaDepth));
         vec3 seaN = normalize(vec3(-slope.x, 1.0, -slope.y));
         // Shoreline foam: a thin band where the water shoals, broken by drifting noise.
         float shore = 1.0 - smoothstep(0.0, 0.32, seaDepth);

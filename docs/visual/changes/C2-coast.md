@@ -32,3 +32,13 @@
 | horizon | Continuous haze; island small; the archipelago's silhouette is low and even |
 
 **Expected movement:** materials, detail density, environment integration and atmosphere/depth up at arrival, coast-grazing, bath and horizon; architecture rows unchanged until C3.
+
+## C2b — corrective change after the C2 cold review (27 September 2026)
+
+[C2-REVIEW](../reviews/C2-REVIEW.md): hero average 2.63 → 2.85, static 2.55 → 2.87, with four regressed rows. Two belonged to legacy pieces already replaced by C3 (canopies hiding the Weather House front; the legacy bowl's rim seam). C3 landed before this review returned; this corrective change lands before any further visual change. Fixes:
+
+- **Straight seabed seam through the hero water (arrival X 3→2):** the bake's seabed now feathers to exactly the far seabed's depth (`FAR_SEABED`, −6.75 m) over its last 5 m, and the sea shader uses the same depth outside the heightmap, so the bake's rectangle no longer prints through the water.
+- **Depth-contour edge in the shallows (dusk X 3→2):** shallow water keeps 35% of its ripples (fading over 2.5 m) instead of going flat at 0.6 m; the cove's beach slope now continues past the mouth and melts into the seabed instead of ending in an underwater step.
+- Remaining at dusk, by design: the cliff's long shadow over the cove at 2° sun (glints stay on the sunlit water); flagged for the reviewer rather than removed.
+
+Evidence: `../captures/c2b-after/` (now 11 bookmarks, adding `planting-close`); vegetation still legacy in this set (C4 follows).
