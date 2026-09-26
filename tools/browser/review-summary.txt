@@ -1,0 +1,29 @@
+async (page) => {
+  const report = [];
+  const assert = (ok, name) => { if (!ok) throw new Error(name); report.push(name); };
+  const dismiss = page.getByRole('button', { name: 'Dismiss message', exact: true });
+  if (await dismiss.count()) await dismiss.click();
+  await page.getByLabel('Turn the day', { exact: true }).focus();
+  await page.keyboard.press('End');
+  for (let i = 0; i < 8; i++) await page.keyboard.press('ArrowLeft');
+  assert(await page.getByLabel('Turn the day', { exact: true }).inputValue() === '20', 'Keyboard sets evening time');
+  const downloadEvent = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Take a postcard with you', exact: true }).click();
+  const download = await downloadEvent;
+  await download.saveAs('output/playwright/postcard-example.png');
+  assert(await download.failure() === null, 'Actual PNG postcard downloads');
+  await page.getByRole('button', { name: 'A little rearranging', exact: true }).click();
+  assert(await page.getByRole('combobox', { name: 'Guests', exact: true }).inputValue() === '4', 'Editing summary preserves guests');
+  assert(await page.getByRole('combobox', { name: 'The Borrowed Bath start time', exact: true }).inputValue() === '10.5', 'Editing preserves repaired schedule');
+  await page.getByRole('button', { name: 'Remove The Borrowed Bath', exact: true }).click();
+  await page.getByRole('button', { name: 'Remove The Lantern Walk', exact: true }).click();
+  assert(await page.getByText('A wonderfully empty day.', { exact: false }).isVisible(), 'Empty itinerary is intentional and explained');
+  assert(await page.getByRole('button', { name: 'See your island plan', exact: true }).isEnabled(), 'An empty day is a valid choice');
+  await page.getByRole('button', { name: 'Restore a saved day', exact: true }).click();
+  await page.getByRole('button', { name: 'A little adventure', exact: true }).click();
+  await page.getByRole('combobox', { name: 'Rock-pool ramble start time', exact: true }).selectOption('9');
+  assert(await page.getByText('overlaps', { exact: false }).isVisible(), 'Overlapping activities explain conflict');
+  await page.getByRole('button', { name: 'Find a time that works' }).click();
+  assert(await page.getByRole('button', { name: 'See your island plan', exact: true }).isEnabled(), 'Overlap repair is usable');
+  return report;
+}

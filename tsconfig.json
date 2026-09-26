@@ -15,5 +15,5 @@
     "noEmit": true,
     "types": ["vite/client", "bun"]
   },
-  "include": ["src", "development", "scripts", "tests", "*.config.ts"]
+  "include": ["src", "development", "scripts", "tools", "tests", "*.config.ts"]
 }

@@ -1,0 +1,30 @@
+async (page) => {
+  const report = [];
+  const assert = (ok, name) => { if (!ok) throw new Error(name); report.push(name); };
+  await page.locator('.island-surface.ready').waitFor();
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.world-canvas')).opacity === '1');
+  await page.screenshot({ path: 'output/playwright/final-arrival.png' });
+  await page.getByLabel('Turn the day', { exact: true }).focus();
+  await page.keyboard.press('Home');
+  for (let i=0;i<36;i++) await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(1400);
+  assert(await page.getByLabel('Turn the day', { exact: true }).inputValue() === '15', 'Keyboard advances the actual scene to high tide');
+  await page.screenshot({ path: 'output/playwright/final-high-tide.png' });
+  await page.keyboard.press('Home');
+  for (let i=0;i<12;i++) await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(1400);
+  await page.mouse.click(716,365);
+  await page.waitForURL('**/stays/weather-house?**');
+  await page.waitForTimeout(1500);
+  await page.getByRole('button', { name: 'Take a peek inside', exact: false }).click();
+  await page.waitForTimeout(1600);
+  await page.screenshot({ path: 'output/playwright/final-weather-interior.png' });
+  await page.getByRole('button', { name: 'Tuck the roof back in', exact: false }).click();
+  await page.waitForTimeout(1600);
+  await page.screenshot({ path: 'output/playwright/final-weather-closed.png' });
+  assert(await page.getByRole('button', { name: 'Take a peek inside', exact: false }).isVisible(), 'Roof opens and reverses while the camera remains composed');
+  await page.getByRole('button', { name: 'Make this your little place', exact: true }).click();
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')).opacity === '1');
+  assert(await page.getByRole('radio', { name: 'The Weather House Sleeps 2' }).isChecked(), 'Real scene selection reaches the matching planner');
+  return report;
+}

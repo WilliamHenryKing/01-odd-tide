@@ -1,0 +1,97 @@
+async (page) => {
+  const base = 'http://127.0.0.1:4611', checks = [];
+  const assert = (ok, name) => { if (!ok) throw new Error(name); checks.push(name); };
+  const probe = await page.context().newPage();
+  try {
+    await probe.setViewportSize({ width: 1440, height: 1000 });
+    await probe.addInitScript(() => {
+      window.__draws = 0;
+      for (const name of ['drawElements', 'drawArrays', 'drawElementsInstanced', 'drawArraysInstanced']) {
+        const original = WebGL2RenderingContext.prototype[name];
+        WebGL2RenderingContext.prototype[name] = function(...args) { window.__draws++; return original.apply(this, args); };
+      }
+      window.__audio = [];
+      const NativeAudio = window.AudioContext;
+      window.AudioContext = class extends NativeAudio {
+        constructor(...args) { super(...args); window.__audio.push(this); }
+      };
+    });
+    await probe.goto(base + '/');
+    await probe.locator('.island-surface.ready').waitFor();
+    const activeStart = await probe.evaluate(() => window.__draws);
+    await probe.waitForTimeout(500);
+    assert(await probe.evaluate(() => window.__draws) > activeStart, 'The live scene renders actual WebGL frames');
+    await probe.getByRole('button', { name: 'Pause the ripples', exact: true }).click();
+    await probe.waitForTimeout(1300);
+    const pausedStart = await probe.evaluate(() => window.__draws);
+    await probe.waitForTimeout(500);
+    const pausedEnd = await probe.evaluate(() => window.__draws);
+    assert(pausedEnd === pausedStart, 'Pause stops GPU draw calls after the state transition');
+    await probe.getByRole('button', { name: 'Resume the ripples', exact: true }).click();
+    await probe.getByRole('contentinfo').scrollIntoViewIfNeeded();
+    await probe.waitForTimeout(1300);
+    const offscreenStart = await probe.evaluate(() => window.__draws);
+    await probe.waitForTimeout(500);
+    assert(await probe.evaluate(() => window.__draws) === offscreenStart, 'Offscreen island stops GPU draw calls');
+    assert(await probe.evaluate(() => window.__audio.length) === 0, 'No audio context exists before deliberate activation');
+    await probe.getByRole('button', { name: 'A little sea air · sound off', exact: true }).click();
+    await probe.getByRole('button', { name: 'A little sea air · sound on', exact: true }).waitFor();
+    assert(await probe.evaluate(() => window.__audio[0].state) === 'running', 'Opt-in sound starts a real audio context');
+    await probe.getByRole('slider', { name: 'Volume', exact: true }).focus();
+    await probe.keyboard.press('Home');
+    assert(await probe.getByRole('slider', { name: 'Volume', exact: true }).inputValue() === '0', 'Volume can be reduced to zero by keyboard');
+    await probe.getByRole('button', { name: 'A little sea air · sound on', exact: true }).click();
+    await probe.waitForFunction(() => window.__audio[0].state === 'closed');
+    assert(true, 'Muting closes the audio context');
+    await probe.evaluate(() => window.scrollTo(0, 0));
+    await probe.evaluate(() => document.querySelector('.world-canvas canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
+    await probe.locator('.island-surface.failed').waitFor();
+    assert(await probe.locator('.world-poster img').evaluate((img) => img.complete && img.naturalWidth > 0), 'Context loss reveals a real saved island image');
+    await probe.screenshot({ path: 'output/playwright/context-loss.png' });
+    await probe.getByRole('button', { name: 'Try the island again', exact: true }).click();
+    await probe.locator('.island-surface.ready').waitFor();
+    assert(await probe.locator('.world-canvas canvas').count() === 1, 'Retry creates one working canvas');
+    await probe.goto(base + '/plan');
+    await probe.evaluate(() => Object.defineProperty(window, 'localStorage', { configurable: true, get() { throw new DOMException('Storage disabled for this review', 'SecurityError'); } }));
+    await probe.getByRole('button', { name: 'Save on this browser', exact: true }).click();
+    await probe.getByRole('status').filter({ hasText: 'Browser storage is unavailable.' }).waitFor();
+    assert(await probe.getByRole('status').filter({ hasText: 'Browser storage is unavailable.' }).isVisible(), 'Storage denial explains URL recovery');
+    assert(await probe.getByRole('button', { name: 'See your island plan', exact: true }).isEnabled(), 'Storage denial does not block the planner');
+    await probe.emulateMedia({ reducedMotion: 'reduce' });
+    await probe.goto(base + '/stays/weather-house');
+    await probe.locator('.island-surface.ready').waitFor();
+    assert(await probe.getByRole('button', { name: 'Gentle motion on', exact: true }).getAttribute('aria-pressed') === 'true', 'System reduced-motion preference is respected');
+    await probe.getByRole('button', { name: 'Take a peek inside', exact: true }).click();
+    await probe.getByRole('button', { name: 'Tuck the roof back in', exact: true }).waitFor();
+    assert(true, 'Cabin inspection remains available with reduced motion');
+  } catch (error) {
+    await probe.screenshot({ path: 'output/playwright/recovery-failure.png', fullPage: true });
+    return { checks, failure: error.message, text: (await probe.locator('body').innerText()).slice(-1800) };
+  } finally { await probe.close(); }
+  const fallback = await page.context().newPage();
+  try {
+    await fallback.setViewportSize({ width: 1440, height: 1000 });
+    await fallback.addInitScript(() => {
+      const original = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function(kind, ...args) {
+        if (kind === 'webgl2' || kind === 'webgl' || kind === 'experimental-webgl') return null;
+        return original.call(this, kind, ...args);
+      };
+    });
+    await fallback.goto(base + '/');
+    await fallback.locator('.island-surface.failed').waitFor();
+    assert(await fallback.locator('.world-poster img').evaluate((img) => img.complete && img.naturalWidth > 0), 'Unavailable WebGL has a real image fallback');
+    await fallback.getByRole('link', { name: 'Find your little escape', exact: true }).click();
+    await fallback.getByRole('combobox', { name: 'Your party', exact: true }).waitFor();
+    assert(true, 'Stay comparison works without WebGL');
+    await fallback.goto(base + '/summary');
+    await fallback.locator('.island-surface.failed').waitFor();
+    const downloadEvent = fallback.waitForEvent('download');
+    await fallback.getByRole('button', { name: 'Take a postcard with you', exact: true }).click();
+    const download = await downloadEvent;
+    await download.saveAs('output/playwright/postcard-fallback.png');
+    assert(await download.failure() === null, 'Postcard export also works without WebGL');
+  } finally { await fallback.close(); }
+  return { checks, scope: 'Browser instrumentation and audio state checks, not a listening review. Intentional WebGL failure can emit expected browser diagnostics.' };
+}
+

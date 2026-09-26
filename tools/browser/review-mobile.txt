@@ -1,0 +1,51 @@
+async (page) => {
+  const base = 'http://127.0.0.1:4611', checks = [], sizes = [];
+  const assert = (ok, name) => { if (!ok) throw new Error(name); checks.push(name); };
+  const context = await page.context().browser().newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+  const phone = await context.newPage();
+  const errors = [];
+  phone.on('pageerror', (error) => errors.push(error.message));
+  try {
+    for (const width of [320, 390, 768]) {
+      await phone.setViewportSize({ width, height: width === 768 ? 1024 : 844 });
+      for (const route of ['/', '/stays', '/plan', '/summary']) {
+        await phone.goto(base + route);
+        await phone.getByRole('heading', { level: 1 }).waitFor();
+        await phone.waitForFunction(() => [...document.querySelectorAll('h1')].every((item) => Number(getComputedStyle(item).opacity) >= 0.99));
+        if (route === '/' || route === '/summary') await phone.locator('.island-surface.ready').waitFor();
+        const overflow = await phone.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        sizes.push({ width, route, overflow });
+        assert(overflow <= 1, `${width}px ${route} has no horizontal overflow`);
+        if (route === '/plan' || route === '/') {
+          if (route === '/') {
+            await phone.getByRole('button', { name: 'Gentle motion off', exact: true }).tap();
+            await phone.waitForFunction(() => getComputedStyle(document.querySelector('.world-canvas')).opacity === '1');
+          }
+          await phone.evaluate(() => window.scrollTo(0, 0));
+          await phone.screenshot({ path: `output/playwright/mobile-${width}-${route === '/' ? 'island' : 'planner'}.png`, fullPage: route === '/plan' });
+        }
+      }
+    }
+    await phone.setViewportSize({ width: 390, height: 844 });
+    await phone.goto(base + '/');
+    await phone.getByRole('button', { name: 'Menu +', exact: true }).tap();
+    assert(await phone.getByRole('navigation', { name: 'Main navigation', exact: true }).isVisible(), 'Touch opens mobile navigation');
+    await phone.getByRole('link', { name: 'Make yourself at home', exact: true }).tap();
+    await phone.getByRole('combobox', { name: 'Guests', exact: true }).selectOption('4');
+    await phone.getByRole('radio', { name: 'The Lantern Lodge Sleeps 4' }).tap();
+    await phone.getByRole('button', { name: 'See your island plan', exact: true }).tap();
+    assert(phone.url().includes('/summary?'), 'Touch journey reaches a valid summary');
+    assert(await phone.getByRole('button', { name: 'Menu +', exact: true }).getAttribute('aria-expanded') === 'false', 'Mobile navigation closes after a choice');
+    const actionSizes = await phone.getByRole('button', { name: 'Take a postcard with you', exact: true }).boundingBox();
+    assert(actionSizes.height >= 40, 'Main postcard action has a comfortable touch height');
+    assert(errors.length === 0, 'Touch and responsive routes have no runtime errors');
+  } finally { await context.close(); }
+  const noScriptContext = await page.context().browser().newContext({ javaScriptEnabled: false });
+  try {
+    const staticPage = await noScriptContext.newPage();
+    await staticPage.goto(base + '/stays');
+    assert((await staticPage.getByRole('heading', { level: 1 }).innerText()).includes('to stay a while.'), 'The correct comparison page is served without JavaScript');
+    assert(await staticPage.locator('.no-script-banner').isVisible(), 'No-JavaScript limitation is explained');
+  } finally { await noScriptContext.close(); }
+  return { checks, sizes, device: 'Chrome touch and viewport emulation; no physical phone tested.' };
+}

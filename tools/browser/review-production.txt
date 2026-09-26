@@ -1,0 +1,40 @@
+async (page) => {
+  const base = 'http://127.0.0.1:4611';
+  const failures = [], routes = [], report = [];
+  const onError = (error) => failures.push(error.message);
+  page.on('pageerror', onError);
+  const assert = (ok, name) => { if (!ok) throw new Error(name); report.push(name); };
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  for (const route of ['/', '/stays', '/stays/weather-house', '/stays/nap-observatory', '/stays/lantern-lodge', '/plan', '/summary', '/about', '/404']) {
+    const response = await page.goto(base + route);
+    await page.getByRole('heading', { level: 1 }).waitFor();
+    if (route === '/' || route.startsWith('/stays/') || route === '/summary') await page.locator('.island-surface.ready').waitFor();
+    routes.push({ route, status: response.status(), heading: await page.getByRole('heading', { level: 1 }).innerText() });
+  }
+  assert(failures.length === 0, 'Nine production routes hydrate without runtime errors');
+  await page.goto(base + '/stays?guests=4');
+  assert(await page.getByText('Your party needs a little more room.', { exact: true }).count() === 2, 'Comparison explains both capacity limits');
+  await page.getByRole('article').filter({ has: page.getByRole('heading', { name: 'The Lantern Lodge', exact: true }) }).getByRole('button', { name: 'Explore this stay', exact: true }).click();
+  assert(page.url().includes('/stays/lantern-lodge?'), 'Stay comparison opens the chosen cabin');
+  await page.getByRole('button', { name: 'Make this your little place', exact: true }).click();
+  assert(await page.getByRole('radio', { name: 'The Lantern Lodge Sleeps 4' }).isChecked(), 'Detail choice reaches planner with the same cabin');
+  await page.goBack();
+  await page.getByRole('heading', { name: 'The Lantern Lodge', exact: true, level: 1 }).waitFor();
+  assert(page.url().includes('/stays/lantern-lodge?'), 'Browser back restores cabin route');
+  await page.goto(base + '/?time=9');
+  await page.locator('.island-surface.ready').waitFor();
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.world-canvas')).opacity === '1');
+  await page.mouse.click(716, 365);
+  await page.waitForURL('**/stays/weather-house?**');
+  assert(true, 'Raycast cabin selection opens Weather House');
+  await page.goto(base + '/?time=9');
+  await page.locator('.island-surface.ready').waitFor();
+  await page.getByRole('button', { name: 'Follow a little curiosity', exact: true }).click();
+  assert(await page.getByRole('button', { name: 'Collect lens piece: The last little star', exact: true }).isDisabled(), 'Evening lens is unavailable in morning');
+  await page.getByRole('button', { name: 'Look for glints on the island', exact: false }).click();
+  await page.waitForFunction(() => window.scrollY < 5);
+  await page.screenshot({ path: 'output/playwright/lens-active.png' });
+  page.off('pageerror', onError);
+  assert(failures.length === 0, 'Production navigation and scene interaction have no runtime errors');
+  return { routes, report, failures, browser: await page.evaluate(() => navigator.userAgent) };
+}

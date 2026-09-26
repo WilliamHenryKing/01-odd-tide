@@ -1,0 +1,50 @@
+async (page) => {
+  const report = [];
+  const assert = (ok, name) => {
+    if (!ok) throw new Error(name);
+    report.push(name);
+  };
+  await page.getByRole("combobox", { name: "Guests", exact: true }).selectOption("4");
+  assert(
+    await page.getByRole("button", { name: "See your island plan", exact: true }).isDisabled(),
+    "Capacity prevents completion",
+  );
+  await page.getByRole("radio", { name: "The Lantern Lodge Sleeps 4" }).check();
+  assert(
+    await page.getByRole("button", { name: "See your island plan", exact: true }).isEnabled(),
+    "Four guests accepted by the Lodge",
+  );
+  await page.getByLabel("Arrive", { exact: true }).fill("2026-10-10");
+  await page.getByLabel("Leave", { exact: true }).fill("2026-10-12");
+  assert(
+    await page.getByRole("button", { name: "See your island plan", exact: true }).isDisabled(),
+    "Unavailable dates prevent completion",
+  );
+  await page.getByLabel("Arrive", { exact: true }).fill("2026-10-19");
+  await page.getByLabel("Leave", { exact: true }).fill("2026-10-22");
+  await page
+    .getByRole("combobox", { name: "The Borrowed Bath start time", exact: true })
+    .selectOption("15");
+  assert(
+    await page
+      .getByText("The tide covers the path during The Borrowed Bath.", { exact: false })
+      .isVisible(),
+    "Flooded bath explains the tide conflict",
+  );
+  await page.getByRole("button", { name: "Find a time that works" }).click();
+  assert(
+    await page.getByRole("button", { name: "See your island plan", exact: true }).isEnabled(),
+    "Repair produces a valid schedule",
+  );
+  await page.getByRole("button", { name: "Save on this browser", exact: true }).click();
+  await page.getByRole("combobox", { name: "Guests", exact: true }).selectOption("1");
+  await page.getByRole("button", { name: "Restore a saved day", exact: true }).click();
+  assert(
+    (await page.getByRole("combobox", { name: "Guests", exact: true }).inputValue()) === "4",
+    "Saved day restores guests",
+  );
+  await page.screenshot({ path: "output/playwright/planner-valid-desktop.png", fullPage: true });
+  await page.getByRole("button", { name: "See your island plan", exact: true }).click();
+  assert(page.url().includes("/summary?"), "Valid plan reaches summary");
+  return report;
+}

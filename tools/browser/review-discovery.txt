@@ -1,0 +1,21 @@
+async (page) => {
+  const checks = [];
+  const assert = (ok, name) => { if (!ok) throw new Error(name); checks.push(name); };
+  await page.getByRole('button', { name: 'Gentle motion off', exact: true }).click();
+  await page.mouse.click(518, 428);
+  await page.getByRole('button', { name: 'Found lens piece: A glint beside the bath', exact: true }).waitFor();
+  assert(true, 'The visible bath lens can be collected by raycasting');
+  await page.getByRole('button', { name: 'Collect lens piece: Something in the wind', exact: true }).click();
+  assert(await page.getByRole('button', { name: 'Collect lens piece: The last little star', exact: true }).isDisabled(), 'The final lens waits for evening');
+  await page.getByRole('slider', { name: /Look at the island at/ }).focus();
+  await page.keyboard.press('End');
+  await page.getByRole('button', { name: 'Collect lens piece: The last little star', exact: true }).click();
+  await page.getByText('Three pieces, one little light.', { exact: false }).waitFor();
+  await page.getByRole('button', { name: 'Look for glints on the island', exact: false }).click();
+  await page.waitForFunction(() => window.scrollY < 5);
+  await page.screenshot({ path: 'output/playwright/lighthouse-ending.png' });
+  assert(await page.getByText('✳ Lighthouse restored', { exact: true }).isVisible(), 'All three lenses reach the lighthouse ending');
+  await page.getByRole('button', { name: 'Hide the pieces and play again', exact: true }).click();
+  assert(await page.getByText('0 of 3 pieces found.', { exact: false }).isVisible(), 'Discovery replay resets all pieces');
+  return checks;
+}

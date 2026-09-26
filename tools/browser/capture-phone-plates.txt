@@ -1,0 +1,11 @@
+async (page) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const [name, hour] of [['day', 9], ['night', 21]]) {
+    await page.goto(`http://127.0.0.1:4611/?time=${hour}`);
+    await page.locator('.island-surface.ready').waitFor();
+    await page.getByRole('button', { name: 'Gentle motion off', exact: true }).click();
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('.world-canvas')).opacity === '1');
+    await page.getByLabel('Interactive miniature of the Odd Tide island', { exact: true }).screenshot({ path: `public/plates/island-${name}-phone.jpg`, type: 'jpeg', quality: 88 });
+  }
+  return 'Saved the revised portrait camera plates from real WebGL frames.';
+}

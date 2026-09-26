@@ -1,0 +1,9 @@
+async (page) => {
+  const context = await page.context().browser().newContext({ javaScriptEnabled: false });
+  try {
+    const view = await context.newPage();
+    await view.goto('http://127.0.0.1:4611/stays');
+    await view.screenshot({ path: 'output/playwright/no-javascript.png' });
+    return await view.evaluate(() => ({ text: document.body.innerText.slice(0, 800), banner: document.querySelector('noscript').outerHTML, computed: getComputedStyle(document.querySelector('noscript')).display, heading: document.querySelector('h1').textContent }));
+  } finally { await context.close(); }
+}
