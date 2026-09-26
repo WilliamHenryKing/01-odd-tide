@@ -1,0 +1,28 @@
+async (page) => {
+  const results=[];
+  const context=await page.context().browser().newContext();
+  const probe=await context.newPage();
+  const cdp=await context.newCDPSession(probe);
+  try {
+    await probe.goto('http://127.0.0.1:4511/');
+    await probe.waitForFunction(()=>!!window.__VISUAL_TEST__);
+    await probe.evaluate(async()=>await window.__VISUAL_TEST__.ready);
+    for(const viewport of [{width:360,height:800},{width:800,height:360},{width:1100,height:1400},{width:1400,height:1100},{width:1600,height:1800},{width:1800,height:1600}]) {
+      await probe.setViewportSize(viewport);
+      await probe.evaluate(async()=>{const h=window.__VISUAL_TEST__;await h.setBookmark('arrival-day');h.freeze();await h.settle(30);scrollTo(0,0);});
+      const path=`docs/visual/captures/baseline/responsive-${viewport.width}x${viewport.height}.png`;
+      await probe.screenshot({path});
+      results.push({viewport,path,overflow:await probe.evaluate(()=>document.documentElement.scrollWidth>innerWidth),info:await probe.evaluate(()=>window.__VISUAL_TEST__.info())});
+    }
+    for(const type of ['protanopia','deuteranopia','tritanopia']) {
+      await cdp.send('Emulation.setEmulatedVisionDeficiency',{type});
+      for(const viewport of [{width:1920,height:1080},{width:390,height:844}]) {
+        await probe.setViewportSize(viewport);
+        await probe.evaluate(async()=>{const h=window.__VISUAL_TEST__;await h.setBookmark('arrival-day');h.freeze();await h.settle(30);scrollTo(0,0);});
+        const path=`docs/visual/captures/baseline/vision-${type}-${viewport.width}.png`;
+        await probe.screenshot({path,fullPage:true});results.push({viewport,type,path});
+      }
+    }
+  }finally{await context.close();}
+  return {scope:'Arrival UI at every CSS breakpoint in portrait/landscape; colour-vision emulation. Main baseline covers all ten bookmarks at desktop and portrait DPR3.',results};
+}

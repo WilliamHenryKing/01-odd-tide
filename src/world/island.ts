@@ -303,10 +303,12 @@ export function createIsland(
     frame = 0,
     last = performance.now(),
     elapsed = 0;
+  let perfActive = false;
   let lastSelected: StayId | null | undefined;
   let lastOpened = false;
   const wake = () => {
     dirty = true;
+    if (perfActive) return;
     if (!frame && visible && !document.hidden && !disposed) frame = requestAnimationFrame(draw);
   };
   const pose = (instant: boolean) => {
@@ -358,12 +360,13 @@ export function createIsland(
     });
   };
   function draw(now: number, captureFrame = false) {
+    if (perfActive && !captureFrame) return;
     frame = 0;
     if (disposed || (!captureFrame && (!visible || document.hidden))) return;
     const delta = Math.min((now - last) / 1000, 0.05);
     last = now;
     const animated = !state.paused && !state.reduced;
-    if (animated) elapsed += delta;
+    if (animated && !perfActive) elapsed += delta;
     const visualHour = captureFrame ? state.hour : values.hour;
     const level = waterHeight(visualHour);
     const dusk = Math.max(0, Math.min(1, (visualHour - 16.5) / 4));
@@ -412,7 +415,7 @@ export function createIsland(
     camera.lookAt(target);
     renderer.render(scene, camera);
     dirty = false;
-    if (animated && visible && !document.hidden) frame = requestAnimationFrame(draw);
+    if (animated && !perfActive && visible && !document.hidden) frame = requestAnimationFrame(draw);
   }
   const resize = () => {
     const rect = host.getBoundingClientRect();
@@ -494,8 +497,176 @@ export function createIsland(
   frame = 0;
   draw(performance.now());
   onReady();
+  let detachInspection: (() => void) | undefined;
+  let detachPerf: (() => void) | undefined;
+  if (import.meta.env.MODE === "performance" && document.documentElement.dataset.perf === "true") {
+    void Promise.all([import("../visual/perf"), import("../visual/bookmarks")]).then(
+      ([{ installPerf }, { BOOKMARKS }]) => {
+        if (disposed) return;
+        let savedState = state;
+        let savedElapsed = elapsed;
+        const savedPosition = new Vector3();
+        const savedTarget = new Vector3();
+        const poses: { position: Vector3; target: Vector3 }[] = [];
+        detachPerf = installPerf({
+          renderer,
+          scene,
+          camera,
+          begin() {
+            savedState = state;
+            savedElapsed = elapsed;
+            savedPosition.copy(camera.position);
+            savedTarget.copy(target);
+            perfActive = true;
+            cancelAnimationFrame(frame);
+            frame = 0;
+            gsap.killTweensOf(values);
+            gsap.killTweensOf(camera.position);
+            gsap.killTweensOf(target);
+            poses.length = 0;
+            for (const bookmark of BOOKMARKS) {
+              state = { ...bookmark.state, paused: false, reduced: false };
+              pose(true);
+              if (bookmark.camera) {
+                camera.position.set(...bookmark.camera.position);
+                target.set(...bookmark.camera.target);
+              }
+              poses.push({ position: camera.position.clone(), target: target.clone() });
+            }
+          },
+          frame(seconds) {
+            // A first rAF timestamp can precede setup's performance.now within the same frame.
+            seconds = Math.max(0, seconds);
+            const phase = (seconds % 60) / (60 / BOOKMARKS.length);
+            const index = Math.floor(phase);
+            const next = (index + 1) % BOOKMARKS.length;
+            const bookmark = BOOKMARKS[index];
+            const from = poses[index];
+            const to = poses[next];
+            if (!bookmark || !from || !to) throw new Error("Missing benchmark pose");
+            state = { ...bookmark.state, paused: false, reduced: false };
+            values.hour = state.hour;
+            values.open = state.opened ? 1 : 0;
+            // Hold each bookmark for 4 seconds, then travel for 2. Same path on every run.
+            const u = Math.max(0, ((phase % 1) - 2 / 3) * 3);
+            const smooth = u * u * (3 - 2 * u);
+            camera.position.lerpVectors(from.position, to.position, smooth);
+            target.lerpVectors(from.target, to.target, smooth);
+            elapsed = seconds;
+            draw(performance.now(), true);
+            return `${bookmark.id}${u > 0 ? ":transition" : ":hold"}`;
+          },
+          end() {
+            state = savedState;
+            values.hour = state.hour;
+            values.open = state.opened ? 1 : 0;
+            elapsed = savedElapsed;
+            camera.position.copy(savedPosition);
+            target.copy(savedTarget);
+            perfActive = false;
+            last = performance.now();
+            wake();
+          },
+        });
+      },
+    );
+  }
+  if (import.meta.env.DEV || import.meta.env.MODE === "visual-test") {
+    void Promise.all([import("../visual/inspection"), import("../visual/bookmarks")]).then(
+      ([{ installInspection }, { BOOKMARKS }]) => {
+        if (disposed) return;
+        root.traverse((object) => {
+          object.userData.visualFamily = "site fixtures and decoration";
+        });
+        for (const child of root.children) {
+          if (
+            child instanceof Group &&
+            child.children.some(
+              (object) => object instanceof Mesh && object.geometry.type === "ExtrudeGeometry",
+            )
+          )
+            child.traverse((object) => {
+              object.userData.visualFamily = "terrain strata and rock fragments";
+            });
+          if (
+            child instanceof Group &&
+            child.children.some(
+              (object) =>
+                object instanceof Mesh &&
+                (object.material === kit.leaf || object.material === kit.leafLight),
+            )
+          )
+            child.traverse((object) => {
+              object.userData.visualFamily = "foliage";
+            });
+        }
+        for (const [id, building] of Object.entries(buildings))
+          building.group.traverse((object) => {
+            object.userData.visualFamily = `cabin:${id}`;
+          });
+        bath.traverse((object) => {
+          object.userData.visualFamily = "borrowed bath";
+        });
+        sea.userData.visualFamily = "shader water";
+        for (const fragment of fragments)
+          fragment.group.traverse((object) => {
+            object.userData.visualFamily = "discovery markers";
+          });
+        let currentBookmark = BOOKMARKS[0];
+        const freeze = () => {
+          state = { ...state, paused: true, reduced: true };
+          elapsed = 0;
+          gsap.killTweensOf(values);
+          gsap.killTweensOf(camera.position);
+          gsap.killTweensOf(target);
+          values.hour = state.hour;
+          values.open = state.opened ? 1 : 0;
+          cancelAnimationFrame(frame);
+          frame = 0;
+        };
+        const apply = async (id: string) => {
+          const item = BOOKMARKS.find((bookmark) => bookmark.id === id);
+          if (!item) throw new Error(`Unknown bookmark: ${id}`);
+          currentBookmark = item;
+          window.dispatchEvent(new CustomEvent("odd-tide-visual-state", { detail: item.state }));
+          await new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          );
+          state = { ...item.state };
+          freeze();
+          pose(true);
+          if (item.camera) {
+            gsap.killTweensOf(camera.position);
+            gsap.killTweensOf(target);
+            camera.position.set(...item.camera.position);
+            target.set(...item.camera.target);
+          }
+          draw(performance.now(), true);
+        };
+        detachInspection = installInspection({
+          renderer,
+          scene,
+          camera,
+          bookmarks: BOOKMARKS,
+          apply,
+          freeze,
+          render: () => draw(performance.now(), true),
+          current: () => ({ ...state, elapsed, inspectionCamera: !!currentBookmark?.camera }),
+          lighting: async (name) => {
+            const hour = { day: 9, dusk: 18.5, night: 21 }[name];
+            if (hour === undefined) throw new Error(`Unknown lighting state: ${name}`);
+            state = { ...state, hour };
+            freeze();
+            draw(performance.now(), true);
+            window.dispatchEvent(new CustomEvent("odd-tide-visual-state", { detail: state }));
+          },
+        });
+      },
+    );
+  }
   return {
     update(next) {
+      if (perfActive) return;
       const previous = state;
       state = next;
       if (
@@ -558,6 +729,8 @@ export function createIsland(
     dispose() {
       if (disposed) return;
       disposed = true;
+      detachPerf?.();
+      detachInspection?.();
       cancelAnimationFrame(frame);
       gsap.killTweensOf(values);
       gsap.killTweensOf(camera.position);

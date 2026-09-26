@@ -1,0 +1,66 @@
+[
+  {
+    "id": "combined-overload",
+    "kind": "combined",
+    "count": 2304,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 15,
+    "seconds": 30
+  },
+  {
+    "id": "candidate-precondition",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 0,
+    "seconds": 120
+  },
+  {
+    "id": "candidate-A1",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 60
+  },
+  {
+    "id": "candidate-B-no-query",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "gpuQueries": false,
+    "warmup": 10,
+    "seconds": 60
+  },
+  {
+    "id": "candidate-A2",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 60
+  },
+  {
+    "id": "candidate-A3",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 60
+  },
+  { "id": "existing-repeat-2", "kind": "island", "fullHD": true, "warmup": 10, "seconds": 60 },
+  { "id": "existing-repeat-3", "kind": "island", "fullHD": true, "warmup": 10, "seconds": 60 },
+  { "id": "empty-final-control", "kind": "empty", "fullHD": true, "warmup": 5, "seconds": 10 }
+]

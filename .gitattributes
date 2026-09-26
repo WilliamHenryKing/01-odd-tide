@@ -4,3 +4,7 @@
 *.webp binary
 *.glb binary
 *.woff2 binary
+
+# Preserve the byte identity recorded in capture and benchmark SHA256 receipts.
+docs/visual/captures/** -text
+docs/visual/perf/** -text

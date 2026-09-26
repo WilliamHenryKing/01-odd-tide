@@ -1,5 +1,7 @@
 # ODD TIDE asset register
 
+> **Visual acceptance withdrawn, 26 September 2026.** William rejected this output. The records below describe historical implementation/testing, not an accepted visual result. Follow `docs/visual/AUDIT.md` and the collection Visual Quality Directive.
+
 26 September 2026. Final original assets reviewed locally by the sole producer; no independent or client approval is implied.
 
 | Family | Purpose / view | Creation and rights | Planned location | Status |

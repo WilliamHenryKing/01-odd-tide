@@ -1,0 +1,116 @@
+[
+  {
+    "id": "draws-1024",
+    "kind": "draws",
+    "count": 1024,
+    "fullHD": true,
+    "warmup": 8,
+    "seconds": 20
+  },
+  {
+    "id": "draws-1536",
+    "kind": "draws",
+    "count": 1536,
+    "fullHD": true,
+    "warmup": 8,
+    "seconds": 20
+  },
+  {
+    "id": "draws-1792",
+    "kind": "draws",
+    "count": 1792,
+    "fullHD": true,
+    "warmup": 8,
+    "seconds": 20
+  },
+  {
+    "id": "vertices-256",
+    "kind": "triangles",
+    "count": 256,
+    "segments": 256,
+    "fullHD": true,
+    "warmup": 8,
+    "seconds": 20
+  },
+  {
+    "id": "vertices-512",
+    "kind": "triangles",
+    "count": 256,
+    "segments": 512,
+    "fullHD": true,
+    "warmup": 8,
+    "seconds": 20
+  },
+  {
+    "id": "textures-384",
+    "kind": "textures",
+    "count": 384,
+    "fullHD": true,
+    "warmup": 8,
+    "seconds": 20
+  },
+  {
+    "id": "combined-512-64",
+    "kind": "combined",
+    "count": 512,
+    "segments": 64,
+    "textureCount": 192,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 20
+  },
+  {
+    "id": "combined-1024-64",
+    "kind": "combined",
+    "count": 1024,
+    "segments": 64,
+    "textureCount": 192,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 20
+  },
+  {
+    "id": "combined-1536-64",
+    "kind": "combined",
+    "count": 1536,
+    "segments": 64,
+    "textureCount": 192,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 20
+  },
+  {
+    "id": "resolution-1_6",
+    "kind": "combined",
+    "count": 512,
+    "segments": 64,
+    "textureCount": 192,
+    "fullHD": true,
+    "dpr": 1.6,
+    "warmup": 10,
+    "seconds": 20
+  },
+  {
+    "id": "resolution-2",
+    "kind": "combined",
+    "count": 512,
+    "segments": 64,
+    "textureCount": 192,
+    "fullHD": true,
+    "dpr": 2,
+    "warmup": 10,
+    "seconds": 20
+  },
+  {
+    "id": "combined-query-off",
+    "kind": "combined",
+    "count": 512,
+    "segments": 64,
+    "textureCount": 192,
+    "fullHD": true,
+    "gpuQueries": false,
+    "warmup": 10,
+    "seconds": 20
+  },
+  { "id": "existing-full-hd", "kind": "island", "fullHD": true, "warmup": 60, "seconds": 60 }
+]

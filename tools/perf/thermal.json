@@ -1,0 +1,12 @@
+[
+  {
+    "id": "candidate-continuous-720",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 30,
+    "seconds": 720
+  }
+]

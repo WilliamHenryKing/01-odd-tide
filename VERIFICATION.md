@@ -1,17 +1,19 @@
-# Local verification — 26 September 2026
+# Local verification â€” 26 September 2026
+
+> **Visual acceptance withdrawn, 26 September 2026.** William rejected this output. The records below describe historical implementation/testing, not an accepted visual result. Follow `docs/visual/AUDIT.md` and the collection Visual Quality Directive.
 
 Result: locally complete original portfolio demonstration, self-reviewed by the sole producer. No independent review, client acceptance, deployment or Upwork publication occurred.
 
 ## Delivered journey
 
-Explore the changing island → compare three stays → inspect their articulated rooms → select dates, party and activities → resolve capacity, availability, tide or overlap conflicts → finish a demo summary → download a real postcard or edit the same choices. Optional three-lens discovery has a lighthouse ending and replay. None of this creates a reservation or collects personal details.
+Explore the changing island â†’ compare three stays â†’ inspect their articulated rooms â†’ select dates, party and activities â†’ resolve capacity, availability, tide or overlap conflicts â†’ finish a demo summary â†’ download a real postcard or edit the same choices. Optional three-lens discovery has a lighthouse ending and replay. None of this creates a reservation or collects personal details.
 
 The bath causeway and floating dock move relative to actual rendered water. Lighting, windows and lamps change with the same selected time used by the domain. Entire activity intervals are checked for access. Final art is original procedural geometry, texture/shader work, illustrations and graphics; two self-hosted OFL fonts are the outside assets.
 
 ## Technical and browser evidence
 
 - `bun run check`: strict TypeScript, Biome, six domain tests / 24 assertions and a Vite production build with nine prerendered HTML routes pass. Frozen dependency installation passed in environment setup. Exact versions remain in package.json and bun.lock.
-- Windows, Headless Chrome 154.0.0.0, Playwright CLI 0.1.21. Desktop 1440 × 1000; responsive/touch emulation at 320, 390 and 768 px widths. These are emulated viewports, not physical devices.
+- Windows, Headless Chrome 154.0.0.0, Playwright CLI 0.1.21. Desktop 1440 Ã— 1000; responsive/touch emulation at 320, 390 and 768 px widths. These are emulated viewports, not physical devices.
 - All nine routes hydrated without runtime errors. Comparison capacity notes, chosen-stay navigation, browser back and scene raycast cabin selection passed. Clean routes serve the right saved HTML; no-JavaScript comparison content and the limitation banner were checked.
 - Planner: capacity four rejects the two-person stay; Lodge accepts it. Blocked dates, high-tide activity and overlaps explain the conflict and prevent finishing. Schedule repair succeeds. Save/restore, URL choices, editable summary and intentionally empty days work. Actual PNG downloads were saved and inspected.
 - Optional discovery: raycast collection, equivalent DOM controls, time-dependent star clue, three-piece lighthouse ending and replay passed.
@@ -25,7 +27,7 @@ Procedures: `tools/browser/review-production.txt`, `review-planner.txt`, `review
 
 Actual desktop and portrait images were inspected, including three daylight studies, all three open interiors, high tide, night, the lighthouse ending and exported postcards. Revisions corrected repetitive water marks, inverted bath geometry, obstructive vegetation, unattached chimney motion, a floating observatory roof, clipped open roofs, tablet type/scene overlap and narrow-phone camera fit. Final daylight is the clearest arrival; blue hour supplies the warm payoff.
 
-`island-motion.webm` records a real 36.72-second browser interaction at 1440 × 1000 / 25 fps, including changing tide, camera approach and roof opening/closing. Its one-second frame samples were visually reviewed alongside timed live interactions and final states. This is **sampled motion review**, not a claim of uninterrupted audiovisual viewing. The source capture includes preparation time and is evidence, not a finished promotional edit.
+`island-motion.webm` records a real 36.72-second browser interaction at 1440 Ã— 1000 / 25 fps, including changing tide, camera approach and roof opening/closing. Its one-second frame samples were visually reviewed alongside timed live interactions and final states. This is **sampled motion review**, not a claim of uninterrupted audiovisual viewing. The source capture includes preparation time and is evidence, not a finished promotional edit.
 
 ## Practical limits
 

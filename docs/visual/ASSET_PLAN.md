@@ -1,0 +1,16 @@
+# ODD TIDE — asset reset plan
+
+Existing files and exact sizes/hashes are in `../../assets.manifest.json`; runtime mesh/material inventory is in baseline metadata. **No new asset is acquired or approved. Per-tier allocations await D02.** Existing OFL fonts await D03. Missing original plate hashes are explicitly marked; regenerate plates after revised scenes pass review.
+
+| Family | Existing result | Next sourcing / construction decision | Tier budget / status |
+|---|---|---|---|
+| Coastal rock and shelves | Nine repeated extrusion bands per island; polyhedral rocks; sRGB albedo reused as bump | Inspect CC0 coastal rock scans and complete stone PBR maps from approved sources. Retain only the authored tide elevations/collision envelope; assemble grounded rocks at known scale. | Pending D02; candidate comparison required |
+| Vegetation | Repeated faceted blobs, 340 meshes | Inspect licence-clean modelled coastal vegetation; use instanced variants/LODs. No tree generator until its leaf-texture rights and dependency policy are verified. | Pending D02 |
+| Three cabins | Primitive assemblies with opening roofs | Keep distinctive original silhouettes and configuration; source/reference real joinery, glazing and furniture. Use well-modelled licensed subassemblies where they match, then author moving roof connections to real measurements. | Pending D02 |
+| Screws / pins / board repetition | Mostly absent fasteners; unbatched boards | Procedural exception proposed: repeated dimensioned fixings and board layouts tied to the moving roof, instanced. A generic cabin model cannot preserve these exact mechanical states; this does not justify procedural vegetation or stone. | Must be recorded per acquired/created asset |
+| Timber / ceramic / metal / textile | Constant roughness; small generated speckle | Compare full CC0 PBR sets in look-dev. Separate colour and data textures; match physical texel scale and deliberate wear locations. | Pending D02 |
+| Water / sky / practicals | Unreflective shader sea, flat sky and indoor IBL | One environment setup for each authored time state. Procedural water motion is justified by shared tide state; surface reflection and shore contact still need physical consistency. | Pending lighting look-dev |
+| UI graphics / copy / sound | Original project art and optional synthesis | Preserve provenance; no external recording or copyrighted reference art is needed. | Existing; unaccepted visuals |
+| Fonts / fallback plates | Current self-hosted OFL and original scene images | Keep source/licence records; resolve D03; regenerate plates with source hash and new verified bookmarks. | Hold for decisions / revised scene |
+
+Source order and licence checks follow the collection directive §§4–5. Treat this as commercial portfolio work. Reference photography is link-only and never copied into `public/`. No sourced GLB may pass the gate without inspect/validate, scale/pivot/normal review, explicit processing steps and output hashes. Avoid downloading large originals before the accepted tier allocation is known.

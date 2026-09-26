@@ -29,7 +29,14 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 4511,
     strictPort: true,
-    watch: { ignored: ["**/output/**", "**/.playwright-cli/**", "**/public/plates/**"] },
+    watch: {
+      ignored: [
+        "**/output/**",
+        "**/.playwright-cli/**",
+        "**/public/plates/**",
+        "**/docs/visual/captures/**",
+      ],
+    },
   },
   preview: { host: "127.0.0.1", port: 4611, strictPort: true },
   build: { cssMinify: "lightningcss", manifest: true },

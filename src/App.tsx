@@ -106,6 +106,25 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
     [plan.hour, selected, opened, paused, reduced, found, discover],
   );
   const update = (change: Partial<Plan>) => setPlan((current) => ({ ...current, ...change }));
+  useEffect(() => {
+    if (!import.meta.env.DEV && import.meta.env.MODE !== "visual-test") return;
+    const apply = (event: Event) => {
+      const state = (event as CustomEvent<typeof sceneState>).detail;
+      setPlan((current) => ({
+        ...current,
+        hour: state.hour,
+        stay: state.selected ?? current.stay,
+      }));
+      setPath(state.selected ? `/stays/${state.selected}` : "/");
+      setOpened(state.opened);
+      setPaused(state.paused);
+      setReduced(state.reduced);
+      setFound(state.found);
+      setDiscover(state.discover);
+    };
+    window.addEventListener("odd-tide-visual-state", apply);
+    return () => window.removeEventListener("odd-tide-visual-state", apply);
+  }, []);
   const navigate = useCallback(
     (next: string) => {
       history.pushState(null, "", `${next}?${planQuery(plan)}`);

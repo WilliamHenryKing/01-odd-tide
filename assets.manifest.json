@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "project": "01-odd-tide",
+  "status": "baseline inventory only; no visual or licence-exception approval",
+  "policy": "same-origin public assets; new originals under assets-src; budget/tier approval D02 pending",
+  "assets": [
+    {
+      "id": "public-.gitkeep",
+      "title": ".gitkeep",
+      "sourceUrl": "project:public/.gitkeep",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processingSteps": ["Original project SVG/code authoring"],
+      "outputFiles": [
+        {
+          "path": "public/.gitkeep",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 0
+      },
+      "status": "historical baseline; visual acceptance withdrawn"
+    },
+    {
+      "id": "public-favicon.svg",
+      "title": "favicon.svg",
+      "sourceUrl": "project:public/favicon.svg",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": "4e7faf9fea4071572b41fdb5bdca1aff1e5ae451d4e22f031dbf38eef5a3601f",
+      "processingSteps": ["Original project SVG/code authoring"],
+      "outputFiles": [
+        {
+          "path": "public/favicon.svg",
+          "bytes": 251,
+          "sha256": "4e7faf9fea4071572b41fdb5bdca1aff1e5ae451d4e22f031dbf38eef5a3601f"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 251
+      },
+      "status": "historical baseline; visual acceptance withdrawn"
+    },
+    {
+      "id": "public-fonts-dm-sans-OFL.txt",
+      "title": "dm-sans-OFL.txt",
+      "sourceUrl": "https://github.com/google/fonts/tree/main/ofl/dmsans",
+      "author": "Google Fonts / DM Sans authors",
+      "license": "SIL Open Font License 1.1",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
+      "processingSteps": ["retained upstream source/licence"],
+      "outputFiles": [
+        {
+          "path": "public/fonts/dm-sans-OFL.txt",
+          "bytes": 4482,
+          "sha256": "9af36190332437f5ecd09974de43c1f7c77a310a996cdd8ceb25628b458840e1"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 4482
+      },
+      "status": "historical verified source; D03 exception pending"
+    },
+    {
+      "id": "public-fonts-dm-sans.ttf",
+      "title": "dm-sans.ttf",
+      "sourceUrl": "https://github.com/google/fonts/tree/main/ofl/dmsans",
+      "author": "Google Fonts / DM Sans authors",
+      "license": "SIL Open Font License 1.1",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
+      "processingSteps": ["retained upstream source/licence"],
+      "outputFiles": [
+        {
+          "path": "public/fonts/dm-sans.ttf",
+          "bytes": 240164,
+          "sha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 240164
+      },
+      "status": "historical verified source; D03 exception pending"
+    },
+    {
+      "id": "public-fonts-dm-sans.woff2",
+      "title": "dm-sans.woff2",
+      "sourceUrl": "https://github.com/google/fonts/tree/main/ofl/dmsans",
+      "author": "Google Fonts / DM Sans authors",
+      "license": "SIL Open Font License 1.1",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
+      "processingSteps": ["fontTools WOFF2 conversion"],
+      "outputFiles": [
+        {
+          "path": "public/fonts/dm-sans.woff2",
+          "bytes": 88728,
+          "sha256": "f7601d92d585c025cc88561e8e5c9080c3dbdd32bf21b713e2068e8ef395d011"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 88728
+      },
+      "status": "historical verified source; D03 exception pending"
+    },
+    {
+      "id": "public-fonts-young-serif-OFL.txt",
+      "title": "young-serif-OFL.txt",
+      "sourceUrl": "https://github.com/google/fonts/tree/main/ofl/youngserif",
+      "author": "Google Fonts / Young Serif authors",
+      "license": "SIL Open Font License 1.1",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
+      "processingSteps": ["retained upstream source/licence"],
+      "outputFiles": [
+        {
+          "path": "public/fonts/young-serif-OFL.txt",
+          "bytes": 4398,
+          "sha256": "737d8d343b674c6894f373de71a044b6782c130f2aebf180933d63ddf7a3dc19"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 4398
+      },
+      "status": "historical verified source; D03 exception pending"
+    },
+    {
+      "id": "public-fonts-young-serif.ttf",
+      "title": "young-serif.ttf",
+      "sourceUrl": "https://github.com/google/fonts/tree/main/ofl/youngserif",
+      "author": "Google Fonts / Young Serif authors",
+      "license": "SIL Open Font License 1.1",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
+      "processingSteps": ["retained upstream source/licence"],
+      "outputFiles": [
+        {
+          "path": "public/fonts/young-serif.ttf",
+          "bytes": 106608,
+          "sha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 106608
+      },
+      "status": "historical verified source; D03 exception pending"
+    },
+    {
+      "id": "public-fonts-young-serif.woff2",
+      "title": "young-serif.woff2",
+      "sourceUrl": "https://github.com/google/fonts/tree/main/ofl/youngserif",
+      "author": "Google Fonts / Young Serif authors",
+      "license": "SIL Open Font License 1.1",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
+      "processingSteps": ["fontTools WOFF2 conversion"],
+      "outputFiles": [
+        {
+          "path": "public/fonts/young-serif.woff2",
+          "bytes": 40052,
+          "sha256": "d89d8687ea3c6e83184695b5fa22385642c0263425d3477243647a4ca511c984"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 40052
+      },
+      "status": "historical verified source; D03 exception pending"
+    },
+    {
+      "id": "public-plates-island-day-phone.jpg",
+      "title": "island-day-phone.jpg",
+      "sourceUrl": "project:src/world/island.ts",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": null,
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "outputFiles": [
+        {
+          "path": "public/plates/island-day-phone.jpg",
+          "bytes": 22276,
+          "sha256": "e88a574fac26bf249e1f1772b2d165e33a7e44f8c9d832448e1160a03ca9e91c"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 22276
+      },
+      "status": "historical baseline; visual acceptance withdrawn",
+      "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    },
+    {
+      "id": "public-plates-island-day.jpg",
+      "title": "island-day.jpg",
+      "sourceUrl": "project:src/world/island.ts",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": null,
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "outputFiles": [
+        {
+          "path": "public/plates/island-day.jpg",
+          "bytes": 100118,
+          "sha256": "db898dfff9e240d2f7aec30791dd1a205890a671d7f58f9bc57e08d356caf4f4"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 100118
+      },
+      "status": "historical baseline; visual acceptance withdrawn",
+      "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    },
+    {
+      "id": "public-plates-island-night-phone.jpg",
+      "title": "island-night-phone.jpg",
+      "sourceUrl": "project:src/world/island.ts",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": null,
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "outputFiles": [
+        {
+          "path": "public/plates/island-night-phone.jpg",
+          "bytes": 22539,
+          "sha256": "9862eaeca32a1dbac5ae9ce900dfb76fe1a9891c256ae0a2d2b27cdf2bf6e093"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 22539
+      },
+      "status": "historical baseline; visual acceptance withdrawn",
+      "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    },
+    {
+      "id": "public-plates-island-night.jpg",
+      "title": "island-night.jpg",
+      "sourceUrl": "project:src/world/island.ts",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": null,
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "outputFiles": [
+        {
+          "path": "public/plates/island-night.jpg",
+          "bytes": 108891,
+          "sha256": "6e768d696e6af0c1426f04fd6d0ac77e09bb42d8538102d234cf67d68e092e43"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 108891
+      },
+      "status": "historical baseline; visual acceptance withdrawn",
+      "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    },
+    {
+      "id": "public-plates-lantern-lodge-day.jpg",
+      "title": "lantern-lodge-day.jpg",
+      "sourceUrl": "project:src/world/island.ts",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": null,
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "outputFiles": [
+        {
+          "path": "public/plates/lantern-lodge-day.jpg",
+          "bytes": 123965,
+          "sha256": "80fa35c0bd6d8d94339066d65013e7ec6bec1b98eac91ac6d3e0abb41b636b9b"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 123965
+      },
+      "status": "historical baseline; visual acceptance withdrawn",
+      "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    },
+    {
+      "id": "public-plates-nap-observatory-day.jpg",
+      "title": "nap-observatory-day.jpg",
+      "sourceUrl": "project:src/world/island.ts",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": null,
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "outputFiles": [
+        {
+          "path": "public/plates/nap-observatory-day.jpg",
+          "bytes": 105401,
+          "sha256": "001721ac68b01048081f9f8fba553143089911e5b467a95c42d00d53d890db22"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 105401
+      },
+      "status": "historical baseline; visual acceptance withdrawn",
+      "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    },
+    {
+      "id": "public-plates-weather-house-day.jpg",
+      "title": "weather-house-day.jpg",
+      "sourceUrl": "project:src/world/island.ts",
+      "author": "Original commissioned project work",
+      "license": "Original project artwork; no third-party asset licence",
+      "retrievalDate": null,
+      "originalSha256": null,
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "outputFiles": [
+        {
+          "path": "public/plates/weather-house-day.jpg",
+          "bytes": 107291,
+          "sha256": "1125a8829bc0549c6db554108f0ddb10c74108449c5db6746ba037ec460b780a"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 107291
+      },
+      "status": "historical baseline; visual acceptance withdrawn",
+      "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    }
+  ]
+}

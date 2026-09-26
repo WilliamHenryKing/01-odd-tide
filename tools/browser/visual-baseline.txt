@@ -1,0 +1,34 @@
+async (page) => {
+  const results=[];
+  for(const viewport of [{name:'desktop',width:1920,height:1080,dpr:1},{name:'mobile',width:390,height:844,dpr:3}]) {
+    const context=await page.context().browser().newContext({viewport:{width:viewport.width,height:viewport.height},deviceScaleFactor:viewport.dpr});
+    const probe=await context.newPage(), errors=[];
+    probe.on('pageerror',error=>errors.push(String(error)));
+    probe.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
+    try {
+      await probe.goto('http://127.0.0.1:4511/');
+      await probe.waitForFunction(()=>!!window.__VISUAL_TEST__,{timeout:20000});
+      await probe.evaluate(async()=>await window.__VISUAL_TEST__.ready);
+      const bookmarks=await probe.evaluate(()=>window.__VISUAL_TEST__.bookmarks);
+      for(const bookmark of bookmarks){
+        await probe.evaluate(async id=>{
+          const hook=window.__VISUAL_TEST__;
+          hook.setTier('existing'); hook.setSeed(870);
+          const result=await hook.setBookmark(id);
+          if(result.bookmark!==id)throw new Error('Bookmark acknowledgement mismatch');
+          hook.freeze(); await hook.settle(30); window.scrollTo(0,0);
+        },bookmark.id);
+        await probe.waitForTimeout(120);
+        const stem=`docs/visual/captures/baseline/${bookmark.id}_existing_${viewport.name}`;
+        await probe.screenshot({path:stem+'.png',animations:'disabled'});
+        await probe.locator('.world-canvas canvas').screenshot({path:stem+'_canvas.png'});
+        const downloading=probe.waitForEvent('download');
+        await probe.locator('.world-canvas canvas').evaluate(canvas=>{const link=document.createElement('a');link.href=canvas.toDataURL('image/png');link.download='webgl.png';link.click();});
+        await (await downloading).saveAs(stem+'_webgl.png');
+        const info=await probe.evaluate(()=>window.__VISUAL_TEST__.info());
+        results.push({bookmark,viewport,path:stem+'.png',canvasPath:stem+'_canvas.png',webglPath:stem+'_webgl.png',info,errors:[...errors]});
+      }
+    }finally {await context.close();}
+  }
+  return {capturedAt:new Date().toISOString(),results};
+}

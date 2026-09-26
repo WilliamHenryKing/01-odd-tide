@@ -1,4 +1,6 @@
-# ODD TIDE — somewhere between here and the sea
+# ODD TIDE â€” somewhere between here and the sea
+
+> **Visual acceptance withdrawn, 26 September 2026.** William rejected this output. The records below describe historical implementation/testing, not an accepted visual result. Follow `docs/visual/AUDIT.md` and the collection Visual Quality Directive.
 
 26 September 2026. Original fictional retreat; sole-agent design and self-review.
 
@@ -48,9 +50,9 @@ All tweens are scoped/killed on unmount; each property has one owner. Three.js s
 
 Routes: `/` island, `/stays` comparison, `/stays/weather-house`, `/stays/nap-observatory`, `/stays/lantern-lodge`, `/plan`, `/summary`, `/about`, and a real not-found view. Direct loads and history work. Route navigation restores focus and cancels obsolete movement.
 
-Dates are calendar dates in a fictional October 2026 sample season, computed in integer days. Check-in must precede check-out; allow 1–7 nights; guests 1–4; rooms enforce their capacity; booked intervals are half-open. Prices are integer rand cents and labelled illustrative. There is no live availability or real tide forecast. No names, email addresses or payments.
+Dates are calendar dates in a fictional October 2026 sample season, computed in integer days. Check-in must precede check-out; allow 1â€“7 nights; guests 1â€“4; rooms enforce their capacity; booked intervals are half-open. Prices are integer rand cents and labelled illustrative. There is no live availability or real tide forecast. No names, email addresses or payments.
 
-Sample tide repeats in the authored day, low at 09:00 and 21:00, high at 15:00. Visitors can explore 06:00–22:00. A causeway access window requires the entire activity to remain within the safe demonstration threshold. Borrowed Bath lasts 60 minutes; Lantern Walk is available from 18:00; observatory visit from 19:00; Weather House reading and rock-pool exploration have their own finite windows. The planner checks access and overlapping activities, explains conflicts and offers a feasible schedule. Suggestions are deterministic, not a hidden service.
+Sample tide repeats in the authored day, low at 09:00 and 21:00, high at 15:00. Visitors can explore 06:00â€“22:00. A causeway access window requires the entire activity to remain within the safe demonstration threshold. Borrowed Bath lasts 60 minutes; Lantern Walk is available from 18:00; observatory visit from 19:00; Weather House reading and rock-pool exploration have their own finite windows. The planner checks access and overlapping activities, explains conflicts and offers a feasible schedule. Suggestions are deterministic, not a hidden service.
 
 Mood plans: wander, slow down, stargaze. Visitors can edit/remove activities and their times. Summary blocks while conflicts, unavailable room/dates or capacity errors remain. Editing a finished summary returns to the same choices. Configuration URL and optional local saving are versioned/validated; malformed storage and disabled storage never crash the site.
 

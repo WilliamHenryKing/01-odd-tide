@@ -1,0 +1,44 @@
+[
+  { "id": "empty-control", "kind": "empty", "warmup": 5, "seconds": 15 },
+  { "id": "existing-path", "kind": "island", "warmup": 10, "seconds": 60 },
+  { "id": "draws-128", "kind": "draws", "count": 128, "warmup": 5, "seconds": 15 },
+  { "id": "draws-512", "kind": "draws", "count": 512, "warmup": 5, "seconds": 15 },
+  { "id": "draws-2048", "kind": "draws", "count": 2048, "warmup": 5, "seconds": 15 },
+  { "id": "draws-4096", "kind": "draws", "count": 4096, "warmup": 5, "seconds": 15 },
+  {
+    "id": "vertices-32",
+    "kind": "triangles",
+    "count": 256,
+    "segments": 32,
+    "warmup": 5,
+    "seconds": 15
+  },
+  {
+    "id": "vertices-64",
+    "kind": "triangles",
+    "count": 256,
+    "segments": 64,
+    "warmup": 5,
+    "seconds": 15
+  },
+  {
+    "id": "vertices-128",
+    "kind": "triangles",
+    "count": 256,
+    "segments": 128,
+    "warmup": 5,
+    "seconds": 15
+  },
+  { "id": "textures-32", "kind": "textures", "count": 32, "warmup": 5, "seconds": 15 },
+  { "id": "textures-128", "kind": "textures", "count": 128, "warmup": 5, "seconds": 15 },
+  { "id": "textures-256", "kind": "textures", "count": 256, "warmup": 5, "seconds": 15 },
+  {
+    "id": "combined-256-32",
+    "kind": "combined",
+    "count": 256,
+    "segments": 32,
+    "textureCount": 64,
+    "warmup": 10,
+    "seconds": 30
+  }
+]

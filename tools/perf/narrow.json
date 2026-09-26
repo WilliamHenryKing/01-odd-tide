@@ -1,0 +1,49 @@
+[
+  { "id": "existing-full-hd", "kind": "island", "fullHD": true, "warmup": 60, "seconds": 60 },
+  {
+    "id": "textures-640",
+    "kind": "textures",
+    "count": 640,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 30
+  },
+  {
+    "id": "textures-736",
+    "kind": "textures",
+    "count": 736,
+    "fullHD": true,
+    "warmup": 10,
+    "seconds": 30
+  },
+  {
+    "id": "combined-1280-64-512",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 15,
+    "seconds": 30
+  },
+  {
+    "id": "combined-1792-64-512",
+    "kind": "combined",
+    "count": 1792,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 15,
+    "seconds": 30
+  },
+  {
+    "id": "combined-1280-return",
+    "kind": "combined",
+    "count": 1280,
+    "segments": 64,
+    "textureCount": 512,
+    "fullHD": true,
+    "warmup": 15,
+    "seconds": 30
+  }
+]

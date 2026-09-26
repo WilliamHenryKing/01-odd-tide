@@ -1,5 +1,7 @@
 # ODD TIDE
 
+> **Visual acceptance withdrawn, 26 September 2026.** William rejected this output. The records below describe historical implementation/testing, not an accepted visual result. Follow `docs/visual/AUDIT.md` and the collection Visual Quality Directive.
+
 Status: locally complete, 26 September 2026. This is an original fictional coastal stay planner. Nothing is published and no real booking or payment is possible. Read VERIFICATION.md for the exact self-review scope and limitations.
 
 Working checkout: `experiences/01-odd-tide`. Repository anchor: `.repositories/01-odd-tide`. Branch: `work/experience`. Preserve both directories.

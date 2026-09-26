@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-smoke/
+dist-perf/
 .vite/
 .env
 .env.*
@@ -10,3 +11,12 @@ output/
 *.log
 *.tsbuildinfo
 .DS_Store
+
+# Untouched source downloads; reproduce from assets.manifest.json and tools/assets.
+assets-src/
+
+# Immutable evidence of the build used for the final benchmark repetitions.
+!docs/visual/perf/build-snapshots/final-pre-soak/dist-perf/
+!docs/visual/perf/build-snapshots/final-pre-soak/dist-perf/**
+!docs/visual/perf/build-snapshots/thermal/dist-perf/
+!docs/visual/perf/build-snapshots/thermal/dist-perf/**
