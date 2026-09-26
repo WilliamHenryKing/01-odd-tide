@@ -1,0 +1,12 @@
+{
+  "size": 256,
+  "min": [
+    -30,
+    -24
+  ],
+  "max": [
+    30,
+    22
+  ],
+  "format": "float32 row-major, row = z"
+}

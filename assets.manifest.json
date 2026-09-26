@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "01-odd-tide",
-  "status": "baseline inventory only; no visual or licence-exception approval",
+  "status": "visual reset: CC0 sources being integrated under the directive; see docs/visual/ASSET_PLAN.md",
   "policy": "same-origin public assets; new originals under assets-src; budget/tier approval D02 pending",
   "assets": [
     {
@@ -12,7 +12,9 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "processingSteps": ["Original project SVG/code authoring"],
+      "processingSteps": [
+        "Original project SVG/code authoring"
+      ],
       "outputFiles": [
         {
           "path": "public/.gitkeep",
@@ -33,7 +35,9 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": "4e7faf9fea4071572b41fdb5bdca1aff1e5ae451d4e22f031dbf38eef5a3601f",
-      "processingSteps": ["Original project SVG/code authoring"],
+      "processingSteps": [
+        "Original project SVG/code authoring"
+      ],
       "outputFiles": [
         {
           "path": "public/favicon.svg",
@@ -54,7 +58,9 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
-      "processingSteps": ["retained upstream source/licence"],
+      "processingSteps": [
+        "retained upstream source/licence"
+      ],
       "outputFiles": [
         {
           "path": "public/fonts/dm-sans-OFL.txt",
@@ -75,7 +81,9 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
-      "processingSteps": ["retained upstream source/licence"],
+      "processingSteps": [
+        "retained upstream source/licence"
+      ],
       "outputFiles": [
         {
           "path": "public/fonts/dm-sans.ttf",
@@ -96,7 +104,9 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
-      "processingSteps": ["fontTools WOFF2 conversion"],
+      "processingSteps": [
+        "fontTools WOFF2 conversion"
+      ],
       "outputFiles": [
         {
           "path": "public/fonts/dm-sans.woff2",
@@ -117,7 +127,9 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
-      "processingSteps": ["retained upstream source/licence"],
+      "processingSteps": [
+        "retained upstream source/licence"
+      ],
       "outputFiles": [
         {
           "path": "public/fonts/young-serif-OFL.txt",
@@ -138,7 +150,9 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
-      "processingSteps": ["retained upstream source/licence"],
+      "processingSteps": [
+        "retained upstream source/licence"
+      ],
       "outputFiles": [
         {
           "path": "public/fonts/young-serif.ttf",
@@ -159,7 +173,9 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
-      "processingSteps": ["fontTools WOFF2 conversion"],
+      "processingSteps": [
+        "fontTools WOFF2 conversion"
+      ],
       "outputFiles": [
         {
           "path": "public/fonts/young-serif.woff2",
@@ -180,7 +196,10 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "processingSteps": [
+        "Browser scene capture",
+        "JPEG conversion for saved-view fallback"
+      ],
       "outputFiles": [
         {
           "path": "public/plates/island-day-phone.jpg",
@@ -202,7 +221,10 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "processingSteps": [
+        "Browser scene capture",
+        "JPEG conversion for saved-view fallback"
+      ],
       "outputFiles": [
         {
           "path": "public/plates/island-day.jpg",
@@ -224,7 +246,10 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "processingSteps": [
+        "Browser scene capture",
+        "JPEG conversion for saved-view fallback"
+      ],
       "outputFiles": [
         {
           "path": "public/plates/island-night-phone.jpg",
@@ -246,7 +271,10 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "processingSteps": [
+        "Browser scene capture",
+        "JPEG conversion for saved-view fallback"
+      ],
       "outputFiles": [
         {
           "path": "public/plates/island-night.jpg",
@@ -268,7 +296,10 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "processingSteps": [
+        "Browser scene capture",
+        "JPEG conversion for saved-view fallback"
+      ],
       "outputFiles": [
         {
           "path": "public/plates/lantern-lodge-day.jpg",
@@ -290,7 +321,10 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "processingSteps": [
+        "Browser scene capture",
+        "JPEG conversion for saved-view fallback"
+      ],
       "outputFiles": [
         {
           "path": "public/plates/nap-observatory-day.jpg",
@@ -312,7 +346,10 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
+      "processingSteps": [
+        "Browser scene capture",
+        "JPEG conversion for saved-view fallback"
+      ],
       "outputFiles": [
         {
           "path": "public/plates/weather-house-day.jpg",
@@ -325,6 +362,594 @@
       },
       "status": "historical baseline; visual acceptance withdrawn",
       "provenanceGap": "Exact pre-reset raw-image hash was not recorded in this manifest. Do not invent it; regenerate under the new capture pipeline before revised delivery."
+    },
+    {
+      "id": "polyhaven-cliff_side",
+      "title": "Cliff Side (2k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/cliff_side",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "cliff_side_diff_2k.jpg": "bc6f92d72eb6383ecc3a1094ed9f5b37efb36ccf83cf29699bb5990e6775afee",
+        "cliff_side_nor_gl_2k.jpg": "eec5c0bb3daa1ad72f0f9c1d19caf78e84dfedcf3283b35b5a5dcf163718025f",
+        "cliff_side_arm_2k.jpg": "4c7eda3983f14892717baea852690840e6b4f6e7f30fb95f4f2c7c25b1856230"
+      },
+      "processingSteps": [
+        "Downloaded 2k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/cliff_side/cliff_side_diff_2k.jpg",
+          "bytes": 3387348,
+          "sha256": "bc6f92d72eb6383ecc3a1094ed9f5b37efb36ccf83cf29699bb5990e6775afee"
+        },
+        {
+          "path": "public/textures/cliff_side/cliff_side_nor_gl_2k.jpg",
+          "bytes": 3585856,
+          "sha256": "eec5c0bb3daa1ad72f0f9c1d19caf78e84dfedcf3283b35b5a5dcf163718025f"
+        },
+        {
+          "path": "public/textures/cliff_side/cliff_side_arm_2k.jpg",
+          "bytes": 2130381,
+          "sha256": "4c7eda3983f14892717baea852690840e6b4f6e7f30fb95f4f2c7c25b1856230"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 9103585
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "terrain sandstone (primary)"
+    },
+    {
+      "id": "polyhaven-rock_face_03",
+      "title": "Rock Face 03 (2k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/rock_face_03",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "rock_face_03_diff_2k.jpg": "644ee79df7ffbf5f6afc330b64dd3f33794bab8820915fe61ffe0c88ecfd7ece",
+        "rock_face_03_nor_gl_2k.jpg": "a498cef4ba6191f6959b6d03fb835263c77271948264a289af24497ab7111dec",
+        "rock_face_03_arm_2k.jpg": "1921303981d12bccf72dd29d8a8daf823f1d9bb60400b447c64757203c1e2dad"
+      },
+      "processingSteps": [
+        "Downloaded 2k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/rock_face_03/rock_face_03_diff_2k.jpg",
+          "bytes": 3814362,
+          "sha256": "644ee79df7ffbf5f6afc330b64dd3f33794bab8820915fe61ffe0c88ecfd7ece"
+        },
+        {
+          "path": "public/textures/rock_face_03/rock_face_03_nor_gl_2k.jpg",
+          "bytes": 4473242,
+          "sha256": "a498cef4ba6191f6959b6d03fb835263c77271948264a289af24497ab7111dec"
+        },
+        {
+          "path": "public/textures/rock_face_03/rock_face_03_arm_2k.jpg",
+          "bytes": 3215097,
+          "sha256": "1921303981d12bccf72dd29d8a8daf823f1d9bb60400b447c64757203c1e2dad"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 11502701
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "terrain sandstone (variation)"
+    },
+    {
+      "id": "polyhaven-damp_sand",
+      "title": "Damp Sand (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/damp_sand",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "damp_sand_diff_1k.jpg": "3b26e6033205d4c774bb8c48bda8081b5a369e01ac701a0dcaa7ddc1f484f1de",
+        "damp_sand_nor_gl_1k.jpg": "1bda846d2361eeba2938700e68771711a29880299da61733bd2bcdd7af83c1f4",
+        "damp_sand_arm_1k.jpg": "a54ba44a05381a87b4506c6e75d92e096b11cb45c5d7d052957b1d36eee4aef9"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/damp_sand/damp_sand_diff_1k.jpg",
+          "bytes": 900798,
+          "sha256": "3b26e6033205d4c774bb8c48bda8081b5a369e01ac701a0dcaa7ddc1f484f1de"
+        },
+        {
+          "path": "public/textures/damp_sand/damp_sand_nor_gl_1k.jpg",
+          "bytes": 1223062,
+          "sha256": "1bda846d2361eeba2938700e68771711a29880299da61733bd2bcdd7af83c1f4"
+        },
+        {
+          "path": "public/textures/damp_sand/damp_sand_arm_1k.jpg",
+          "bytes": 657410,
+          "sha256": "a54ba44a05381a87b4506c6e75d92e096b11cb45c5d7d052957b1d36eee4aef9"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 2781270
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "terrain beach and seabed sand"
+    },
+    {
+      "id": "polyhaven-grass_ground",
+      "title": "Grass Ground (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/grass_ground",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "grass_ground_diff_1k.jpg": "a79cc5ed65af0f80261b39a383b64a8c5272c5144d724deb43dbc29f0e4cd19b",
+        "grass_ground_nor_gl_1k.jpg": "7000e2ccd479bb7b66dcdf4faef7b47554324566886314ca620cbf03e274e826",
+        "grass_ground_arm_1k.jpg": "b8c13e5972827dda6465fc98bbb8b3a0e67215bf8e864c729072fc9c1cc502ef"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/grass_ground/grass_ground_diff_1k.jpg",
+          "bytes": 876584,
+          "sha256": "a79cc5ed65af0f80261b39a383b64a8c5272c5144d724deb43dbc29f0e4cd19b"
+        },
+        {
+          "path": "public/textures/grass_ground/grass_ground_nor_gl_1k.jpg",
+          "bytes": 1310516,
+          "sha256": "7000e2ccd479bb7b66dcdf4faef7b47554324566886314ca620cbf03e274e826"
+        },
+        {
+          "path": "public/textures/grass_ground/grass_ground_arm_1k.jpg",
+          "bytes": 896135,
+          "sha256": "b8c13e5972827dda6465fc98bbb8b3a0e67215bf8e864c729072fc9c1cc502ef"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 3083235
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "terrain coastal turf"
+    },
+    {
+      "id": "polyhaven-namaqualand_boulder_02",
+      "title": "Namaqualand Boulder 02 (glTF 1k)",
+      "sourceUrl": "https://polyhaven.com/a/namaqualand_boulder_02",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "namaqualand_boulder_02_1k.gltf": "3c41b5946cd5b208673ec481a3969047665688b2fab1de99b57a7b4eedde099b",
+        "namaqualand_boulder_02.bin": "0f6daa7ec9b1a92207c0b09b737ff1eec904aebc1c1eada778afa6e5eacd55c0",
+        "textures/namaqualand_boulder_02_nor_gl_1k.jpg": "2407a9915ea0cf42b164d42f548618145da892b948327fff67bef6123790a5d7",
+        "textures/namaqualand_boulder_02_diff_1k.jpg": "e567620fa04906e023e3d3b49860dd32db39b368d72ecfc10ad005945fd4034d",
+        "textures/namaqualand_boulder_02_arm_1k.jpg": "e67643f5de3e2bfdd07fae1137eff0b9d86745a8c60ccac7e64b62e85ae9cee0"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary and 1k textures from the Poly Haven download host",
+        "gltf-transform dedup",
+        "gltf-transform prune",
+        "gltf-transform meshopt --level medium"
+      ],
+      "outputFiles": [],
+      "bytesPerTier": {
+        "existing": 0
+      },
+      "status": "evaluated; not shipped \u2014 3.0\u20133.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
+      "role": "causeway stepping stones / shore boulders"
+    },
+    {
+      "id": "polyhaven-namaqualand_boulder_05",
+      "title": "Namaqualand Boulder 05 (glTF 1k)",
+      "sourceUrl": "https://polyhaven.com/a/namaqualand_boulder_05",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "namaqualand_boulder_05_1k.gltf": "f8e5fd8fd981e889d621ba4e53170a52c47cd3053b8748ee7025ed1083f36a5f",
+        "namaqualand_boulder_05.bin": "a60ade71de8612c873f9112159ed5d93dcba58979007a0915bc10d551a9ed03c",
+        "textures/namaqualand_boulder_05_nor_gl_1k.jpg": "027359a8a79febee925cc29af3106cc12bdeed5bc91cb26f1d88f589c77f448d",
+        "textures/namaqualand_boulder_05_diff_1k.jpg": "58d1fba55e16a56fe2d6e016ac75bcddfbc3bb2273ca8c9127f1de497c54db2a",
+        "textures/namaqualand_boulder_05_arm_1k.jpg": "1466c8467188f54c2fb655b05f9e1d0a9a93a366f3cd45878bcf6905487c5f3e"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary and 1k textures from the Poly Haven download host",
+        "gltf-transform dedup",
+        "gltf-transform prune",
+        "gltf-transform meshopt --level medium"
+      ],
+      "outputFiles": [],
+      "bytesPerTier": {
+        "existing": 0
+      },
+      "status": "evaluated; not shipped \u2014 3.0\u20133.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
+      "role": "causeway stepping stones / shore boulders"
+    },
+    {
+      "id": "polyhaven-rock_face_02",
+      "title": "Rock Face 02 (glTF 1k)",
+      "sourceUrl": "https://polyhaven.com/a/rock_face_02",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "rock_face_02_1k.gltf": "ebeab82d463c89eb5f894b85807da111280a73b552d694257118f3f2d47bf760",
+        "rock_face_02.bin": "cfa3dea8f0f91525b5dfe93d889acacf961d20f7174aae100eae2c6e101edf31",
+        "textures/rock_face_02_nor_gl_1k.jpg": "a9dc200810f5488395fdc928b5a9441c007c33047d0375d946f33dcd2ff1c853",
+        "textures/rock_face_02_diff_1k.jpg": "d777f2c9b598773c2143751c34913cf5eef0ae392af31fb73c28b98afab6fb7b",
+        "textures/rock_face_02_arm_1k.jpg": "0f3f64b9f56e3c5cecbb99e45d8fa0d4cbf025d4455439d1c5f6672a408365ee"
+      },
+      "processingSteps": [
+        "Downloaded glTF, shared binary and 1k textures from the Poly Haven download host",
+        "gltf-transform dedup",
+        "gltf-transform prune",
+        "gltf-transform meshopt --level medium"
+      ],
+      "outputFiles": [],
+      "bytesPerTier": {
+        "existing": 0
+      },
+      "status": "evaluated; not shipped \u2014 3.0\u20133.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
+      "role": "cliff-base kitbash rock (layered sandstone scan)"
+    },
+    {
+      "id": "polyhaven-wood_planks_grey",
+      "title": "Wood Planks Grey (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/wood_planks_grey",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "wood_planks_grey_diff_1k.jpg": "d758be23e8fe7bfbd73bc4ab257cfd59406e1835f6557c12a67cd4fdb15de0d8",
+        "wood_planks_grey_nor_gl_1k.jpg": "5e570e57d688b016b217b9e8e0592f9a8b3364406e22bf6cd775da990452bdb6",
+        "wood_planks_grey_arm_1k.jpg": "0464853147811dd6dcf9f286ca3753fb63fa654d081ae708070fbf0fd4614d97"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/wood_planks_grey/wood_planks_grey_diff_1k.jpg",
+          "bytes": 228279,
+          "sha256": "d758be23e8fe7bfbd73bc4ab257cfd59406e1835f6557c12a67cd4fdb15de0d8"
+        },
+        {
+          "path": "public/textures/wood_planks_grey/wood_planks_grey_nor_gl_1k.jpg",
+          "bytes": 157419,
+          "sha256": "5e570e57d688b016b217b9e8e0592f9a8b3364406e22bf6cd775da990452bdb6"
+        },
+        {
+          "path": "public/textures/wood_planks_grey/wood_planks_grey_arm_1k.jpg",
+          "bytes": 155198,
+          "sha256": "0464853147811dd6dcf9f286ca3753fb63fa654d081ae708070fbf0fd4614d97"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 540896
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "weathered decking and cladding"
+    },
+    {
+      "id": "polyhaven-brown_planks_03",
+      "title": "Brown Planks 03 (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/brown_planks_03",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "brown_planks_03_diff_1k.jpg": "8dfae22286fa9bb0ed62ce7326e8bc14c284e567d38fd64b5a453838080ecf19",
+        "brown_planks_03_nor_gl_1k.jpg": "868c153165ecaa7dd7259cb58214f06f6f86c80ac71fc92a827dff07708be077",
+        "brown_planks_03_arm_1k.jpg": "2be4c94cc58a0f4ea2120a1004aab5ff1baf720809c321f4fa398cdb31fd3756"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/brown_planks_03/brown_planks_03_diff_1k.jpg",
+          "bytes": 570668,
+          "sha256": "8dfae22286fa9bb0ed62ce7326e8bc14c284e567d38fd64b5a453838080ecf19"
+        },
+        {
+          "path": "public/textures/brown_planks_03/brown_planks_03_nor_gl_1k.jpg",
+          "bytes": 516860,
+          "sha256": "868c153165ecaa7dd7259cb58214f06f6f86c80ac71fc92a827dff07708be077"
+        },
+        {
+          "path": "public/textures/brown_planks_03/brown_planks_03_arm_1k.jpg",
+          "bytes": 126038,
+          "sha256": "2be4c94cc58a0f4ea2120a1004aab5ff1baf720809c321f4fa398cdb31fd3756"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 1213566
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "structural timber and cedar-toned cladding"
+    },
+    {
+      "id": "polyhaven-plank_flooring_02",
+      "title": "Plank Flooring 02 (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/plank_flooring_02",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "plank_flooring_02_diff_1k.jpg": "5337067d6ed23987659cf5d8be151660b3170a7b0bf5ab5f599fff8c3879d8a6",
+        "plank_flooring_02_nor_gl_1k.jpg": "41b52dbbad1afaaa85b5284e426246bf5ac9c8e98f78cf23c121f3378fc6e1f7",
+        "plank_flooring_02_arm_1k.jpg": "f21ebe50e65293dba024efd506c277aaeb9c483ec0662cee8c50ad87069a0df6"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/plank_flooring_02/plank_flooring_02_diff_1k.jpg",
+          "bytes": 667517,
+          "sha256": "5337067d6ed23987659cf5d8be151660b3170a7b0bf5ab5f599fff8c3879d8a6"
+        },
+        {
+          "path": "public/textures/plank_flooring_02/plank_flooring_02_nor_gl_1k.jpg",
+          "bytes": 527201,
+          "sha256": "41b52dbbad1afaaa85b5284e426246bf5ac9c8e98f78cf23c121f3378fc6e1f7"
+        },
+        {
+          "path": "public/textures/plank_flooring_02/plank_flooring_02_arm_1k.jpg",
+          "bytes": 430310,
+          "sha256": "f21ebe50e65293dba024efd506c277aaeb9c483ec0662cee8c50ad87069a0df6"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 1625028
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "interior lining and floors"
+    },
+    {
+      "id": "polyhaven-distressed_painted_planks",
+      "title": "Distressed Painted Planks (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/distressed_painted_planks",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "distressed_painted_planks_diff_1k.jpg": "ec8d54700e32d583ec3cd64089de73810de1e177874266fe29e931d33ab5ca1e",
+        "distressed_painted_planks_nor_gl_1k.jpg": "65372398238b1a4d723e414b195e94900e076fa63d9409c5acc9b55d795abe88",
+        "distressed_painted_planks_arm_1k.jpg": "10cf35fb0e55ccbf3e4e31f68e8f2d8e4579fe4241bb999669eedbb6b0172722"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/distressed_painted_planks/distressed_painted_planks_diff_1k.jpg",
+          "bytes": 366553,
+          "sha256": "ec8d54700e32d583ec3cd64089de73810de1e177874266fe29e931d33ab5ca1e"
+        },
+        {
+          "path": "public/textures/distressed_painted_planks/distressed_painted_planks_nor_gl_1k.jpg",
+          "bytes": 424390,
+          "sha256": "65372398238b1a4d723e414b195e94900e076fa63d9409c5acc9b55d795abe88"
+        },
+        {
+          "path": "public/textures/distressed_painted_planks/distressed_painted_planks_arm_1k.jpg",
+          "bytes": 368878,
+          "sha256": "10cf35fb0e55ccbf3e4e31f68e8f2d8e4579fe4241bb999669eedbb6b0172722"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 1159821
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "painted board-and-batten (tinted green)"
+    },
+    {
+      "id": "polyhaven-rough_concrete",
+      "title": "Rough Concrete (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/rough_concrete",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "rough_concrete_diff_1k.jpg": "dd7fc03e152eb8c2fd511248aa2e9bf7428a645bd0e0b74ac1d887ad136cb0bc",
+        "rough_concrete_nor_gl_1k.jpg": "54c85854ad5cafb16840df91a605c857bdf3d07fa79f11921c8327fccf6423ae",
+        "rough_concrete_arm_1k.jpg": "1b733bf12c056d680dbc82d53be03dd281ac88ad5555a4a05b5a33ecb579ae1d"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/rough_concrete/rough_concrete_diff_1k.jpg",
+          "bytes": 1042065,
+          "sha256": "dd7fc03e152eb8c2fd511248aa2e9bf7428a645bd0e0b74ac1d887ad136cb0bc"
+        },
+        {
+          "path": "public/textures/rough_concrete/rough_concrete_nor_gl_1k.jpg",
+          "bytes": 1447537,
+          "sha256": "54c85854ad5cafb16840df91a605c857bdf3d07fa79f11921c8327fccf6423ae"
+        },
+        {
+          "path": "public/textures/rough_concrete/rough_concrete_arm_1k.jpg",
+          "bytes": 900369,
+          "sha256": "1b733bf12c056d680dbc82d53be03dd281ac88ad5555a4a05b5a33ecb579ae1d"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 3389971
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "footings and piers"
+    },
+    {
+      "id": "polyhaven-white_stucco",
+      "title": "White Stucco (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/white_stucco",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "white_stucco_diff_1k.jpg": "5f2d11f5675ffe679155d8e38ed8eaa9b9972126675641e4977c8a4f905f276b",
+        "white_stucco_nor_gl_1k.jpg": "f0d4f34b30093ceca5e58d5168fc06c2f0cd0b81289708aa3eac7d0801bd069d",
+        "white_stucco_arm_1k.jpg": "f072f12ac50d667f23ec2c20dd03463923e405f109106cc7ad4d2d85eeb16bd6"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/white_stucco/white_stucco_diff_1k.jpg",
+          "bytes": 557550,
+          "sha256": "5f2d11f5675ffe679155d8e38ed8eaa9b9972126675641e4977c8a4f905f276b"
+        },
+        {
+          "path": "public/textures/white_stucco/white_stucco_nor_gl_1k.jpg",
+          "bytes": 932038,
+          "sha256": "f0d4f34b30093ceca5e58d5168fc06c2f0cd0b81289708aa3eac7d0801bd069d"
+        },
+        {
+          "path": "public/textures/white_stucco/white_stucco_arm_1k.jpg",
+          "bytes": 323604,
+          "sha256": "f072f12ac50d667f23ec2c20dd03463923e405f109106cc7ad4d2d85eeb16bd6"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 1813192
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "observatory limewash render"
+    },
+    {
+      "id": "polyhaven-rough_linen",
+      "title": "Rough Linen (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/rough_linen",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "rough_linen_diff_1k.jpg": "04897d7611d7390ddf5b2c6f7273f448dfc48341fdbd1f4f207fa30b331d7f57",
+        "rough_linen_nor_gl_1k.jpg": "e2402166d1a489f7414814e69e1836ab672aa24e30bec2d41fea356f81687e53",
+        "rough_linen_arm_1k.jpg": "e1ca6b51ed62834063253e08f8f2e23836aa00d72675b960ddd8e608d9f0c7e6"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/rough_linen/rough_linen_diff_1k.jpg",
+          "bytes": 835801,
+          "sha256": "04897d7611d7390ddf5b2c6f7273f448dfc48341fdbd1f4f207fa30b331d7f57"
+        },
+        {
+          "path": "public/textures/rough_linen/rough_linen_nor_gl_1k.jpg",
+          "bytes": 916843,
+          "sha256": "e2402166d1a489f7414814e69e1836ab672aa24e30bec2d41fea356f81687e53"
+        },
+        {
+          "path": "public/textures/rough_linen/rough_linen_arm_1k.jpg",
+          "bytes": 1191393,
+          "sha256": "e1ca6b51ed62834063253e08f8f2e23836aa00d72675b960ddd8e608d9f0c7e6"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 2944037
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "bedding and curtains (retinted)"
+    },
+    {
+      "id": "polyhaven-wool_boucle",
+      "title": "Wool Boucle (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/wool_boucle",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "wool_boucle_diff_1k.jpg": "fee39653b3c78efe89636508f2c10ceb38ecb10c0d735ae8dd4e9935cf26540e",
+        "wool_boucle_nor_gl_1k.jpg": "2cc13a2be4d0bb942a59a86d613665c0d24ff201560daa4d841cee597af0c752",
+        "wool_boucle_arm_1k.jpg": "5a46c8ded370471c2f26a698e4b33abcaab59f823ead459b97c52297a096053b"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/wool_boucle/wool_boucle_diff_1k.jpg",
+          "bytes": 1284379,
+          "sha256": "fee39653b3c78efe89636508f2c10ceb38ecb10c0d735ae8dd4e9935cf26540e"
+        },
+        {
+          "path": "public/textures/wool_boucle/wool_boucle_nor_gl_1k.jpg",
+          "bytes": 1266355,
+          "sha256": "2cc13a2be4d0bb942a59a86d613665c0d24ff201560daa4d841cee597af0c752"
+        },
+        {
+          "path": "public/textures/wool_boucle/wool_boucle_arm_1k.jpg",
+          "bytes": 1561832,
+          "sha256": "5a46c8ded370471c2f26a698e4b33abcaab59f823ead459b97c52297a096053b"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 4112566
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "throws and upholstery"
+    },
+    {
+      "id": "polyhaven-hessian_230",
+      "title": "Hessian 230 (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/hessian_230",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "hessian_230_diff_1k.jpg": "ef9ac1a0129b6d0f44b6d5beb68db7be7a0adf11e09fe52fd2cdc9370b27d4ba",
+        "hessian_230_nor_gl_1k.jpg": "6d5a6d23c880dbaae98477ed33dbd5d7c0eeda910a39319aec2d0014892974aa",
+        "hessian_230_arm_1k.jpg": "963ba03b3583a9dcc3a10181a9042de63aec019ee1a8a89c8be77d33a2f6b691"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/hessian_230/hessian_230_diff_1k.jpg",
+          "bytes": 1062404,
+          "sha256": "ef9ac1a0129b6d0f44b6d5beb68db7be7a0adf11e09fe52fd2cdc9370b27d4ba"
+        },
+        {
+          "path": "public/textures/hessian_230/hessian_230_nor_gl_1k.jpg",
+          "bytes": 1030521,
+          "sha256": "6d5a6d23c880dbaae98477ed33dbd5d7c0eeda910a39319aec2d0014892974aa"
+        },
+        {
+          "path": "public/textures/hessian_230/hessian_230_arm_1k.jpg",
+          "bytes": 1139496,
+          "sha256": "963ba03b3583a9dcc3a10181a9042de63aec019ee1a8a89c8be77d33a2f6b691"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 3232421
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "rugs and matting"
     }
   ]
 }

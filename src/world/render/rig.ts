@@ -111,9 +111,13 @@ export class LightingRig {
     this.sky_state = celestial(9);
   }
 
-  registerPractical(light: PointLight | SpotLight, candela: number) {
+  /**
+   * A lamp in candela. 'range' (metres) fades it smoothly to zero, standing in for the walls
+   * and floors that would otherwise block an unshadowed interior lamp (0 = unlimited).
+   */
+  registerPractical(light: PointLight | SpotLight, candela: number, range = 0) {
     light.decay = 2;
-    light.distance = 0;
+    light.distance = range;
     const practical = { light, candela, on: 0 };
     this.practicals.push(practical);
     return practical;

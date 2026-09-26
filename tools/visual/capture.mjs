@@ -67,7 +67,9 @@ try {
     });
     try {
       if (target === "lookdev") {
-        await page.goto(`${base}/?lookdev`);
+        await page.goto(
+          `${base}/?lookdev${args.query && args.query !== "true" ? `&${args.query}` : ""}`,
+        );
         await page.waitForFunction(() => !!window.__LOOKDEV__, null, { timeout: 60_000 });
         await page.evaluate(async () => await window.__LOOKDEV__.ready);
         const all = await page.evaluate(() => window.__LOOKDEV__.states.map((s) => s.id));
@@ -88,7 +90,11 @@ try {
             await panel.evaluate((node) => {
               node.style.visibility = "hidden";
             });
-            const file = path.join(out, `lookdev_${view}_${state}_${viewport.name}.png`);
+            const suffix =
+              args.query && args.query !== "true"
+                ? `_${args.query.replace(/[^a-z0-9]+/gi, "-")}`
+                : "";
+            const file = path.join(out, `lookdev_${view}_${state}${suffix}_${viewport.name}.png`);
             await page.screenshot({ path: file });
             await panel.evaluate((node) => {
               node.style.visibility = "visible";

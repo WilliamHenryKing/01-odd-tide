@@ -5,6 +5,7 @@ export type Bookmark = {
   purpose: string;
   hero: boolean;
   state: IslandState;
+  /** Inspection camera in metres (world space), when the public camera is not enough. */
   camera?: { position: [number, number, number]; target: [number, number, number] };
 };
 const base: IslandState = {
@@ -16,7 +17,8 @@ const base: IslandState = {
   found: [],
   discover: false,
 };
-// Existing scene states. Inspection cameras expose flaws; they do not replace the public cameras.
+// Scene states shared by captures, tests and the perf path. Inspection cameras expose flaws;
+// they do not replace the public cameras. All positions are metres (1 unit = 1 m).
 export const BOOKMARKS: Bookmark[] = [
   {
     id: "arrival-day",
@@ -65,20 +67,20 @@ export const BOOKMARKS: Bookmark[] = [
     purpose: "Rock, shore and grazing-angle roughness inspection",
     hero: false,
     state: { ...base },
-    camera: { position: [-7, 2.8, 6], target: [-1.5, 0.8, 1.6] },
+    camera: { position: [-15.5, 4.2, 15.5], target: [-7.5, 1.4, 5.8] },
   },
   {
     id: "bath-arm-length",
     purpose: "Arm-length fixture and contact inspection",
     hero: false,
     state: { ...base },
-    camera: { position: [-7.6, 3.1, 4.8], target: [-5, 1.5, 2.2] },
+    camera: { position: [-19.8, 4.4, 11.4], target: [-16.6, 3.3, 7.6] },
   },
   {
     id: "horizon",
     purpose: "Far atmosphere, silhouettes and fog",
     hero: false,
     state: { ...base, hour: 12 },
-    camera: { position: [20, 6, 29], target: [0.8, 1.4, 0] },
+    camera: { position: [62, 16, 88], target: [2, 4, 0] },
   },
 ];

@@ -86,15 +86,24 @@ declare global {
   }
 }
 
-export function mountLookdev(host: HTMLElement, samples: LookdevSample[] = []): () => void {
+export type LookdevStage = (context: { scene: Scene; rig: LightingRig }) => {
+  views: Record<string, { position: [number, number, number]; target: [number, number, number] }>;
+  update?(hour: number, time: number): void;
+};
+
+export function mountLookdev(
+  host: HTMLElement,
+  samples: LookdevSample[] = [],
+  stage?: LookdevStage,
+): () => void {
   const scene = new Scene();
   const camera = new PerspectiveCamera(32, 1, 0.05, 40_000);
   const aoHidden: Object3D[] = [];
   const pipeline: Pipeline = new Pipeline(scene, camera, { aoHidden: () => aoHidden });
   host.append(pipeline.domElement);
   const rig: LightingRig = new LightingRig(pipeline.renderer, scene, {
-    shadowCentre: new Vector3(0, 0, 0),
-    shadowRadius: 6,
+    shadowCentre: new Vector3(5, 0, -9),
+    shadowRadius: 20,
     shadowMapSize: 2048,
   });
   aoHidden.push(rig.sky.mesh);
@@ -202,6 +211,8 @@ export function mountLookdev(host: HTMLElement, samples: LookdevSample[] = []): 
     scene.add(object);
   });
 
+  const staged = stage?.({ scene, rig });
+  if (staged) Object.assign(VIEWS, staged.views);
   let hour = 9;
   let view = "overview";
   let frame = 0;
@@ -218,6 +229,7 @@ export function mountLookdev(host: HTMLElement, samples: LookdevSample[] = []): 
     const lampsOn = celestial(hour).sun.elevation < 0.05 ? 1 : 0;
     lampState.on = lampsOn;
     globeState.on = 0.02 + lampsOn;
+    staged?.update?.(hour, time);
     const sky = rig.apply(hour, time, camera, force);
     pipeline.setNight(sky.night);
     pipeline.render();
