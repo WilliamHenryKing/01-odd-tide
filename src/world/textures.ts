@@ -33,14 +33,28 @@ function load(url: string, colour: boolean, anisotropy: number): Promise<Texture
   return promise;
 }
 
-export async function loadPbrSet(name: string, resolution = "1k", anisotropy = 8): Promise<PbrSet> {
+export async function loadPbrSet(
+  name: string,
+  resolution = "1k",
+  anisotropy = 8,
+  /** Rotate the maps 90° when the scan's grain runs along V (board UVs run grain along U). */
+  grainAlongV = false,
+): Promise<PbrSet> {
   const base = `/textures/${name}/${name}`;
   const [colour, normal, arm] = await Promise.all([
     load(`${base}_diff_${resolution}.jpg`, true, anisotropy),
     load(`${base}_nor_gl_${resolution}.jpg`, false, anisotropy),
     load(`${base}_arm_${resolution}.jpg`, false, anisotropy),
   ]);
-  return { colour, normal, arm };
+  if (!grainAlongV) return { colour, normal, arm };
+  const turn = (texture: Texture) => {
+    const copy = texture.clone();
+    copy.center.set(0.5, 0.5);
+    copy.rotation = Math.PI / 2;
+    copy.needsUpdate = true;
+    return copy;
+  };
+  return { colour: turn(colour), normal: turn(normal), arm: turn(arm) };
 }
 
 export function disposeTextureCache() {

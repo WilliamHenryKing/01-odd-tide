@@ -45,9 +45,8 @@ export type Materials = {
 
 /** Texture sets by role. Each folder holds <id>_diff/_nor_gl/_arm at the listed resolution. */
 export const TEXTURE_SETS = {
-  deck: "wood_planks_grey",
-  cedar: "brown_planks_03",
-  lining: "plank_flooring_02",
+  grain: "kitchen_wood",
+  lining: "oak_veneer_01",
   painted: "distressed_painted_planks",
   plaster: "white_stucco",
   concrete: "rough_concrete",
@@ -102,27 +101,25 @@ export function createGlass(tint = new Color(0.9, 0.97, 0.95)) {
 }
 
 export async function createMaterials(load = loadPbrSet): Promise<Materials> {
-  const safe = async (id: string, res = "1k") => {
+  const safe = async (id: string, res = "1k", grainAlongV = false) => {
     if (!id) return null;
     try {
-      return await load(id, res);
+      return await load(id, res, 8, grainAlongV);
     } catch {
       return null;
     }
   };
-  const [deck, cedar, lining, painted, plaster, concrete, fabric, wool, rug, metal] =
-    await Promise.all([
-      safe(TEXTURE_SETS.deck),
-      safe(TEXTURE_SETS.cedar),
-      safe(TEXTURE_SETS.lining),
-      safe(TEXTURE_SETS.painted),
-      safe(TEXTURE_SETS.plaster),
-      safe(TEXTURE_SETS.concrete),
-      safe(TEXTURE_SETS.fabric),
-      safe(TEXTURE_SETS.wool),
-      safe(TEXTURE_SETS.rug),
-      safe(TEXTURE_SETS.metal),
-    ]);
+  const [grain, lining, painted, plaster, concrete, fabric, wool, rug, metal] = await Promise.all([
+    safe(TEXTURE_SETS.grain, "1k", true),
+    safe(TEXTURE_SETS.lining, "1k", true),
+    safe(TEXTURE_SETS.painted),
+    safe(TEXTURE_SETS.plaster),
+    safe(TEXTURE_SETS.concrete),
+    safe(TEXTURE_SETS.fabric),
+    safe(TEXTURE_SETS.wool),
+    safe(TEXTURE_SETS.rug),
+    safe(TEXTURE_SETS.metal),
+  ]);
   const vertexColors = true;
   // Glazed units: the base colour stays white because each instance carries its own glaze
   // colour (instance colour multiplies the material colour).
@@ -137,10 +134,11 @@ export async function createMaterials(load = loadPbrSet): Promise<Materials> {
       side: DoubleSide,
     });
   const materials: Omit<Materials, "all"> = {
-    cedar: pbr(cedar, { name: "cedar", color: 0xd8c2a8, roughness: 1, vertexColors }),
-    structural: pbr(cedar, { name: "structural", color: 0xcdb392, roughness: 1, vertexColors }),
-    deck: pbr(deck, { name: "deck", color: 0xe0dcd4, roughness: 1, vertexColors }),
-    lining: pbr(lining, { name: "lining", color: 0xf0e2c8, roughness: 1, vertexColors }),
+    // One weathered grain scan, tinted per role: warm cladding, silvered structure, grey decks.
+    cedar: pbr(grain, { name: "cedar", color: 0xf2d3b2, roughness: 1, vertexColors }),
+    structural: pbr(grain, { name: "structural", color: 0xe0d2bd, roughness: 1, vertexColors }),
+    deck: pbr(grain, { name: "deck", color: 0xdcd8d0, roughness: 1, vertexColors }),
+    lining: pbr(lining, { name: "lining", color: 0xf4ece0, roughness: 1, vertexColors }),
     painted: pbr(painted, { name: "painted-green", color: 0x3f5a4b, roughness: 1, vertexColors }),
     limewash: pbr(plaster, { name: "limewash", color: 0xf2eadb, roughness: 1, vertexColors }),
     concrete: pbr(concrete, { name: "concrete", color: 0xc9c4ba, roughness: 1, vertexColors }),

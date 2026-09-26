@@ -543,7 +543,7 @@
       "bytesPerTier": {
         "existing": 0
       },
-      "status": "evaluated; not shipped \u2014 3.0\u20133.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
+      "status": "evaluated; not shipped — 3.0–3.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
       "role": "causeway stepping stones / shore boulders"
     },
     {
@@ -570,7 +570,7 @@
       "bytesPerTier": {
         "existing": 0
       },
-      "status": "evaluated; not shipped \u2014 3.0\u20133.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
+      "status": "evaluated; not shipped — 3.0–3.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
       "role": "causeway stepping stones / shore boulders"
     },
     {
@@ -597,125 +597,8 @@
       "bytesPerTier": {
         "existing": 0
       },
-      "status": "evaluated; not shipped \u2014 3.0\u20133.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
+      "status": "evaluated; not shipped — 3.0–3.4 MB after meshopt is disproportionate to its use; original kept in assets-src for a simplified LOD if a later change needs it",
       "role": "cliff-base kitbash rock (layered sandstone scan)"
-    },
-    {
-      "id": "polyhaven-wood_planks_grey",
-      "title": "Wood Planks Grey (1k diff/nor_gl/arm)",
-      "sourceUrl": "https://polyhaven.com/a/wood_planks_grey",
-      "author": "Poly Haven",
-      "license": "CC0 1.0",
-      "retrievalDate": "2026-09-26",
-      "originalSha256": {
-        "wood_planks_grey_diff_1k.jpg": "d758be23e8fe7bfbd73bc4ab257cfd59406e1835f6557c12a67cd4fdb15de0d8",
-        "wood_planks_grey_nor_gl_1k.jpg": "5e570e57d688b016b217b9e8e0592f9a8b3364406e22bf6cd775da990452bdb6",
-        "wood_planks_grey_arm_1k.jpg": "0464853147811dd6dcf9f286ca3753fb63fa654d081ae708070fbf0fd4614d97"
-      },
-      "processingSteps": [
-        "Downloaded 1k JPG maps from the Poly Haven download host",
-        "Shipped unmodified (JPG); colour map sRGB, others linear"
-      ],
-      "outputFiles": [
-        {
-          "path": "public/textures/wood_planks_grey/wood_planks_grey_diff_1k.jpg",
-          "bytes": 228279,
-          "sha256": "d758be23e8fe7bfbd73bc4ab257cfd59406e1835f6557c12a67cd4fdb15de0d8"
-        },
-        {
-          "path": "public/textures/wood_planks_grey/wood_planks_grey_nor_gl_1k.jpg",
-          "bytes": 157419,
-          "sha256": "5e570e57d688b016b217b9e8e0592f9a8b3364406e22bf6cd775da990452bdb6"
-        },
-        {
-          "path": "public/textures/wood_planks_grey/wood_planks_grey_arm_1k.jpg",
-          "bytes": 155198,
-          "sha256": "0464853147811dd6dcf9f286ca3753fb63fa654d081ae708070fbf0fd4614d97"
-        }
-      ],
-      "bytesPerTier": {
-        "existing": 540896
-      },
-      "status": "sourced; pending look-dev and review",
-      "role": "weathered decking and cladding"
-    },
-    {
-      "id": "polyhaven-brown_planks_03",
-      "title": "Brown Planks 03 (1k diff/nor_gl/arm)",
-      "sourceUrl": "https://polyhaven.com/a/brown_planks_03",
-      "author": "Poly Haven",
-      "license": "CC0 1.0",
-      "retrievalDate": "2026-09-26",
-      "originalSha256": {
-        "brown_planks_03_diff_1k.jpg": "8dfae22286fa9bb0ed62ce7326e8bc14c284e567d38fd64b5a453838080ecf19",
-        "brown_planks_03_nor_gl_1k.jpg": "868c153165ecaa7dd7259cb58214f06f6f86c80ac71fc92a827dff07708be077",
-        "brown_planks_03_arm_1k.jpg": "2be4c94cc58a0f4ea2120a1004aab5ff1baf720809c321f4fa398cdb31fd3756"
-      },
-      "processingSteps": [
-        "Downloaded 1k JPG maps from the Poly Haven download host",
-        "Shipped unmodified (JPG); colour map sRGB, others linear"
-      ],
-      "outputFiles": [
-        {
-          "path": "public/textures/brown_planks_03/brown_planks_03_diff_1k.jpg",
-          "bytes": 570668,
-          "sha256": "8dfae22286fa9bb0ed62ce7326e8bc14c284e567d38fd64b5a453838080ecf19"
-        },
-        {
-          "path": "public/textures/brown_planks_03/brown_planks_03_nor_gl_1k.jpg",
-          "bytes": 516860,
-          "sha256": "868c153165ecaa7dd7259cb58214f06f6f86c80ac71fc92a827dff07708be077"
-        },
-        {
-          "path": "public/textures/brown_planks_03/brown_planks_03_arm_1k.jpg",
-          "bytes": 126038,
-          "sha256": "2be4c94cc58a0f4ea2120a1004aab5ff1baf720809c321f4fa398cdb31fd3756"
-        }
-      ],
-      "bytesPerTier": {
-        "existing": 1213566
-      },
-      "status": "sourced; pending look-dev and review",
-      "role": "structural timber and cedar-toned cladding"
-    },
-    {
-      "id": "polyhaven-plank_flooring_02",
-      "title": "Plank Flooring 02 (1k diff/nor_gl/arm)",
-      "sourceUrl": "https://polyhaven.com/a/plank_flooring_02",
-      "author": "Poly Haven",
-      "license": "CC0 1.0",
-      "retrievalDate": "2026-09-26",
-      "originalSha256": {
-        "plank_flooring_02_diff_1k.jpg": "5337067d6ed23987659cf5d8be151660b3170a7b0bf5ab5f599fff8c3879d8a6",
-        "plank_flooring_02_nor_gl_1k.jpg": "41b52dbbad1afaaa85b5284e426246bf5ac9c8e98f78cf23c121f3378fc6e1f7",
-        "plank_flooring_02_arm_1k.jpg": "f21ebe50e65293dba024efd506c277aaeb9c483ec0662cee8c50ad87069a0df6"
-      },
-      "processingSteps": [
-        "Downloaded 1k JPG maps from the Poly Haven download host",
-        "Shipped unmodified (JPG); colour map sRGB, others linear"
-      ],
-      "outputFiles": [
-        {
-          "path": "public/textures/plank_flooring_02/plank_flooring_02_diff_1k.jpg",
-          "bytes": 667517,
-          "sha256": "5337067d6ed23987659cf5d8be151660b3170a7b0bf5ab5f599fff8c3879d8a6"
-        },
-        {
-          "path": "public/textures/plank_flooring_02/plank_flooring_02_nor_gl_1k.jpg",
-          "bytes": 527201,
-          "sha256": "41b52dbbad1afaaa85b5284e426246bf5ac9c8e98f78cf23c121f3378fc6e1f7"
-        },
-        {
-          "path": "public/textures/plank_flooring_02/plank_flooring_02_arm_1k.jpg",
-          "bytes": 430310,
-          "sha256": "f21ebe50e65293dba024efd506c277aaeb9c483ec0662cee8c50ad87069a0df6"
-        }
-      ],
-      "bytesPerTier": {
-        "existing": 1625028
-      },
-      "status": "sourced; pending look-dev and review",
-      "role": "interior lining and floors"
     },
     {
       "id": "polyhaven-distressed_painted_planks",
@@ -950,6 +833,84 @@
       },
       "status": "sourced; pending look-dev and review",
       "role": "rugs and matting"
+    },
+    {
+      "id": "polyhaven-kitchen_wood",
+      "title": "Kitchen Wood (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/kitchen_wood",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "kitchen_wood_diff_1k.jpg": "6d0170f1ab1b9353aab6f0382a7753026e32a5b58f779651cd05a91618dfcdab",
+        "kitchen_wood_nor_gl_1k.jpg": "30d6c1f3f7ad9e6a0e216393d9ee9a489f3b8a6efd9d85237f639e9bfde4cae5",
+        "kitchen_wood_arm_1k.jpg": "fab4a32dc9e08eb307a6d613f2e78ba2c66903c65eec23fa20e41c8796d206fd"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/kitchen_wood/kitchen_wood_diff_1k.jpg",
+          "bytes": 879137,
+          "sha256": "6d0170f1ab1b9353aab6f0382a7753026e32a5b58f779651cd05a91618dfcdab"
+        },
+        {
+          "path": "public/textures/kitchen_wood/kitchen_wood_nor_gl_1k.jpg",
+          "bytes": 666833,
+          "sha256": "30d6c1f3f7ad9e6a0e216393d9ee9a489f3b8a6efd9d85237f639e9bfde4cae5"
+        },
+        {
+          "path": "public/textures/kitchen_wood/kitchen_wood_arm_1k.jpg",
+          "bytes": 1098401,
+          "sha256": "fab4a32dc9e08eb307a6d613f2e78ba2c66903c65eec23fa20e41c8796d206fd"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 2644371
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "weathered board grain: decking, cladding, structure (tinted per role)"
+    },
+    {
+      "id": "polyhaven-oak_veneer_01",
+      "title": "Oak Veneer 01 (1k diff/nor_gl/arm)",
+      "sourceUrl": "https://polyhaven.com/a/oak_veneer_01",
+      "author": "Poly Haven",
+      "license": "CC0 1.0",
+      "retrievalDate": "2026-09-26",
+      "originalSha256": {
+        "oak_veneer_01_diff_1k.jpg": "c14681f72f59f17bff568cae7a837641443b607b899f0c279cd64a5638f877a7",
+        "oak_veneer_01_nor_gl_1k.jpg": "1297acf7b4476d5ccd83cc8b27be96aa6110f7a9c3a40be0bd767bf81b17db01",
+        "oak_veneer_01_arm_1k.jpg": "8bf4f36a9ba1d5377a2fa5273a2a0763775afe511b50293d71b159d15576cf1e"
+      },
+      "processingSteps": [
+        "Downloaded 1k JPG maps from the Poly Haven download host",
+        "Shipped unmodified (JPG); colour map sRGB, others linear"
+      ],
+      "outputFiles": [
+        {
+          "path": "public/textures/oak_veneer_01/oak_veneer_01_diff_1k.jpg",
+          "bytes": 641756,
+          "sha256": "c14681f72f59f17bff568cae7a837641443b607b899f0c279cd64a5638f877a7"
+        },
+        {
+          "path": "public/textures/oak_veneer_01/oak_veneer_01_nor_gl_1k.jpg",
+          "bytes": 484844,
+          "sha256": "1297acf7b4476d5ccd83cc8b27be96aa6110f7a9c3a40be0bd767bf81b17db01"
+        },
+        {
+          "path": "public/textures/oak_veneer_01/oak_veneer_01_arm_1k.jpg",
+          "bytes": 982665,
+          "sha256": "8bf4f36a9ba1d5377a2fa5273a2a0763775afe511b50293d71b159d15576cf1e"
+        }
+      ],
+      "bytesPerTier": {
+        "existing": 2109265
+      },
+      "status": "sourced; pending look-dev and review",
+      "role": "pale interior lining and furniture grain"
     }
   ]
 }

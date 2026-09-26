@@ -102,26 +102,18 @@ export const JOBS: (TextureJob | ModelJob)[] = [
   // Architecture (C3)
   {
     kind: "texture",
-    id: "wood_planks_grey",
+    id: "kitchen_wood",
     res: "1k",
-    role: "weathered decking and cladding",
-    title: "Wood Planks Grey",
+    role: "weathered board grain: decking, cladding, structure (tinted per role)",
+    title: "Kitchen Wood",
     author: "Poly Haven",
   },
   {
     kind: "texture",
-    id: "brown_planks_03",
+    id: "oak_veneer_01",
     res: "1k",
-    role: "structural timber and cedar-toned cladding",
-    title: "Brown Planks 03",
-    author: "Poly Haven",
-  },
-  {
-    kind: "texture",
-    id: "plank_flooring_02",
-    res: "1k",
-    role: "interior lining and floors",
-    title: "Plank Flooring 02",
+    role: "pale interior lining and furniture grain",
+    title: "Oak Veneer 01",
     author: "Poly Haven",
   },
   {

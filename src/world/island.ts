@@ -71,7 +71,13 @@ export interface Island {
  * Visual reset stages. Each concern lands (and is reviewed) as its own change:
  * C2 coast & tide, C3 architecture, C4 vegetation. Legacy pieces fill in until replaced.
  */
-const STAGE = { architecture: false, vegetation: false };
+const STAGE = { architecture: true, vegetation: false };
+/** Floor level above the rock for each rebuilt stay (piers and posts make up the difference). */
+const FLOOR_LIFT: Record<StayId, number> = {
+  "weather-house": 0.55,
+  "nap-observatory": 0.5,
+  "lantern-lodge": 0.7,
+};
 /** Legacy models were built at one third of a metre per unit. */
 const LEGACY = 3;
 
@@ -645,6 +651,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
     const building = stays[id];
     const site = STAY_SITES[id];
     building.group.position.set(...site.position);
+    if (STAGE.architecture) building.group.position.y += FLOOR_LIFT[id];
     building.group.rotation.y = site.rotation;
     building.group.traverse((object) => {
       object.userData.stay = id;
@@ -663,6 +670,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
   }));
   const bath = STAGE.architecture ? buildBath(materials) : legacyBath(kit);
   bath.group.position.set(...BATH_SITE);
+  if (STAGE.architecture) bath.group.position.y += 0.12;
   bath.group.rotation.y = 0.4;
   root.add(bath.group);
   const bathLights = bath.lights.map(({ light, candela }) =>
