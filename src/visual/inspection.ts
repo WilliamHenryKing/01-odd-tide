@@ -147,6 +147,10 @@ function inspect({ renderer, scene, camera }: Adapter) {
       family: object.userData.visualFamily ?? "unclassified",
       geometry: geometry.type,
       triangles: count / 3,
+      instances:
+        "isInstancedMesh" in object && object.isInstancedMesh
+          ? (object as { count: number }).count
+          : 1,
       visible: object.visible,
       materials: mats.map((m) => m.name || m.uuid),
       castShadow: object.castShadow,

@@ -12,6 +12,7 @@ import {
   Vector3,
   WebGLCubeRenderTarget,
   type WebGLRenderer,
+  type WebGLRenderTarget,
 } from "three";
 import { ATMOSPHERE_GLSL, SOLAR_ILLUMINANCE, scatter, skyIlluminance } from "./atmosphere";
 import type { Celestial, Vec3 } from "./sky-model";
@@ -261,7 +262,8 @@ export class EnvironmentBaker {
   private readonly target = new WebGLCubeRenderTarget(128, { type: HalfFloatType });
   private readonly camera = new CubeCamera(0.1, 100_000, this.target);
   private readonly pmrem: PMREMGenerator;
-  private current: Texture | null = null;
+  /** One prefiltered target, reused: disposing only a render target's texture leaks the target. */
+  private output: WebGLRenderTarget | null = null;
   private readonly bakeDome: SkyDome;
   constructor(private readonly renderer: WebGLRenderer) {
     this.pmrem = new PMREMGenerator(renderer);
@@ -275,13 +277,11 @@ export class EnvironmentBaker {
     set(u.detail, 0);
     set(u.stars, 0);
     this.camera.update(this.renderer, this.scene);
-    const next = this.pmrem.fromCubemap(this.target.texture).texture;
-    this.current?.dispose();
-    this.current = next;
-    return next;
+    this.output = this.pmrem.fromCubemap(this.target.texture, this.output);
+    return this.output.texture;
   }
   dispose() {
-    this.current?.dispose();
+    this.output?.dispose();
     this.target.dispose();
     this.pmrem.dispose();
     this.bakeDome.dispose();
