@@ -48,3 +48,30 @@ The per-frame triangle count is roughly ten times the scene inventory. Most of i
 | horizon | Trees add useful silhouette; unchanged otherwise |
 
 **Known limitations:** plant shadows do not follow the wind sway (the shadow depth material has no wind); there is no LOD tier for vegetation yet, which the performance change should decide from measurements.
+
+## C4b — planting corrections from the C4 review
+
+27 September 2026 · implementer: root (Claude Opus 5.5) · review of C4: `../reviews/C4-REVIEW.md` (hero average 2.70 → 3.00, no regressions); review of C4b: `../reviews/C4B-REVIEW.md`.
+
+The review's three next fixes, in order, all in `src/world/vegetation.ts`:
+
+1. **Cards shade as foliage.** Leaf albedo brought down to living-foliage values (the scans were lit flat and read pale); a shadowed translucency term passes some key light through leaves lit from behind, so the far side of a canopy glows green instead of going dark against a cream near side (the "confetti"); alpha-to-coverage on the 4× MSAA target antialiases every card edge, with alpha raised by mip level so distant canopies keep their coverage. Grass tufts use mostly green blades (about one in eight dry), a darker olive tint, and normals within 9° of the turf's so low sun no longer lights them ten times brighter than the ground; they dissolve by coverage between 14 and 26 m instead of aliasing into one-pixel stubble.
+2. **Every plant is grounded.** Trunks flare at the root; multiplicative contact decals, tilted to the ground, darken the turf under trunks, scrub, tussocks and ferns (the cut-outs get no ambient occlusion). Branches whose canopy would reach within a building's keep-out turn away or shorten, and the tree behind the Weather House moved 1.7 m out: no canopy crosses the lifted roof. Scrub grows only on level turf with no lip within 1.3 m, so no fronds hang over a cliff face or float at a slope's edge.
+3. **Distribution and colour.** Tufts in 110 overlapping meadow patches plus an even scatter (≈2,700 tufts); scrub is now low mounds of smaller leaf cards on woody stems, distinct from the tree canopies; the fern is pulled from spring green toward the island's olive.
+
+Also fixed: the merged canopy mesh swayed by the square of its world height (up to ~2 m at the treetops when motion is on; stills never showed it). Each cluster now carries its own sway amplitude (3–8 cm) and phase.
+
+**Evidence:** before `../captures/c4-after/`, after `../captures/c4b-after/`. Checks: `tsc` ✓, Biome ✓, `bun test` 8/8 ✓, no console errors or warnings.
+
+**Cost** (`../perf/c4b-scene/`, same plan as P1): GPU p95 11.82 / 11.98 ms (P1 11.58 / 11.74); worst segment bath-arm-length 12.5 ms, planting-close 12.2 ms (budget 13.33); RAF p95 15.9 / 16.0 ms; 416 draw calls and 2.23 M triangles a frame. Vegetation inventory 157 k triangles: tussocks 63 k, tufts 49 k, ferns 25 k, trunks and stems 14 k, leaf cards 6 k. The second pass recorded one 56.4 ms callback gap in bath-arm-length's hold; that frame's own work was 2.3 ms CPU and 7.8 ms GPU with normal frames either side, so the stall was outside the render, but it is a gap over 50 ms and is recorded as such.
+
+**Self-critique — three most visible remaining planting flaws**
+
+| Bookmark | Flaws |
+|---|---|
+| planting-close | Near meadow is even in height, so it reads mown-then-grown rather than wind-shaped; blades are single planar cards at arm's length; scrub stems thin against the mound |
+| weather-exterior | The four trees still share one silhouette; a branch cluster turned away from the house sits apart from its crown |
+| lantern-dusk | Tufts at 18–24 m still catch the low sun as warm specks; canopies uniform in tone |
+| nap-observatory | Plateau turf mostly bare beyond 26 m (tufts dissolved); one fern reads as an isolated rosette |
+| bath-arm-length | Tufts on the rock above, seen against the sky, read pale |
+| arrival views | Trees read as small umbrellas; no plant mass on the lower terraces |
