@@ -2,7 +2,7 @@
 
 > **Visual acceptance withdrawn, 26 September 2026.** William rejected this output. The records below describe historical implementation/testing, not an accepted visual result. Follow `docs/visual/AUDIT.md` and the collection Visual Quality Directive.
 
-Status: locally complete, 26 September 2026. This is an original fictional coastal stay planner. Nothing is published and no real booking or payment is possible. Read VERIFICATION.md for the exact self-review scope and limitations.
+Status: paused at the visual-reset handover, 26 September 2026. The baseline is independently rejected; local hardware testing is complete; look-dev and improved art remain pending. This is an original fictional coastal stay planner with working journeys, not a visually accepted delivery. Nothing is published and no real booking or payment is possible. Read ../../HANDOFF.md for continuation and VERIFICATION.md only as historical self-review evidence.
 
 Working checkout: `experiences/01-odd-tide`. Repository anchor: `.repositories/01-odd-tide`. Branch: `work/experience`. Preserve both directories.
 
@@ -24,6 +24,6 @@ Each project owns its dependencies and lockfile. Tailwind uses its Vite plugin; 
 
 Read DESIGN.md and ASSET-REGISTER.md for creative intent and provenance. The domain module owns all tide and itinerary rules; React owns the visitor's discrete choices; Three owns the scene; GSAP owns camera/roof/day choreography. No external services, forms, accounts or asset CDNs are required at runtime. Optional original sound starts only after a deliberate press.
 
-Review evidence goes in `output/playwright/` (not committed). Reproducible browser procedures under `tools/browser/*.txt` run through the installed Playwright CLI's `run-code --filename` command. These are function expressions because that CLI wraps its input; do not append a semicolon or turn them into a test runner suite.
+Historical journey evidence is in `output/playwright/` (not committed). The current visual-reset frames and metadata are committed in `docs/visual/captures/`; performance evidence is in `docs/visual/perf/`. Reproducible browser procedures under `tools/browser/*.txt` run through the installed Playwright CLI's `run-code --filename` command. These are function expressions because that CLI wraps its input; do not append a semicolon or turn them into a test runner suite.
 
-The local delivery package lives at `../../portfolio-packages/01-odd-tide/`: deployable build, selected actual captures and factual case study. Hosting needs directory-index routing for the prerendered pages and a custom 404 document; Vite preview implements this locally. No host is configured. Chrome desktop and touch emulation were exercised, not physical phones or cross-browser compatibility. Audio controls were instrumented, not auditioned. The experience remains complete with sound off.
+The old, explicitly unaccepted local delivery package lives at `../../portfolio-packages/01-odd-tide/`: build, selected actual captures and factual case study. Hosting needs directory-index routing for the prerendered pages and a custom 404 document; the preview middleware's unknown-route status still needs verification (see HANDOFF). No host is configured. Chrome desktop and touch emulation were exercised, not physical phones or cross-browser compatibility. Audio controls were instrumented, not auditioned. All planner tasks are available with sound off.

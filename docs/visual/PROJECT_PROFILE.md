@@ -1,6 +1,6 @@
 # ODD TIDE — visual project profile
 
-26 September 2026. Reset profile from current source and commission. **Visual acceptance withdrawn. No release sign-off.**
+26 September 2026. Reset profile from current source and commission. **Visual acceptance withdrawn. No release sign-off.** Paused for handover at William's request; read the [root handoff](../../../../HANDOFF.md) before resuming.
 
 | Field | Verified current state / authority |
 |---|---|

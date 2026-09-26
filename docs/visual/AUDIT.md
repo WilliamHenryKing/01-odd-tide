@@ -1,6 +1,6 @@
 # ODD TIDE — Phase 0 visual audit
 
-26 September 2026. **Baseline, not approval.** No aesthetic changes have been made in this reset. The source is the earlier rejected implementation plus development-only capture instrumentation. Independent review awaits D01. Proposed budgets/devices await D02.
+26 September 2026. **Baseline, not approval.** No aesthetic changes have been made in this reset. The source is the earlier rejected implementation plus development-only capture instrumentation. Subsequent D01 review rejects the baseline; D02's local hardware policy is measured and adopted. Historical frame findings below are preserved. William has now paused before look-dev and visual rebuilding; see the root HANDOFF.md.
 
 ## Evidence and method
 
@@ -58,7 +58,7 @@ Materials: timber, stone and ceramic use 256² seeded CanvasTextures. Timber and
 
 All bookmarks report 743 geometries and 7 renderer textures. Repeated vegetation comprises 340 individual meshes; site fixtures add 102. No performance diagnosis is claimed from counts alone, but this is a clear batching investigation target.
 
-Public asset files total 1,075,164 bytes (about 1.03 MiB); generated textures/render targets are additional GPU allocations. Budget comparison is pending D02. These counts are not GPU memory bytes. No glTF assets exist, so glTF validation is not applicable to this baseline.
+Public asset files total 1,075,164 bytes (about 1.03 MiB); generated textures/render targets are additional GPU allocations. D02 now supplies the local residency/timing policy; compressed delivery bytes remain a separate project allocation, not a value inferred from VRAM. These counts are not GPU memory bytes. No glTF assets exist, so glTF validation is not applicable to this baseline.
 
 ## Failure patterns established by frames
 
@@ -77,7 +77,7 @@ Public asset files total 1,075,164 bytes (about 1.03 MiB); generated textures/re
 5. Batch repeated meshes after composition/asset choices; verify mobile framing and collect target-device performance.
 6. Repeat identical bookmarks, independent review, score deltas and commit only through the new gate.
 
-**Orchestrator update after the hardware session: Phase 0 factual audit and independent cold review are complete; the baseline is rejected.** William resolved D01 and authorised D02, now measured in the [local-machine policy](../../../../docs/visual/LOCAL_MACHINE_BUDGET.md). Proceed with exact-pipeline look-dev and inspected reference selection, then one visual concern through the directive's change loop. The [independent review](INDEPENDENT-REVIEW-2026-09-26.md) supplements the preserved self-scorecard. D03 remains specific to unchanged existing OFL fonts; it does not block unrelated material work. No assumed budget, unapproved dependency or new asset licence may silently become an implementation constraint.
+**Orchestrator update after the hardware session: Phase 0 factual audit and independent cold review are complete; the baseline is rejected.** William resolved D01 and authorised D02, now measured in the [local-machine policy](../../../../docs/visual/LOCAL_MACHINE_BUDGET.md). On William's resumption after the handover pause, proceed with exact-pipeline look-dev and inspected reference selection, then one visual concern through the directive's change loop. The [independent review](INDEPENDENT-REVIEW-2026-09-26.md) supplements the preserved self-scorecard. D03 remains specific to unchanged existing OFL fonts; it does not block unrelated material work. No assumed budget, unapproved dependency or new asset licence may silently become an implementation constraint.
 
 ## Supplemental responsive capture
 
