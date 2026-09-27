@@ -115,6 +115,10 @@ try {
         await page.goto(`${base}/`);
         await page.waitForFunction(() => !!window.__VISUAL_TEST__, null, { timeout: 60_000 });
         await page.evaluate(async () => await window.__VISUAL_TEST__.ready);
+        // The arrival loader must have lifted and left the page before any frame is taken.
+        await page.waitForFunction(() => !document.getElementById("odd-loader"), null, {
+          timeout: 60_000,
+        });
         const all = await page.evaluate(() => window.__VISUAL_TEST__.bookmarks.map((b) => b.id));
         const tier = args.tier ?? (await page.evaluate(() => window.__VISUAL_TEST__.tiers[0]));
         for (const bookmark of list(args.bookmarks) ?? all) {

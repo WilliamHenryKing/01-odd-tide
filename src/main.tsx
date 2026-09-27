@@ -1,5 +1,6 @@
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { App } from "./App";
+import { startLoader } from "./loader";
 
 if (import.meta.env.MODE === "performance" && new URLSearchParams(location.search).has("perf"))
   document.documentElement.dataset.perf = "true";
@@ -14,14 +15,18 @@ const lookdev =
   new URLSearchParams(location.search).has("lookdev");
 
 if (lookdev) {
+  document.documentElement.classList.remove("odd-loading");
   element.removeAttribute("data-rendered");
   element.replaceChildren();
   element.style.cssText = "position:fixed;inset:0;background:#0d1414";
   void import("./world/lookdev-entry").then(({ start }) => start(element));
 } else {
-  const app = (
-    <App initialPath={element.dataset.path ?? (location.pathname.replace(/\/$/, "") || "/")} />
-  );
+  const initialPath = element.dataset.path ?? (location.pathname.replace(/\/$/, "") || "/");
+  // Routes that open on the live island wait for it; the others only for their fonts.
+  const world =
+    initialPath === "/" || initialPath === "/summary" || initialPath.startsWith("/stays/");
+  startLoader({ world: world && document.documentElement.dataset.perf !== "true" });
+  const app = <App initialPath={initialPath} />;
   if (element.dataset.rendered) hydrateRoot(element, app);
   else createRoot(element).render(app);
 }

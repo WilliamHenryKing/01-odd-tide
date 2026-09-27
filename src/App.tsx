@@ -21,7 +21,9 @@ import {
   stayFor,
   totals,
   validatePlan,
+  waterHeight,
 } from "./domain";
+import { whenRevealed } from "./loader";
 import { pageTitle, ROUTES } from "./routes";
 import { Sound } from "./Sound";
 import { World } from "./World";
@@ -37,6 +39,43 @@ function Mark({ small = false }: { small?: boolean }) {
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
+/**
+ * The sea clock: the sun (or moon) travels the rim through the day and the dial fills with
+ * the tide, both driven by the same hour as the island.
+ */
+function SeaDial({ hour }: { hour: number }) {
+  const level = Math.min(1, Math.max(0, (waterHeight(hour) - 0.16) / 0.86));
+  const day = hour >= 6.2 && hour <= 19.2;
+  const t = day ? (hour - 6.2) / 13 : ((hour < 6.2 ? hour + 24 : hour) - 19.2) / 11;
+  const angle = Math.PI * (1 - Math.min(1, Math.max(0, t)));
+  const bx = 22 + Math.cos(angle) * 17;
+  const by = 22 - Math.sin(angle) * 17;
+  const waterTop = 38 - level * 22;
+  return (
+    <svg className="sea-dial" viewBox="0 0 44 44" aria-hidden="true">
+      <defs>
+        <clipPath id="sea-dial-clip">
+          <circle cx="22" cy="22" r="17" />
+        </clipPath>
+      </defs>
+      <circle cx="22" cy="22" r="17" className="sea-dial-face" />
+      <g clipPath="url(#sea-dial-clip)">
+        <path
+          className="sea-dial-water"
+          d={`M0 ${waterTop} q5.5 -2.2 11 0 t11 0 t11 0 t11 0 V44 H0 Z`}
+        />
+      </g>
+      <circle cx="22" cy="22" r="17" className="sea-dial-rim" />
+      <circle
+        cx={bx}
+        cy={by}
+        r={day ? 3.6 : 3}
+        className={day ? "sea-dial-sun" : "sea-dial-moon"}
+      />
+    </svg>
+  );
+}
+
 /** How each stay opens, for the portrait's second still and the gallery caption. */
 const OPENING: Record<StayId, string> = {
   "weather-house": "The roof slope lifted on its gas struts",
@@ -95,10 +134,46 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
   const stay = stayFor(selected ?? plan.stay);
   const issues = validatePlan(plan),
     price = totals(plan);
+  // "Watch the day go by": a time-lapse drives the island's hour without touching the plan
+  // (or the address bar) until it stops.
+  const [liveHour, setLiveHour] = useState<number | null>(null);
+  const timelapse = useRef<{ tween: gsap.core.Tween; proxy: { hour: number } } | null>(null);
+  const shownHour = liveHour ?? plan.hour;
   const sceneState = useMemo(
-    () => ({ hour: plan.hour, selected, opened, paused, reduced, found, discover }),
-    [plan.hour, selected, opened, paused, reduced, found, discover],
+    () => ({ hour: shownHour, selected, opened, paused, reduced, found, discover }),
+    [shownHour, selected, opened, paused, reduced, found, discover],
   );
+  const stopDay = useCallback((commit = true) => {
+    const running = timelapse.current;
+    if (!running) return;
+    running.tween.kill();
+    timelapse.current = null;
+    if (commit) {
+      const hour = Math.min(22, Math.max(6, Math.round(running.proxy.hour * 4) / 4));
+      setPlan((current) => ({ ...current, hour }));
+    }
+    setLiveHour(null);
+  }, []);
+  const playDay = () => {
+    if (timelapse.current) {
+      stopDay();
+      return;
+    }
+    const start = plan.hour >= 21.75 ? 6 : plan.hour;
+    const proxy = { hour: start };
+    const hours = 22 - start;
+    setLiveHour(start);
+    const tween = gsap.to(proxy, {
+      hour: 22,
+      duration: hours * 1.5,
+      // Gentle motion: the day advances an hour at a time instead of sweeping.
+      ease: reduced ? `steps(${Math.max(1, Math.ceil(hours))})` : "none",
+      onUpdate: () => setLiveHour(Math.round(proxy.hour * 20) / 20),
+      onComplete: () => stopDay(),
+    });
+    timelapse.current = { tween, proxy };
+  };
+  useEffect(() => () => stopDay(false), [stopDay]);
   const update = (change: Partial<Plan>) => setPlan((current) => ({ ...current, ...change }));
   useEffect(() => {
     if (!import.meta.env.DEV && import.meta.env.MODE !== "visual-test") return;
@@ -200,7 +275,20 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
   }, [path]);
   // biome-ignore lint/correctness/useExhaustiveDependencies: A route change introduces new arrival elements to animate.
   useEffect(() => {
-    const context = gsap.context(() => {
+    // On first load the copy arrives as the loader lifts, not unseen behind it.
+    let context: gsap.Context | null = null;
+    let cancelled = false;
+    void whenRevealed().then(() => {
+      if (cancelled) return;
+      context = arrive();
+    });
+    return () => {
+      cancelled = true;
+      context?.revert();
+    };
+  }, [path, reduced]);
+  const arrive = () =>
+    gsap.context(() => {
       const card = content.current?.querySelector(".postcard");
       if (card)
         gsap.fromTo(
@@ -231,16 +319,19 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
         },
       );
     }, content);
-    return () => context.revert();
-  }, [path, reduced]);
   const onSelect = (id: StayId) => {
     update({ stay: id });
     navigate(`/stays/${id}`);
   };
   const collect = (id: LensId) => {
     if (!lensReady(id, plan.hour)) return;
-    setFound((current) => (current.includes(id) ? current : [...current, id]));
-    setMessage("A piece of the lighthouse lens, found.");
+    const next = found.includes(id) ? found : [...found, id];
+    setFound(next);
+    setMessage(
+      next.length === 3
+        ? "The lens is whole again. Turn the day to evening and watch the lighthouse shine."
+        : "A piece of the lighthouse lens, found.",
+    );
   };
   const save = () => {
     try {
@@ -444,42 +535,54 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
               </button>
             </div>
             <div className="tide-instrument">
-              <div className="dial-symbol" aria-hidden="true">
-                ◒
-              </div>
+              <SeaDial hour={shownHour} />
               <div className="tide-label">
                 <span className="eyebrow">The island keeps sea time</span>
                 <strong>
-                  {hourLabel(plan.hour)}{" "}
+                  {hourLabel(shownHour)}{" "}
                   <span>
                     ·{" "}
-                    {plan.hour >= 18
+                    {shownHour >= 18
                       ? "Evening settles in"
-                      : pathOpen(plan.hour)
+                      : pathOpen(shownHour)
                         ? "The path is yours"
                         : "The sea has the right of way"}
                   </span>
                 </strong>
               </div>
               <div className="time-range">
-                <label htmlFor="island-time">Turn the day</label>
+                <div className="time-range-head">
+                  <label htmlFor="island-time">Turn the day</label>
+                  <button
+                    type="button"
+                    className="play-day"
+                    aria-pressed={liveHour !== null}
+                    onClick={playDay}
+                  >
+                    <span aria-hidden="true">{liveHour !== null ? "❚❚" : "▶"}</span>
+                    {liveHour !== null ? "Pause the day" : "Watch the day go by"}
+                  </button>
+                </div>
                 <input
                   id="island-time"
                   type="range"
                   min="6"
                   max="22"
                   step="0.25"
-                  value={plan.hour}
-                  onChange={(event) => update({ hour: Number(event.target.value) })}
+                  value={shownHour}
+                  onChange={(event) => {
+                    stopDay(false);
+                    update({ hour: Number(event.target.value) });
+                  }}
                 />
                 <div>
                   <span>06:00 · Morning</span>
                   <span>22:00 · Goodnight</span>
                 </div>
               </div>
-              <p className="access-status" aria-live="polite">
-                <i className={pathOpen(plan.hour) ? "open-dot" : "closed-dot"} />
-                {pathOpen(plan.hour) ? "Bath causeway open" : "Bath causeway underwater"}
+              <p className="access-status" aria-live={liveHour === null ? "polite" : "off"}>
+                <i className={pathOpen(shownHour) ? "open-dot" : "closed-dot"} />
+                {pathOpen(shownHour) ? "Bath causeway open" : "Bath causeway underwater"}
                 <small>Fictional tide cycle</small>
               </p>
             </div>

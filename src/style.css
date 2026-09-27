@@ -332,8 +332,10 @@ select {
 .ready .world-canvas {
   opacity: 1;
 }
+/* The poster stays behind the canvas until the canvas has finished fading in. */
 .ready .world-poster {
   visibility: hidden;
+  transition: visibility 0s linear 0.7s;
 }
 .world-canvas canvas {
   display: block;
@@ -490,10 +492,67 @@ select {
   border: 1px solid #8d9d894f;
   box-shadow: 0 12px 24px #234a3c08;
 }
-.dial-symbol {
-  font-size: 38px;
-  line-height: 1;
-  transform: rotate(-30deg);
+/* The sea clock: sun or moon on the rim, the dial filling with the tide. */
+.sea-dial {
+  width: 44px;
+  height: 44px;
+  overflow: visible;
+}
+.sea-dial-face {
+  fill: #eef0e4;
+}
+.sea-dial-water {
+  fill: #7fb0a9;
+  transition: d 0.6s ease;
+}
+.sea-dial-rim {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.4;
+}
+.sea-dial-sun {
+  fill: #f2b07a;
+  stroke: #b8733c;
+  stroke-width: 0.8;
+}
+.sea-dial-moon {
+  fill: #dfe6ea;
+  stroke: #6f8591;
+  stroke-width: 0.8;
+}
+.time-range-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+.time-range-head label {
+  margin-bottom: 0;
+}
+.play-day {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  padding: 4px 11px 4px 9px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.play-day span {
+  font-size: 8px;
+  letter-spacing: -0.1em;
+}
+.play-day:hover,
+.play-day[aria-pressed="true"] {
+  background: #e3e8d8;
+  border-color: #8d9d89;
 }
 .tide-label strong {
   display: block;
@@ -1499,8 +1558,9 @@ footer .footer-fine {
     grid-template-columns: 27px 1fr;
     gap: 12px;
   }
-  .dial-symbol {
-    font-size: 30px;
+  .sea-dial {
+    width: 30px;
+    height: 30px;
   }
   .tide-label .eyebrow {
     font-size: 8px;

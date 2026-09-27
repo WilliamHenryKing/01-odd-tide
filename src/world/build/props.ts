@@ -1,5 +1,9 @@
 import {
+  AdditiveBlending,
+  Color,
+  ConeGeometry,
   CylinderGeometry,
+  DoubleSide,
   Group,
   IcosahedronGeometry,
   LatheGeometry,
@@ -7,6 +11,7 @@ import {
   type MeshStandardMaterial,
   OctahedronGeometry,
   PointLight,
+  ShaderMaterial,
   SphereGeometry,
   TorusGeometry,
   Vector2,
@@ -255,8 +260,79 @@ export function buildLighthouse(mats: Materials, seed = 91) {
     const mesh = batch.build();
     if (mesh) group.add(mesh);
   }
-  return { group, light, lensMaterial };
+
+  // Two opposed beams from the lens, turning with it: light scattered by the air along each
+  // beam, bright near the lamp and through its core, soft at its edges, gone by 55 m. Radiance
+  // is physical (cd/m²) and pre-exposed, so the beams vanish by day and show from twilight.
+  const beamUniforms = {
+    radiance: { value: 0 },
+    colour: { value: new Color(1, 0.84, 0.6) },
+  };
+  const beamMaterial = new ShaderMaterial({
+    name: "lighthouse-beam",
+    uniforms: beamUniforms,
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    side: DoubleSide,
+    vertexShader: `
+      varying float vAlong;
+      varying vec3 vNormalView;
+      varying vec3 vViewDir;
+      void main() {
+        // The apex sits at the lamp (the rotor's origin): vAlong runs 0 there to 1 at the end.
+        vAlong = length(position) / ${BEAM_LENGTH.toFixed(1)};
+        vec4 view = modelViewMatrix * vec4(position, 1.0);
+        vNormalView = normalize(normalMatrix * normal);
+        vViewDir = normalize(-view.xyz);
+        gl_Position = projectionMatrix * view;
+      }`,
+    fragmentShader: `
+      uniform float radiance;
+      uniform vec3 colour;
+      varying float vAlong;
+      varying vec3 vNormalView;
+      varying vec3 vViewDir;
+      void main() {
+        // Seen through its middle the beam is thickest; its silhouette edges are thin.
+        float core = pow(abs(dot(normalize(vNormalView), normalize(vViewDir))), 2.0);
+        float fall = pow(1.0 - clamp(vAlong, 0.0, 1.0), 1.7) * smoothstep(0.0, 0.03, vAlong);
+        gl_FragColor = vec4(colour * radiance * core * fall, 1.0);
+      }`,
+  });
+  const rotor = new Group();
+  rotor.name = "lighthouse-rotor";
+  rotor.position.y = 3.05;
+  for (const side of [1, -1]) {
+    const cone = new ConeGeometry(BEAM_RADIUS, BEAM_LENGTH, 32, 1, true);
+    // Lay the cone on its side with its apex at the lamp, pointing out along ±x and tilted
+    // 1.5° up so it clears the islets' roofs.
+    cone.translate(0, -BEAM_LENGTH / 2, 0);
+    cone.rotateZ(side * (Math.PI / 2 + (1.5 * Math.PI) / 180));
+    const beam = new Mesh(cone, beamMaterial);
+    beam.renderOrder = 4;
+    beam.frustumCulled = false;
+    beam.userData.visualFamily = "lighthouse beam";
+    rotor.add(beam);
+  }
+  rotor.visible = false;
+  group.add(rotor);
+  return {
+    group,
+    light,
+    lensMaterial,
+    /** on: 0–1 lamp state; preExposure from the rig; the beams turn once every 7 s when animated. */
+    updateBeam(on: number, preExposure: number, time: number, animated: boolean) {
+      rotor.visible = on > 0.001;
+      beamUniforms.radiance.value = on * BEAM_RADIANCE * preExposure;
+      rotor.rotation.y = animated ? (time * Math.PI * 2) / 7 : 0.9;
+    },
+  };
 }
+/** Beam geometry (metres) and in-scattered radiance at the lamp (cd/m²). */
+const BEAM_LENGTH = 55;
+const BEAM_RADIUS = 3;
+const BEAM_RADIANCE = 0.05;
 
 /** A lens fragment for the optional discovery: a cut glass prism in a brass bezel. */
 export function buildLensFragment(mats: Materials) {

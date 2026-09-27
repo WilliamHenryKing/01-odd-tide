@@ -1,0 +1,14 @@
+# C9 — arrival loader, lighthouse payoff, "watch the day go by" (change record)
+
+27 September 2026 · implementer: root (Claude Opus 5.5). Independent review: deferred to the ODD TIDE completion review (D10: reviewers only at milestones).
+
+**What changed**
+
+- **Arrival loader (D09).** `index.html` paints a tide clock at first paint: a dial that fills with animated water as loading progresses, a sun travelling its rim, the wordmark and a line of copy per stage ("Checking the tide tables…" → "Here we are."). `src/loader.ts` drives it from real stages — the island's code arriving, every model/texture/file through three's `DefaultLoadingManager`, shader compilation, three settled frames — never moving backwards, eased for display. It reveals only when fonts are in and the island has rendered settled frames; non-island routes wait for fonts only (a quick fade if ready within 450 ms); a WebGL failure or context loss reveals at once; a 25 s ceiling reveals anyway (the island's own poster and status take over). The hero copy's arrival animation starts as the loader lifts. Reduced motion: no wave animation, plain fade. No JavaScript: the loader never shows. `html { scrollbar-gutter: stable }` keeps the page width fixed when scrolling unlocks, and a resize now draws into the new canvas buffer immediately (a continuous recording showed the canvas blank for ~0.5 s after the reveal, caused by the scrollbar returning and resizing the canvas; this fix is pending re-verification in the next batch cycle).
+- **Establishing move.** As the loader lifts, the camera eases 14% closer and 3.5 m lower into the arrival framing over 3.6 s (skipped with gentle motion); resizes no longer interrupt it.
+- **Lighthouse payoff.** With all three lens pieces found, the lamp lights and two opposed beams of scattered light turn once every 7 s: physical radiance (0.05 cd/m² at the lamp, pre-exposed), so they vanish by day and show from twilight; soft edges, fading over 55 m, tilted 1.5° up to clear the roofs. The unlit lens no longer glows. Finding the third piece now says to turn the day to evening to see it.
+- **Watch the day go by.** A play control on the time instrument runs a time-lapse from the current hour to 22:00 (1.5 s per hour): sun, tide, lamps and — if restored — the lighthouse, without touching the plan or the address bar until it stops. Gentle motion steps an hour at a time.
+- **Sea clock.** The time instrument's static glyph is now a live dial: the sun or moon on its rim and the tide filling it, driven by the same hour as the island.
+- **Poster handover.** The poster stays behind the canvas until the canvas has faded in.
+
+**Checks:** `tsc` ✓, Biome ✓. Captures, video evidence, `bun test`, the production build and the scene performance run are in the next batch cycle (`../batch/`).

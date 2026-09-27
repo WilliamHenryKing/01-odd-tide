@@ -3,6 +3,7 @@ import {
   BufferAttribute,
   BufferGeometry,
   Color,
+  DefaultLoadingManager,
   Group,
   type Material,
   Mesh,
@@ -21,6 +22,7 @@ import {
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { type LensId, lensReady, type StayId, waterHeight } from "../domain";
+import { reportLoading, worldFailed, worldReady } from "../loader";
 import { buildBath } from "./build/bath";
 import { buildGull } from "./build/gull";
 import { buildLodge } from "./build/lodge";
@@ -92,6 +94,9 @@ const ARRIVAL = {
   portrait: { position: new Vector3(48, 54, 78), target: new Vector3(2.1, 1.2, 0) },
 };
 
+// The island's code has arrived: the arrival loader's first stage.
+reportLoading("module", 1);
+
 export function createIsland(
   host: HTMLElement,
   onSelect: (id: StayId) => void,
@@ -145,6 +150,7 @@ export function createIsland(
   let last = performance.now();
   let elapsed = 0;
   let perfActive = false;
+  let introTween: gsap.core.Tween | null = null;
   let ready = false;
   let lastSelected: StayId | null | undefined;
   let lastOpened = false;
@@ -223,7 +229,14 @@ export function createIsland(
     pipeline.setSize(width, height, window.devicePixelRatio);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    pose(true);
+    // Let the establishing move finish; it already ends on this framing.
+    if (!introTween?.isActive()) pose(true);
+    if (ready && !disposed) {
+      // Resizing clears the canvas: draw into the new buffer at once rather than show a blank.
+      cancelAnimationFrame(frame);
+      frame = 0;
+      draw(performance.now());
+    }
     wake();
   };
   const observer = new ResizeObserver(resize);
@@ -253,6 +266,7 @@ export function createIsland(
     event.preventDefault();
     cancelAnimationFrame(frame);
     frame = 0;
+    worldFailed();
     onLost();
   };
   renderer.domElement.addEventListener("webglcontextlost", lost);
@@ -291,6 +305,10 @@ export function createIsland(
   renderer.domElement.addEventListener("pointerup", up);
   resize();
 
+  // Every model, texture and file loaded through three's default manager feeds the arrival
+  // loader's asset stage.
+  DefaultLoadingManager.onProgress = (_url, loaded, total) =>
+    reportLoading("assets", total ? loaded / total : 0);
   void buildWorld({
     scene,
     rig,
@@ -306,18 +324,51 @@ export function createIsland(
         return;
       }
       world = built;
+      reportLoading("assets", 1);
       await renderer.compileAsync(scene, camera);
       if (disposed) return;
+      reportLoading("compile", 1);
       ready = true;
       last = performance.now();
       draw(performance.now(), true);
       onReady();
       installHooks();
+      introduce();
+      // Three settled frames (environment baked, shadows drawn, textures uploaded) before the
+      // loader reveals the island.
+      let settled = 0;
+      const settle = () => {
+        if (disposed) return;
+        draw(performance.now(), true);
+        if (++settled < 3) requestAnimationFrame(settle);
+        else worldReady();
+      };
+      requestAnimationFrame(settle);
     })
     .catch((error) => {
       console.error(error);
+      worldFailed();
       if (!disposed) onLost();
     });
+  /** A slow establishing dolly into the arrival view as the loader lifts (not with gentle motion). */
+  function introduce() {
+    if (state.selected || state.reduced || perfActive) return;
+    const end = camera.position.clone();
+    const start = target
+      .clone()
+      .add(end.clone().sub(target).multiplyScalar(1.14))
+      .add(new Vector3(0, 3.5, 0));
+    camera.position.copy(start);
+    introTween = gsap.to(camera.position, {
+      x: end.x,
+      y: end.y,
+      z: end.z,
+      duration: 3.6,
+      ease: "power2.out",
+      overwrite: true,
+      onUpdate: wake,
+    });
+  }
 
   function installHooks() {
     if (
@@ -765,6 +816,8 @@ async function buildWorld(context: WorldContext): Promise<World> {
   const lighthouse = buildLighthouse(materials);
   lighthouse.group.position.set(...LIGHTHOUSE_SITE);
   root.add(lighthouse.group);
+  // The beams are light in the air, not surfaces: keep them out of the AO pre-pass.
+  aoHidden.push(...(lighthouse.group.getObjectByName("lighthouse-rotor")?.children ?? []));
   const beacon = rig.registerPractical(lighthouse.light, 150, 40);
   const beaconGlow = rig.registerEmissive(lighthouse.lensMaterial, 3000);
   const weather = STAY_SITES["weather-house"].position;
@@ -851,6 +904,8 @@ async function buildWorld(context: WorldContext): Promise<World> {
 
   const tmp = new Vector3();
   let interiorShadowKey = "";
+  let beaconTime = 0;
+  let beaconAnimated = false;
   return {
     frame(hour, time, animated) {
       const state = context.getState();
@@ -899,6 +954,8 @@ async function buildWorld(context: WorldContext): Promise<World> {
       for (const lantern of lanternGlows) lantern.state.on = 0.02 + walkOn(lantern.order);
       const found = state.found.length === 3;
       beacon.on = found ? 1 : 0;
+      beaconAnimated = animated;
+      beaconTime = time;
       // Unlit until the lens is whole: even a faint glow read as a working lamp at twilight.
       beaconGlow.on = found ? 1 : 0;
       for (const fragment of fragments) {
@@ -922,6 +979,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
       gull.update(time, animated);
     },
     afterLighting() {
+      lighthouse.updateBeam(beacon.on, rig.sky_state.preExposure, beaconTime, beaconAnimated);
       seaSun.direction.value.copy(rig.key.position).sub(rig.key.target.position).normalize();
       seaSun.irradiance.value.copy(rig.key.color).multiplyScalar(rig.key.intensity);
     },

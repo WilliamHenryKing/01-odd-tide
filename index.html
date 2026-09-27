@@ -9,9 +9,171 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href="/fonts/young-serif.woff2" as="font" type="font/woff2" crossorigin />
     <title>Somewhere between here and the sea — ODD TIDE</title>
+    <style>
+      /* Arrival loader: inline so it paints before any script or stylesheet arrives. Driven by
+         src/loader.ts through --progress (0–1); shown only when JavaScript runs. */
+      @font-face {
+        font-family: "Young Serif";
+        src: url("/fonts/young-serif.woff2") format("woff2");
+        font-display: swap;
+      }
+      /* Reserve the scrollbar's gutter so unlocking scroll after the reveal cannot change the
+         page width (which would resize the island's canvas mid-reveal). */
+      html {
+        scrollbar-gutter: stable;
+      }
+      .odd-loader {
+        display: none;
+      }
+      .odd-loading body {
+        overflow: hidden;
+      }
+      .odd-loading .odd-loader {
+        --progress: 0;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(ellipse at 50% 40%, #f8f5ec 0%, #f1ecdf 60%, #e8e1cf 100%);
+        color: #234939;
+        font-family: "DM Sans", system-ui, sans-serif;
+        transition:
+          opacity 1s cubic-bezier(0.5, 0, 0.2, 1) 0.15s,
+          visibility 0s linear 1.2s;
+      }
+      .odd-loader-inner {
+        display: grid;
+        justify-items: center;
+        gap: 18px;
+        transition:
+          transform 1.1s cubic-bezier(0.5, 0, 0.2, 1),
+          opacity 0.7s ease;
+      }
+      .odd-loader-dial {
+        width: 132px;
+        height: 132px;
+        overflow: visible;
+      }
+      .odd-loader-dial .face {
+        fill: #faf8f1;
+      }
+      .odd-loader-dial .rim {
+        fill: none;
+        stroke: #234939;
+        stroke-width: 1.6;
+      }
+      .odd-loader-dial .ticks {
+        stroke: #234939;
+        stroke-width: 1;
+        opacity: 0.35;
+      }
+      .odd-loader-dial .water {
+        /* Wave crests start at the dial's foot (y 112) and rise to its top (y 12) at 100%. */
+        transform: translateY(calc(var(--progress) * -100px));
+      }
+      .odd-loader-dial .wave {
+        animation: odd-wave 3.2s linear infinite;
+      }
+      .odd-loader-dial .wave.back {
+        fill: #a9cbc3;
+        animation-duration: 4.6s;
+        animation-direction: reverse;
+      }
+      .odd-loader-dial .wave.front {
+        fill: #6fa59d;
+      }
+      .odd-loader-dial .sun {
+        fill: #f2b07a;
+        stroke: #b8733c;
+        stroke-width: 1;
+        transform-origin: 66px 66px;
+        transform: rotate(calc(var(--progress) * 180deg));
+      }
+      @keyframes odd-wave {
+        to {
+          transform: translateX(40px);
+        }
+      }
+      .odd-loader-mark {
+        margin: 6px 0 0;
+        font-family: "Young Serif", Georgia, serif;
+        font-size: 40px;
+        line-height: 1;
+        letter-spacing: -0.06em;
+      }
+      .odd-loader-mark span {
+        font-family: Georgia, serif;
+        margin: 0 0.05em;
+      }
+      .odd-loader-line {
+        margin: 0;
+        font-size: 13px;
+        letter-spacing: 0.01em;
+        min-height: 1.5em;
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+      }
+      .odd-loader-line [data-loader-percent] {
+        font-variant-numeric: tabular-nums;
+        font-size: 11px;
+        opacity: 0.65;
+      }
+      .odd-loader.done {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .odd-loader.done .odd-loader-inner {
+        transform: translateY(-18px) scale(1.04);
+        opacity: 0;
+      }
+      .odd-loader.quick {
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s ease,
+          visibility 0s linear 0.3s;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .odd-loader-dial .wave {
+          animation: none;
+        }
+        .odd-loader.done .odd-loader-inner {
+          transform: none;
+        }
+      }
+    </style>
   </head>
   <body>
+    <script>
+      document.documentElement.classList.add("odd-loading");
+      window.__oddLoaderStart = performance.now();
+    </script>
     <noscript><style>.scene-status,.scene-tools,.tide-instrument,.hero-copy button,.plan-layout,.hero .small-note{display:none}</style><p class="no-script-banner">Welcome to ODD TIDE, a fictional island. You can read the stays and guide here. Turn on JavaScript for the live island and day planner. No real bookings or payments are available.</p></noscript>
+    <div class="odd-loader" id="odd-loader" role="status" aria-live="polite">
+      <div class="odd-loader-inner">
+        <svg class="odd-loader-dial" viewBox="0 0 132 132" aria-hidden="true">
+          <defs>
+            <clipPath id="odd-loader-clip"><circle cx="66" cy="66" r="50" /></clipPath>
+          </defs>
+          <circle class="face" cx="66" cy="66" r="50" />
+          <g clip-path="url(#odd-loader-clip)">
+            <g class="water">
+              <path class="wave back" d="M-24 112 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 V230 H-24 Z" />
+              <path class="wave front" d="M-44 114 q10 -5 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 V230 H-44 Z" />
+            </g>
+          </g>
+          <g class="ticks">
+            <path d="M66 10v6M66 116v6M10 66h6M116 66h6" />
+          </g>
+          <circle class="rim" cx="66" cy="66" r="50" />
+          <circle class="sun" cx="10" cy="66" r="6.5" />
+        </svg>
+        <p class="odd-loader-mark">odd<span>~</span>tide</p>
+        <p class="odd-loader-line"><span data-loader-text>Checking the tide tables…</span><span data-loader-percent>0%</span></p>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
