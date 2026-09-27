@@ -43,18 +43,24 @@ void (0 as unknown as Mat | Vec3 | Build);
 const SAND = [0xc9965f, 0xb98352, 0xd7a86f, 0xa8744a];
 
 const boulder: Build = (seed) => {
+  // Layered sandstone in several habits: tilted slab stacks, split blocks, undercut ledges.
   const r = rng(seed);
   const w = range(r, 0.6, 2.4);
-  const h = w * range(r, 0.35, 0.7);
+  const h = w * range(r, 0.3, 0.75);
   const stone = mat(pick(r, SAND), 0.85);
-  let rock = blend(w * 0.15, box(w, h, w * range(r, 0.6, 1), w * 0.12, stone), move(ellipsoid(w * 0.45, h * 0.6, w * 0.4, stone), [w * 0.2, h * 0.2, 0]));
+  const habit = Math.floor(r() * 3);
+  let rock: Node = blend(w * 0.15, box(w, h, w * range(r, 0.55, 1), w * 0.1, stone), move(ellipsoid(w * 0.45, h * 0.55, w * 0.4, stone), [w * range(r, -0.2, 0.2), h * 0.2, 0]));
+  if (habit === 1) rock = carve(w * 0.03, rock, move(rotate(box(w * 0.05, h * 3, w * 3), [0, r() * 3, range(r, -0.3, 0.3)]), [w * range(r, -0.15, 0.15), 0, 0]));
+  if (habit === 2) rock = carve(w * 0.08, rock, move(ellipsoid(w * 0.7, h * 0.28, w * 0.7), [w * 0.35, -h * 0.35, 0]));
   rock = displace(rock, w * 0.035, 2.2 / w, 5, seed);
-  // Bedding: thin horizontal grooves and banded colour, algae toward the base.
-  const beds = 2 + Math.floor(r() * 4);
-  for (let i = 1; i <= beds; i++) rock = carve(w * 0.02, rock, move(box(w * 3, h * 0.035, w * 3), [0, -h / 2 + (i * h) / (beds + 1), 0]));
+  const beds = 2 + Math.floor(r() * 5);
+  const tilt = range(r, -0.35, 0.35);
+  for (let i = 1; i <= beds; i++)
+    rock = carve(w * 0.02, rock, move(rotate(box(w * 3, h * range(r, 0.02, 0.05), w * 3), [0, 0, tilt]), [0, -h / 2 + (i * h) / (beds + 1), 0]));
+  rock = rotate(rock, [0, 0, tilt * 0.3]);
   const algae = mat(0x4d5a2e, 0.7);
   return paint(rock, (x, y, z, base) => {
-    const band = 0.85 + 0.25 * Math.sin((y / h) * 18 + fbm(x * 3, y * 3, z * 3, 3, seed) * 3);
+    const band = 0.82 + 0.28 * Math.sin((y / h) * 18 + x * tilt * 10 + fbm(x * 3, y * 3, z * 3, 3, seed) * 3);
     if (y < -h * 0.32 + fbm(x * 4, 0, z * 4, 3, seed) * h * 0.15) return algae;
     return { ...base, c: [base.c[0] * band, base.c[1] * band, base.c[2] * band] };
   });
@@ -80,8 +86,8 @@ const shell: Build = (seed, index) => {
     return rotate(blend(0.004, intersect2(ellipsoid(0.05, 0.012, 0.05, tone), fan), move(box(0.03, 0.01, 0.012, 0.004, tone), [0, 0, 0.002])), [0, 0, 0]);
   }
   if (index % 3 === 1) {
-    // Limpet: ribbed cone.
-    return displace(union(cone(0.035, 0.004, 0.02, tone), radial(capsule([0.004, 0.009, 0], [0.034, -0.009, 0], 0.002, 0.003, tone), 22)), 0.001, 90, 2, seed);
+    // Limpet: a sharp cone with radial ribs cut into it.
+    return displace(carve(0.001, cone(0.036, 0.003, 0.024, tone), radial(capsule([0.006, 0.012, 0.0032], [0.036, -0.012, 0.0032], 0.0012, 0.0016), 20)), 0.0006, 120, 2, seed);
   }
   // Cockle: ribbed dome.
   return blend(0.003, ellipsoid(0.03, 0.02, 0.033, tone), radial(rotate(capsule([0, 0.018, 0], [0.03, -0.004, 0], 0.003, 0.003, tone), [0, 0, 0]), 16));
@@ -106,22 +112,37 @@ const thrift: Build = (seed) => {
 };
 
 const milkwood: Build = (seed) => {
+  // A coastal milkwood: short, flared, leaning trunk splitting low into several limbs, under a
+  // broad, low dome of many leaf clusters (not a lollipop).
   const r = rng(seed);
   const bark = mat(pick(r, [0x6d5a48, 0x5e4c3c, 0x7a6552]), 0.95);
-  const leaves = mat(pick(r, [0x3f5a2c, 0x4a6634, 0x566f3a]), 0.85);
-  const h = range(r, 2.6, 4.2);
-  const lean = range(r, -0.5, 0.5);
-  const trunk = chain([[0, 0, 0], [lean * 0.3, h * 0.35, 0.1], [lean * 0.7, h * 0.7, -0.1], [lean, h, 0]], 0.22, 0.09, bark, 0.08);
-  const parts: Node[] = [trunk];
-  const crowns = 5 + Math.floor(r() * 4);
-  for (let i = 0; i < crowns; i++) {
-    const a = (i / crowns) * Math.PI * 2 + r();
-    const d = range(r, 0.6, 1.4);
-    const top: Vec3 = [lean + Math.cos(a) * d, h + range(r, -0.2, 0.6), Math.sin(a) * d];
-    parts.push(chain([[lean * 0.8, h * 0.8, 0], top], 0.08, 0.04, bark));
-    parts.push(displace(move(ellipsoid(range(r, 0.7, 1.1), range(r, 0.45, 0.7), range(r, 0.7, 1.1), leaves), [top[0], top[1] + 0.2, top[2]]), 0.12, 3.5, 4, seed + i));
+  const h = range(r, 1.6, 2.4);
+  const lean = range(r, -0.6, 0.6);
+  const trunk = chain([[0, 0, 0], [lean * 0.25, h * 0.35, 0.05], [lean * 0.6, h * 0.7, -0.05], [lean, h, 0]], 0.34, 0.16, bark, 0.12);
+  const flare = move(cone(0.5, 0.3, 0.3, bark), [0, 0.15, 0]);
+  const parts: Node[] = [blend(0.15, trunk, flare)];
+  const limbs = 4 + Math.floor(r() * 4);
+  const crown = range(r, 1.8, 2.8);
+  for (let i = 0; i < limbs; i++) {
+    const a = (i / limbs) * Math.PI * 2 + r() * 0.6;
+    const tip: Vec3 = [lean + Math.cos(a) * crown * range(r, 0.5, 0.9), h + range(r, 0.6, 1.3), Math.sin(a) * crown * range(r, 0.5, 0.9)];
+    parts.push(chain([[lean * 0.9, h * 0.9, 0], [(lean + tip[0]) / 2, h + 0.4, tip[2] / 2], tip], 0.12, 0.04, bark, 0.05));
   }
-  return mottle(blend(0.1, ...parts), 0.2, 3, seed);
+  // Leaf mass: many overlapping clusters over a flattened dome, darker underneath.
+  const leaves: Node[] = [];
+  const clusters = 22 + Math.floor(r() * 12);
+  for (let i = 0; i < clusters; i++) {
+    const a = r() * Math.PI * 2;
+    const d = Math.sqrt(r()) * crown;
+    const y = h + 1.2 + (1 - (d / crown) ** 2) * 0.9 + range(r, -0.2, 0.2);
+    const s = range(r, 0.45, 0.8);
+    leaves.push(move(ellipsoid(s, s * 0.6, s, mat(pick(r, [0x3f5a2c, 0x4a6634, 0x566f3a]), 0.85)), [lean + Math.cos(a) * d, y, Math.sin(a) * d]));
+  }
+  const canopy = paint(displace(blend(0.25, ...leaves), 0.1, 4.5, 4, seed), (x, y, z, base) => {
+    const shade = y < h + 1.3 ? 0.72 : 1;
+    return { ...base, c: [base.c[0] * shade, base.c[1] * shade, base.c[2] * shade] };
+  });
+  return union(mottle(blend(0.1, ...parts), 0.2, 3, seed), canopy);
 };
 
 const crabPot: Build = (seed) => {
