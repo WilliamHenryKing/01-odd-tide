@@ -1,0 +1,14 @@
+{
+  // Static assets only (no Worker script): Cloudflare Workers Free, workers.dev address (D13).
+  "name": "01-odd-tide",
+  "compatibility_date": "2026-09-27",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    // The router expects /stays/weather-house, not /stays/weather-house/.
+    "html_handling": "drop-trailing-slash",
+    // Unknown paths get dist/404.html with a real 404 status.
+    "not_found_handling": "404-page"
+  }
+}

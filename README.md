@@ -2,7 +2,7 @@
 
 > **Visual acceptance withdrawn, 26 September 2026.** William rejected this output. The records below describe historical implementation/testing, not an accepted visual result. Follow `docs/visual/AUDIT.md` and the collection Visual Quality Directive.
 
-Status: paused at the visual-reset handover, 26 September 2026. The baseline is independently rejected; local hardware testing is complete; look-dev and improved art remain pending. This is an original fictional coastal stay planner with working journeys, not a visually accepted delivery. Nothing is published and no real booking or payment is possible. Read ../../HANDOFF.md for continuation and VERIFICATION.md only as historical self-review evidence.
+Status: v1 complete, 27 September 2026 (D13 delivery sprint). Visual reset changes C1–C13 are recorded in `docs/visual/changes/`; journeys 23/23 (`docs/visual/journeys/README.md`), breakpoint sweep of 91 shots with no overflow, perf at 1920×1080 GPU p95 13.6–14.2 ms. Deploy with `bun run deploy` (checks, build, `wrangler deploy` to `01-odd-tide.<account>.workers.dev`) after `bun run cloudflare:login`. Deferred to v2: the sky pass (cumulus, bluer zenith). An original fictional coastal stay planner; no real booking or payment.
 
 Working checkout: `experiences/01-odd-tide`. Repository anchor: `.repositories/01-odd-tide`. Branch: `work/experience`. Preserve both directories.
 

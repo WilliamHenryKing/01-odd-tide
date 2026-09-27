@@ -12,9 +12,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "processingSteps": [
-        "Original project SVG/code authoring"
-      ],
+      "processingSteps": ["Original project SVG/code authoring"],
       "outputFiles": [
         {
           "path": "public/.gitkeep",
@@ -35,9 +33,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": "4e7faf9fea4071572b41fdb5bdca1aff1e5ae451d4e22f031dbf38eef5a3601f",
-      "processingSteps": [
-        "Original project SVG/code authoring"
-      ],
+      "processingSteps": ["Original project SVG/code authoring"],
       "outputFiles": [
         {
           "path": "public/favicon.svg",
@@ -58,9 +54,7 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
-      "processingSteps": [
-        "retained upstream source/licence"
-      ],
+      "processingSteps": ["retained upstream source/licence"],
       "outputFiles": [
         {
           "path": "public/fonts/dm-sans-OFL.txt",
@@ -81,9 +75,7 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
-      "processingSteps": [
-        "retained upstream source/licence"
-      ],
+      "processingSteps": ["retained upstream source/licence"],
       "outputFiles": [
         {
           "path": "public/fonts/dm-sans.ttf",
@@ -104,9 +96,7 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
-      "processingSteps": [
-        "fontTools WOFF2 conversion"
-      ],
+      "processingSteps": ["fontTools WOFF2 conversion"],
       "outputFiles": [
         {
           "path": "public/fonts/dm-sans.woff2",
@@ -127,9 +117,7 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
-      "processingSteps": [
-        "retained upstream source/licence"
-      ],
+      "processingSteps": ["retained upstream source/licence"],
       "outputFiles": [
         {
           "path": "public/fonts/young-serif-OFL.txt",
@@ -150,9 +138,7 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
-      "processingSteps": [
-        "retained upstream source/licence"
-      ],
+      "processingSteps": ["retained upstream source/licence"],
       "outputFiles": [
         {
           "path": "public/fonts/young-serif.ttf",
@@ -173,9 +159,7 @@
       "license": "SIL Open Font License 1.1",
       "retrievalDate": "2026-09-26",
       "originalSha256": "42bb2602364b28569fdce5eeb6ab3d81cf8090ba81b211f1229ed69f33155523",
-      "processingSteps": [
-        "fontTools WOFF2 conversion"
-      ],
+      "processingSteps": ["fontTools WOFF2 conversion"],
       "outputFiles": [
         {
           "path": "public/fonts/young-serif.woff2",
@@ -196,10 +180,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": [
-        "Browser scene capture",
-        "JPEG conversion for saved-view fallback"
-      ],
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
       "outputFiles": [
         {
           "path": "public/plates/island-day-phone.jpg",
@@ -221,10 +202,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": [
-        "Browser scene capture",
-        "JPEG conversion for saved-view fallback"
-      ],
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
       "outputFiles": [
         {
           "path": "public/plates/island-day.jpg",
@@ -246,10 +224,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": [
-        "Browser scene capture",
-        "JPEG conversion for saved-view fallback"
-      ],
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
       "outputFiles": [
         {
           "path": "public/plates/island-night-phone.jpg",
@@ -271,10 +246,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": [
-        "Browser scene capture",
-        "JPEG conversion for saved-view fallback"
-      ],
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
       "outputFiles": [
         {
           "path": "public/plates/island-night.jpg",
@@ -296,10 +268,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": [
-        "Browser scene capture",
-        "JPEG conversion for saved-view fallback"
-      ],
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
       "outputFiles": [
         {
           "path": "public/plates/lantern-lodge-day.jpg",
@@ -321,10 +290,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": [
-        "Browser scene capture",
-        "JPEG conversion for saved-view fallback"
-      ],
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
       "outputFiles": [
         {
           "path": "public/plates/nap-observatory-day.jpg",
@@ -346,10 +312,7 @@
       "license": "Original project artwork; no third-party asset licence",
       "retrievalDate": null,
       "originalSha256": null,
-      "processingSteps": [
-        "Browser scene capture",
-        "JPEG conversion for saved-view fallback"
-      ],
+      "processingSteps": ["Browser scene capture", "JPEG conversion for saved-view fallback"],
       "outputFiles": [
         {
           "path": "public/plates/weather-house-day.jpg",

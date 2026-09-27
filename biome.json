@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!**/bun.lock", "!**/docs/visual/captures", "!**/docs/visual/perf"]
+    "includes": ["**", "!**/bun.lock", "!**/docs/visual", "!**/tools/studio/kit"]
   },
   "formatter": {
     "indentStyle": "space",

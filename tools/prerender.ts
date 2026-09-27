@@ -26,6 +26,8 @@ try {
     // Static hosts answer unknown paths from /404.html with a real 404 status.
     if (route === "/404") await writeFile(join("dist", "404.html"), html);
   }
+  // Keep Vite's internal manifest out of the public upload.
+  await writeFile(join("dist", ".assetsignore"), ".vite/\n");
   console.log(`Rendered ${ROUTES.length} meaningful HTML entry points.`);
 } finally {
   await server.close();
