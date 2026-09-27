@@ -1,0 +1,17 @@
+{
+ "cycle": "cycle-04-soak",
+ "started": "2026-09-27T15:22:48.817Z",
+ "steps": {
+  "perf-build": {
+   "ok": true,
+   "status": 0,
+   "seconds": 1
+  },
+  "perf": {
+   "ok": true,
+   "status": 0,
+   "seconds": 779
+  }
+ },
+ "finished": "2026-09-27T15:35:54.202Z"
+}

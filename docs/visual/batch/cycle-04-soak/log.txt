@@ -1,0 +1,22 @@
+2026-09-27T15:22:48.817Z ▶ perf-build: bunx --no-install vite build --mode performance --outDir dist-perf
+dist-perf/assets/bookmarks-qx9qHGIf.js    1.51 kB │ gzip:   0.66 kB
+dist-perf/assets/perf-CvrIhFWt.js        10.16 kB │ gzip:   4.73 kB
+dist-perf/assets/index-Cja-_CeS.js      333.57 kB │ gzip: 109.73 kB
+dist-perf/assets/island-DzQbs33F.js     871.00 kB │ gzip: 233.81 kB
+
+[32m✓ built in 509ms[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+
+2026-09-27T15:22:49.791Z ■ perf-build: exit 0 in 1s
+2026-09-27T15:22:52.296Z preview on 4611 serves dist-perf
+2026-09-27T15:22:52.297Z ▶ perf: node tools/perf/run.mjs C:/Users/William King/AppData/Local/npm-cache/_npx/81fb41e6b6793dc6/node_modules/playwright/index.mjs tools/perf/scene-soak.json cycle-04-soak-scene
+START scene-soak-720
+{"id":"scene-soak-720","aborted":false,"seconds":720.0116000000238,"raf":{"count":60370,"p50":14.699999999982538,"p95":16,"p99":16.399999999965075,"max":24.10000000000582,"mean":11.926471757495532,"over16_67":110,"over33_33":0,"over50":0},"cpu":3.899999976158142,"gpu":14.19856,"calls":452,"triangles":2378056,"gpuCoverage":1,"temp":82,"vram":1918,"ramFreeMiB":5451}
+
+2026-09-27T15:35:51.614Z ■ perf: exit 0 in 779s
+2026-09-27T15:35:54.201Z preview on 4611 serves dist
+2026-09-27T15:35:54.203Z cycle finished

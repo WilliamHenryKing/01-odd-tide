@@ -1,0 +1,24 @@
+2026-09-27T14:55:05.795Z ▶ perf-build: bunx --no-install vite build --mode performance --outDir dist-perf
+dist-perf/assets/bookmarks-qx9qHGIf.js    1.51 kB │ gzip:   0.66 kB
+dist-perf/assets/perf-CvrIhFWt.js        10.16 kB │ gzip:   4.73 kB
+dist-perf/assets/index-Cja-_CeS.js      333.57 kB │ gzip: 109.73 kB
+dist-perf/assets/island-DzQbs33F.js     871.00 kB │ gzip: 233.81 kB
+
+[32m✓ built in 1.12s[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+
+2026-09-27T14:55:08.744Z ■ perf-build: exit 0 in 3s
+2026-09-27T14:55:10.928Z preview on 4611 serves dist-perf
+2026-09-27T14:55:10.929Z ▶ perf: node tools/perf/run.mjs C:/Users/William King/AppData/Local/npm-cache/_npx/81fb41e6b6793dc6/node_modules/playwright/index.mjs tools/perf/scene.json cycle-03-perf-scene
+START scene-1
+{"id":"scene-1","aborted":false,"seconds":60.00580000007153,"raf":{"count":5228,"p50":8.5,"p95":16,"p99":16.30000000000291,"max":23.5,"mean":11.476109410864574,"over16_67":6,"over33_33":0,"over50":0},"cpu":3.899999976158142,"gpu":13.564,"calls":452,"triangles":2378056,"gpuCoverage":1,"temp":70,"vram":1918,"ramFreeMiB":5570}
+START scene-2
+{"id":"scene-2","aborted":false,"seconds":60.001999999999995,"raf":{"count":5141,"p50":14.5,"p95":16,"p99":16.30000000000291,"max":23.89999999999418,"mean":11.671017311807041,"over16_67":8,"over33_33":0,"over50":0},"cpu":3.899999976158142,"gpu":13.85264,"calls":452,"triangles":2378056,"gpuCoverage":1,"temp":74,"vram":1925,"ramFreeMiB":5531}
+
+2026-09-27T14:57:57.176Z ■ perf: exit 0 in 166s
+2026-09-27T14:57:59.380Z preview on 4611 serves dist
+2026-09-27T14:57:59.382Z cycle finished

@@ -1,0 +1,17 @@
+{
+ "cycle": "cycle-03-perf",
+ "started": "2026-09-27T14:55:05.794Z",
+ "steps": {
+  "perf-build": {
+   "ok": true,
+   "status": 0,
+   "seconds": 3
+  },
+  "perf": {
+   "ok": true,
+   "status": 0,
+   "seconds": 166
+  }
+ },
+ "finished": "2026-09-27T14:57:59.381Z"
+}
