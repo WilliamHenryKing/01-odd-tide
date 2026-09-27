@@ -176,6 +176,17 @@ export function buildWeatherHouse(mats: Materials, seed = 7): Building {
       { radius: 0.004 },
     );
   }
+  // …and inside, where the lifted hatch exposes the lining's stepped ends along the pitch.
+  for (const side of [-1, 1]) {
+    const len = Math.hypot(W.halfWidth, ridgeY - W.kneeWall);
+    const angle = Math.atan2(ridgeY - W.kneeWall, W.halfWidth);
+    lining.box(
+      [len + 0.05, 0.24, 0.03],
+      [(side * W.halfWidth) / 2, (W.kneeWall + ridgeY) / 2 - 0.2, -W.halfDepth + 0.045],
+      [0, 0, -side * angle],
+      { radius: 0.004 },
+    );
+  }
   const ring = new TorusGeometry(porthole.r, 0.028, 10, 40);
   metricUVs(ring, 0.3, 0, [0, 0]);
   brass.add(ring, compose([0, porthole.y, -W.halfDepth - 0.06]));
