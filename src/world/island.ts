@@ -91,7 +91,7 @@ const LEGACY = 3;
 // headline, with the horizon just inside the top edge (art direction, composition).
 const ARRIVAL = {
   desktop: { position: new Vector3(22.51, 19.12, 51.01), target: new Vector3(-9.42, 1.2, 6.05) },
-  portrait: { position: new Vector3(48, 54, 78), target: new Vector3(2.1, 1.2, 0) },
+  portrait: { position: new Vector3(44.8, 54, 79.9), target: new Vector3(-1.1, 1.2, 1.9) },
 };
 
 // The island's code has arrived: the arrival loader's first stage.
@@ -164,21 +164,35 @@ export function createIsland(
     if (!frame && visible && !document.hidden && !disposed) frame = requestAnimationFrame(draw);
   };
 
+  // Portrait layouts give the island a window row and let the canvas overhang the copy above
+  // and the instrument below (negative margins): frame for the window, not the whole canvas.
+  const windowShare = () => {
+    const style = getComputedStyle(host);
+    const overhang = -(Number.parseFloat(style.marginTop) + Number.parseFloat(style.marginBottom));
+    return height / Math.max(120, height - Math.max(0, overhang || 0));
+  };
+
   const pose = (instant: boolean) => {
     const portrait = width <= 1100;
+    const tall = portrait ? windowShare() : 1;
     let destination: Vector3;
     let aim: Vector3;
     if (state.selected) {
       const site = STAY_SITES[state.selected];
       const shot = STAY_CAMERAS[state.selected][state.opened ? "open" : "closed"];
       const base = new Vector3(...site.position);
-      destination = base
-        .clone()
-        .add(new Vector3(...shot.offset).multiplyScalar(portrait ? PORTRAIT_PULLBACK : 1));
+      // Portrait frames are taller than wide: pull back with that ratio so the building sits
+      // inside the window between the title and the time instrument.
+      const pull = portrait ? Math.max(PORTRAIT_PULLBACK, (height / width) * 1.4, tall * 0.93) : 1;
+      destination = base.clone().add(new Vector3(...shot.offset).multiplyScalar(pull));
       aim = base.clone().add(new Vector3(...(portrait ? shot.aimPortrait : shot.aim)));
     } else {
       const arrival = portrait ? ARRIVAL.portrait : ARRIVAL.desktop;
-      const fit = portrait ? Math.max(0.85, Math.min(1.35, (height / width) * 0.55)) : 1;
+      // Portrait: pull back with the frame's height-to-width ratio, so the whole island keeps
+      // about 88 % of the width, and far enough that it stays inside a short, wide window.
+      const fit = portrait
+        ? Math.max(0.8, Math.min(2.4, Math.max((height / width) * 0.86, tall * 0.55)))
+        : 1;
       destination = arrival.target.clone().lerp(arrival.position, fit);
       aim = arrival.target.clone();
     }

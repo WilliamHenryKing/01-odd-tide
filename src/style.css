@@ -1492,35 +1492,51 @@ footer .footer-fine {
   .site-header nav .nav-plan {
     width: 100%;
   }
+  /* Portrait stack (art direction): masthead, a tall island view with the island centred in the
+     upper half, the time instrument inside the first viewport, then the journal. The canvas
+     overhangs its window row, so the sea runs on behind the masthead and the instrument. */
   .hero {
+    --window: clamp(230px, calc(100svh - 585px), 520px);
     height: auto;
     min-height: 0;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 6% minmax(0, 1fr) 6%;
+    grid-template-rows: auto auto auto var(--window) auto auto;
+    padding-bottom: 34px;
   }
-  .hero-copy {
-    position: relative;
-    top: auto;
-    left: auto;
-    margin: 37px 6% 0;
-    order: 0;
-    width: 88%;
-    max-width: none;
-  }
-  .hero h1 {
-    font-size: clamp(49px, 10.5vw, 75px);
-    line-height: 1.02;
-    margin: 20px 0 15px;
-  }
-  .hero h1 br:nth-child(2) {
+  .hero::before {
     display: none;
   }
+  .hero-copy {
+    display: contents;
+  }
+  .hero-copy > *,
+  .scene-tools,
+  .tide-instrument {
+    position: relative;
+    z-index: 2;
+    grid-column: 2;
+  }
+  .hero-copy > .eyebrow {
+    grid-row: 1;
+    justify-self: start;
+    margin-top: 10px;
+  }
+  .hero h1 {
+    grid-row: 2;
+    font-size: clamp(36px, 9.4vw, 62px);
+    line-height: 1.02;
+    margin: 10px 0 0;
+  }
   .hero-description {
-    max-width: 315px;
+    grid-row: 6;
+    max-width: 330px;
+    margin-top: 22px;
     font-size: 12px;
   }
   .hero .hero-actions {
-    margin-top: 18px;
+    grid-row: 3;
+    margin-top: 12px;
     max-width: none;
     gap: 12px;
   }
@@ -1528,17 +1544,26 @@ footer .footer-fine {
     display: none;
   }
   .hero .button {
-    padding: 13px 19px;
+    padding: 10px 18px;
     font-size: 11px;
   }
   .island-surface {
     position: relative;
     inset: auto;
-    height: clamp(400px, 76vw, 600px);
-    width: 100%;
-    margin-top: -30px;
-    order: 1;
-    mask-image: linear-gradient(to bottom, transparent, #000 90px, #000 94%, transparent);
+    z-index: 0;
+    grid-column: 1 / -1;
+    grid-row: 4;
+    width: auto;
+    height: auto;
+    /* Overhangs further above than below: the island sits a little above the window's centre. */
+    margin: -154px 0 -106px;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      #000 90px,
+      #000 calc(100% - 70px),
+      transparent
+    );
   }
   .world-poster {
     background: transparent;
@@ -1547,10 +1572,11 @@ footer .footer-fine {
     display: none;
   }
   .scene-tools {
-    position: relative;
     inset: auto;
-    margin: -25px 6% 20px;
-    order: 2;
+    grid-row: 4;
+    align-self: end;
+    justify-self: end;
+    margin: 0 0 6px;
     flex-wrap: wrap;
     justify-content: end;
     gap: 7px;
@@ -1560,12 +1586,11 @@ footer .footer-fine {
     padding: 8px 10px;
   }
   .tide-instrument {
-    position: relative;
     inset: auto;
-    margin: 0 6%;
-    order: 3;
-    width: 88%;
-    padding: 20px;
+    grid-row: 5;
+    margin: 8px 0 0;
+    width: auto;
+    padding: 18px 20px;
     grid-template-columns: 27px 1fr;
     gap: 12px;
   }
@@ -1679,12 +1704,21 @@ footer .footer-fine {
     display: none;
   }
   .close-view h1 {
-    font-size: 49px;
+    font-size: clamp(38px, 10vw, 60px);
     max-width: 340px;
   }
   .close-view .island-surface {
     top: auto;
-    height: clamp(400px, 76vw, 600px);
+    height: auto;
+    /* A stay's surroundings are busy: they stay faint behind the title and buttons. */
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(0 0 0 / 0.22) 110px,
+      #000 165px,
+      #000 calc(100% - 70px),
+      transparent
+    );
   }
   .close-view .hero-actions {
     max-width: 350px;
@@ -1778,12 +1812,24 @@ footer .footer-fine {
     margin: 0;
   }
 }
+/* Short screens (small phones, phones on their side): a smaller title and no eyebrow, so the
+   island still reaches the first viewport. */
+@media (max-width: 1100px) and (max-height: 720px) {
+  .hero-copy > .eyebrow {
+    display: none;
+  }
+  .hero h1,
+  .close-view h1 {
+    font-size: clamp(32px, 8.6vw, 44px);
+    max-width: none;
+  }
+}
 @media (max-width: 360px) {
   .world-poster img {
     object-fit: contain;
   }
   .hero h1 {
-    font-size: 45px;
+    font-size: 34px;
   }
   .hero-copy > .eyebrow {
     font-size: 8px;
