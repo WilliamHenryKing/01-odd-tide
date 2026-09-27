@@ -428,7 +428,8 @@ export function buildLodge(mats: Materials, seed = 29): Building {
     const rise = amount * L.lift;
     roof.position.y = rise;
     for (const jack of jacks) {
-      const length = 0.35 + jackDrop + rise;
+      // The screw ends just under the roof plane at the corner (it used to pierce it).
+      const length = jackDrop - 0.08 + rise;
       jack.screw.scale.set(1, length, 1);
       jack.screw.position.copy(jack.base).add(new Vector3(0, length / 2 + 0.05, 0));
       jack.screw.visible = amount > 0.01;

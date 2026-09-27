@@ -136,18 +136,26 @@ type Shot = {
   aim: [number, number, number];
   aimPortrait: [number, number, number];
 };
-/** Camera shots per stay, relative to the stay's site: closed exterior and roof-open views. */
+/**
+ * Camera shots per stay, relative to the stay's site (metres): three-quarter views 11–15 m
+ * out at 5.5–8 m eye height, per the art direction. Desktop aims sit to the screen-left of the
+ * building so it fills the right two-thirds beside the copy; portrait aims centre it. Open
+ * shots are chosen to show the mechanism and the room: under the Weather House's lifted
+ * slope, down into the observatory's drum, through the gap under the lodge's raised roof.
+ */
 export const STAY_CAMERAS: Record<StayId, { closed: Shot; open: Shot }> = {
   "weather-house": {
-    closed: { offset: [-11, 10.5, 18.5], aim: [-6, 2, -3.4], aimPortrait: [0, 2, 0] },
-    open: { offset: [-12, 15, 23], aim: [-6.8, 3, -3.9], aimPortrait: [0, 3, 0.5] },
+    closed: { offset: [-10.67, 7.05, 7.42], aim: [-1.51, 2.35, -2.17], aimPortrait: [0, 2.35, 0] },
+    open: { offset: [-7.25, 5.55, 9.56], aim: [-1.94, 2.35, -1.47], aimPortrait: [0, 2.35, 0] },
   },
   "nap-observatory": {
-    closed: { offset: [13, 10, 18], aim: [-5.4, 2.1, 3.8], aimPortrait: [0, 2.1, 0] },
-    open: { offset: [14, 14, 22], aim: [-6, 3, 4.3], aimPortrait: [0, 3, 0.5] },
+    closed: { offset: [-2.69, 8, 12.72], aim: [-2.58, 2.1, -0.55], aimPortrait: [0, 2.1, 0] },
+    open: { offset: [-0.73, 11.5, 8.47], aim: [-1.43, 1.5, -0.12], aimPortrait: [0, 1.5, 0] },
   },
   "lantern-lodge": {
-    closed: { offset: [13, 10, 18.5], aim: [-5.6, 2.1, 4], aimPortrait: [0, 2.1, 0] },
-    open: { offset: [14, 14, 22], aim: [-6, 3, 4.4], aimPortrait: [0, 3, 0.5] },
+    closed: { offset: [11.4, 7.7, 10.91], aim: [-1.87, 1.9, 3.27], aimPortrait: [0.15, 1.9, 0.99] },
+    open: { offset: [7.01, 6.2, 9.59], aim: [-1.6, 2.6, 2.38], aimPortrait: [0.15, 2.6, 0.99] },
   },
 };
+/** Portrait screens see a far narrower horizontal field: stay shots pull back by this factor. */
+export const PORTRAIT_PULLBACK = 1.45;

@@ -42,6 +42,7 @@ import {
   FAR_SEABED,
   LIGHTHOUSE_SITE,
   PATHS,
+  PORTRAIT_PULLBACK,
   STAY_CAMERAS,
   STAY_SITES,
   TIDE_SCALE,
@@ -84,8 +85,10 @@ const FLOOR_LIFT: Record<StayId, number> = {
 /** Legacy models were built at one third of a metre per unit. */
 const LEGACY = 3;
 
+// Desktop arrival: 58 m out at 18° so the archipelago fills the right two-thirds beside the
+// headline, with the horizon just inside the top edge (art direction, composition).
 const ARRIVAL = {
-  desktop: { position: new Vector3(45, 40.5, 66), target: new Vector3(-1.9, 1.2, 0) },
+  desktop: { position: new Vector3(22.51, 19.12, 51.01), target: new Vector3(-9.42, 1.2, 6.05) },
   portrait: { position: new Vector3(48, 54, 78), target: new Vector3(2.1, 1.2, 0) },
 };
 
@@ -163,7 +166,9 @@ export function createIsland(
       const site = STAY_SITES[state.selected];
       const shot = STAY_CAMERAS[state.selected][state.opened ? "open" : "closed"];
       const base = new Vector3(...site.position);
-      destination = base.clone().add(new Vector3(...shot.offset));
+      destination = base
+        .clone()
+        .add(new Vector3(...shot.offset).multiplyScalar(portrait ? PORTRAIT_PULLBACK : 1));
       aim = base.clone().add(new Vector3(...(portrait ? shot.aimPortrait : shot.aim)));
     } else {
       const arrival = portrait ? ARRIVAL.portrait : ARRIVAL.desktop;
@@ -491,7 +496,7 @@ export function createIsland(
           camera.lookAt(site.clone().add(new Vector3(...shot.aimPortrait)));
         } else {
           camera.position.copy(ARRIVAL.desktop.position);
-          camera.lookAt(new Vector3(2, 1.2, 0));
+          camera.lookAt(ARRIVAL.desktop.target);
         }
         camera.updateProjectionMatrix();
         pipeline.render();
