@@ -1,0 +1,61 @@
+2026-09-27T04:58:02.961Z ■ reveal: {"ok":true,"frames":209,"firstIslandFrame":164,"blankFramesAfterReveal":0,"seconds":50}
+2026-09-27T04:58:02.963Z ▶ captures: node tools/visual/capture.mjs --run cycle-01-captures --target app
+22 captures → C:\Users\William King\Documents\Money Making Project\experiences\01-odd-tide\docs\visual\captures\cycle-01-captures
+console errors/warnings:
+warning: THREE.WebGLProgram: Program Info Log: (210,81-129): warning X4122: sum of 0.996094 and -2.98545e-017 cannot be represented accurately in double precision
+(209,37-61): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision
+(210,82-106): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision
+(209,37-61): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision
+(210,82-106): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision
+
+2026-09-27T04:58:56.602Z ■ captures: exit 0 in 54s
+2026-09-27T04:58:56.603Z ▶ plates: node tools/visual/plates.mjs
+lantern-lodge-dusk → public/plates/lantern-lodge-dusk.webp (250 KiB)
+lighthouse-dark → public/plates/lighthouse-dark.webp (38 KiB)
+lighthouse-lit → public/plates/lighthouse-lit.webp (38 KiB)
+island-day → public/plates/island-day.jpg (173 KiB)
+island-night → public/plates/island-night.jpg (125 KiB)
+island-day-phone → public/plates/island-day-phone.jpg (92 KiB)
+island-night-phone → public/plates/island-night-phone.jpg (69 KiB)
+weather-house-day → public/plates/weather-house-day.jpg (273 KiB)
+nap-observatory-day → public/plates/nap-observatory-day.jpg (197 KiB)
+lantern-lodge-day → public/plates/lantern-lodge-day.jpg (232 KiB)
+18 plates written
+
+2026-09-27T04:59:50.091Z ■ plates: exit 0 in 53s
+2026-09-27T04:59:50.092Z ▶ build: bun run build
+dist/assets/index-qBLtph1M.js   333.47 kB │ gzip: 109.69 kB
+dist/assets/island-CI2bfk4E.js  867.07 kB │ gzip: 232.34 kB
+
+[32m✓ built in 796ms[39m
+Rendered 9 meaningful HTML entry points.
+$ vite build && bun tools/prerender.ts
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+
+2026-09-27T04:59:55.452Z ■ build: exit 0 in 5s
+2026-09-27T04:59:55.453Z ▶ perf-build: bunx --no-install vite build --mode performance --outDir dist-perf
+dist-perf/assets/bookmarks-qx9qHGIf.js    1.51 kB │ gzip:   0.66 kB
+dist-perf/assets/perf-TZtQ6SKU.js        10.16 kB │ gzip:   4.73 kB
+dist-perf/assets/index-KrcUDcG6.js      333.57 kB │ gzip: 109.73 kB
+dist-perf/assets/island-DgUUvZ8T.js     868.40 kB │ gzip: 232.91 kB
+
+[32m✓ built in 595ms[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+
+2026-09-27T04:59:56.725Z ■ perf-build: exit 0 in 1s
+2026-09-27T04:59:56.726Z ▶ perf: node tools/perf/run.mjs C:/Users/William King/AppData/Local/npm-cache/_npx/81fb41e6b6793dc6/node_modules/playwright/index.mjs tools/perf/scene.json cycle-01-scene
+START scene-1
+{"id":"scene-1","aborted":false,"seconds":60.00360000002384,"raf":{"count":4898,"p50":13.80000000000291,"p95":14.19999999999709,"p99":14.39999999999418,"max":27.79999999998836,"mean":12.24959167006941,"over16_67":33,"over33_33":0,"over50":0},"cpu":5.299999952316284,"gpu":14.036096,"calls":444,"triangles":2343754,"gpuCoverage":1,"temp":74,"vram":2087,"ramFreeMiB":2477}
+START scene-2
+{"id":"scene-2","aborted":false,"seconds":60.005100000023845,"raf":{"count":4796,"p50":13.800000000017462,"p95":14.199999999982538,"p99":20.5,"max":27.89999999999418,"mean":12.508611342785656,"over16_67":49,"over33_33":0,"over50":0},"cpu":5.5,"gpu":14.203904,"calls":444,"triangles":2343754,"gpuCoverage":1,"temp":76,"vram":2043,"ramFreeMiB":2418}
+
+2026-09-27T05:02:48.173Z ■ perf: exit 0 in 171s
+2026-09-27T05:02:48.175Z cycle finished

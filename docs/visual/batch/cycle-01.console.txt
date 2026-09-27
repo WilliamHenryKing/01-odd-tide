@@ -1,0 +1,14 @@
+2026-09-27T04:58:02.961Z ■ reveal: {"ok":true,"frames":209,"firstIslandFrame":164,"blankFramesAfterReveal":0,"seconds":50}
+2026-09-27T04:58:02.963Z ▶ captures: node tools/visual/capture.mjs --run cycle-01-captures --target app
+2026-09-27T04:58:56.602Z ■ captures: exit 0 in 54s
+2026-09-27T04:58:56.603Z ▶ plates: node tools/visual/plates.mjs
+2026-09-27T04:59:50.091Z ■ plates: exit 0 in 53s
+2026-09-27T04:59:50.092Z ▶ build: bun run build
+2026-09-27T04:59:55.452Z ■ build: exit 0 in 5s
+2026-09-27T04:59:55.453Z ▶ perf-build: bunx --no-install vite build --mode performance --outDir dist-perf
+2026-09-27T04:59:56.725Z ■ perf-build: exit 0 in 1s
+2026-09-27T04:59:56.726Z ▶ perf: node tools/perf/run.mjs C:/Users/William King/AppData/Local/npm-cache/_npx/81fb41e6b6793dc6/node_modules/playwright/index.mjs tools/perf/scene.json cycle-01-scene
+2026-09-27T05:02:48.173Z ■ perf: exit 0 in 171s
+2026-09-27T05:02:48.175Z cycle finished
+(node:19444) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

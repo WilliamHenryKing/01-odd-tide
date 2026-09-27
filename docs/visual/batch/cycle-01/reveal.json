@@ -1,0 +1,838 @@
+[
+ {
+  "frame": "f001.png",
+  "deviation": 0
+ },
+ {
+  "frame": "f002.png",
+  "deviation": 0
+ },
+ {
+  "frame": "f003.png",
+  "deviation": 0
+ },
+ {
+  "frame": "f004.png",
+  "deviation": 0
+ },
+ {
+  "frame": "f005.png",
+  "deviation": 0
+ },
+ {
+  "frame": "f006.png",
+  "deviation": 0.0532157
+ },
+ {
+  "frame": "f007.png",
+  "deviation": 0.0532056
+ },
+ {
+  "frame": "f008.png",
+  "deviation": 0.0532203
+ },
+ {
+  "frame": "f009.png",
+  "deviation": 0.0532384
+ },
+ {
+  "frame": "f010.png",
+  "deviation": 0.0532563
+ },
+ {
+  "frame": "f011.png",
+  "deviation": 0.0536502
+ },
+ {
+  "frame": "f012.png",
+  "deviation": 0.0538164
+ },
+ {
+  "frame": "f013.png",
+  "deviation": 0.0539073
+ },
+ {
+  "frame": "f014.png",
+  "deviation": 0.0544701
+ },
+ {
+  "frame": "f015.png",
+  "deviation": 0.0574989
+ },
+ {
+  "frame": "f016.png",
+  "deviation": 0.0592806
+ },
+ {
+  "frame": "f017.png",
+  "deviation": 0.0621172
+ },
+ {
+  "frame": "f018.png",
+  "deviation": 0.0622593
+ },
+ {
+  "frame": "f019.png",
+  "deviation": 0.0622773
+ },
+ {
+  "frame": "f020.png",
+  "deviation": 0.0622659
+ },
+ {
+  "frame": "f021.png",
+  "deviation": 0.0622546
+ },
+ {
+  "frame": "f022.png",
+  "deviation": 0.0622522
+ },
+ {
+  "frame": "f023.png",
+  "deviation": 0.0622255
+ },
+ {
+  "frame": "f024.png",
+  "deviation": 0.0622874
+ },
+ {
+  "frame": "f025.png",
+  "deviation": 0.0621918
+ },
+ {
+  "frame": "f026.png",
+  "deviation": 0.0621751
+ },
+ {
+  "frame": "f027.png",
+  "deviation": 0.0674911
+ },
+ {
+  "frame": "f028.png",
+  "deviation": 0.0674876
+ },
+ {
+  "frame": "f029.png",
+  "deviation": 0.0674821
+ },
+ {
+  "frame": "f030.png",
+  "deviation": 0.068784
+ },
+ {
+  "frame": "f031.png",
+  "deviation": 0.0695173
+ },
+ {
+  "frame": "f032.png",
+  "deviation": 0.0694998
+ },
+ {
+  "frame": "f033.png",
+  "deviation": 0.0695141
+ },
+ {
+  "frame": "f034.png",
+  "deviation": 0.0694867
+ },
+ {
+  "frame": "f035.png",
+  "deviation": 0.0695062
+ },
+ {
+  "frame": "f036.png",
+  "deviation": 0.0695118
+ },
+ {
+  "frame": "f037.png",
+  "deviation": 0.0695267
+ },
+ {
+  "frame": "f038.png",
+  "deviation": 0.0695302
+ },
+ {
+  "frame": "f039.png",
+  "deviation": 0.0695414
+ },
+ {
+  "frame": "f040.png",
+  "deviation": 0.0695412
+ },
+ {
+  "frame": "f041.png",
+  "deviation": 0.0695414
+ },
+ {
+  "frame": "f042.png",
+  "deviation": 0.0695381
+ },
+ {
+  "frame": "f043.png",
+  "deviation": 0.0695382
+ },
+ {
+  "frame": "f044.png",
+  "deviation": 0.0695585
+ },
+ {
+  "frame": "f045.png",
+  "deviation": 0.0695412
+ },
+ {
+  "frame": "f046.png",
+  "deviation": 0.0695247
+ },
+ {
+  "frame": "f047.png",
+  "deviation": 0.0695254
+ },
+ {
+  "frame": "f048.png",
+  "deviation": 0.069521
+ },
+ {
+  "frame": "f049.png",
+  "deviation": 0.0695257
+ },
+ {
+  "frame": "f050.png",
+  "deviation": 0.0695211
+ },
+ {
+  "frame": "f051.png",
+  "deviation": 0.0695257
+ },
+ {
+  "frame": "f052.png",
+  "deviation": 0.0695337
+ },
+ {
+  "frame": "f053.png",
+  "deviation": 0.0695325
+ },
+ {
+  "frame": "f054.png",
+  "deviation": 0.0695371
+ },
+ {
+  "frame": "f055.png",
+  "deviation": 0.0695325
+ },
+ {
+  "frame": "f056.png",
+  "deviation": 0.0695369
+ },
+ {
+  "frame": "f057.png",
+  "deviation": 0.0695323
+ },
+ {
+  "frame": "f058.png",
+  "deviation": 0.0695502
+ },
+ {
+  "frame": "f059.png",
+  "deviation": 0.0695458
+ },
+ {
+  "frame": "f060.png",
+  "deviation": 0.0695504
+ },
+ {
+  "frame": "f061.png",
+  "deviation": 0.0695504
+ },
+ {
+  "frame": "f062.png",
+  "deviation": 0.0695458
+ },
+ {
+  "frame": "f063.png",
+  "deviation": 0.0695426
+ },
+ {
+  "frame": "f064.png",
+  "deviation": 0.0695378
+ },
+ {
+  "frame": "f065.png",
+  "deviation": 0.0695424
+ },
+ {
+  "frame": "f066.png",
+  "deviation": 0.0695378
+ },
+ {
+  "frame": "f067.png",
+  "deviation": 0.0695424
+ },
+ {
+  "frame": "f068.png",
+  "deviation": 0.0695448
+ },
+ {
+  "frame": "f069.png",
+  "deviation": 0.0695479
+ },
+ {
+  "frame": "f070.png",
+  "deviation": 0.0695476
+ },
+ {
+  "frame": "f071.png",
+  "deviation": 0.0695326
+ },
+ {
+  "frame": "f072.png",
+  "deviation": 0.0695462
+ },
+ {
+  "frame": "f073.png",
+  "deviation": 0.0695418
+ },
+ {
+  "frame": "f074.png",
+  "deviation": 0.0695462
+ },
+ {
+  "frame": "f075.png",
+  "deviation": 0.0695359
+ },
+ {
+  "frame": "f076.png",
+  "deviation": 0.0695441
+ },
+ {
+  "frame": "f077.png",
+  "deviation": 0.0695441
+ },
+ {
+  "frame": "f078.png",
+  "deviation": 0.0695398
+ },
+ {
+  "frame": "f079.png",
+  "deviation": 0.0695461
+ },
+ {
+  "frame": "f080.png",
+  "deviation": 0.0695437
+ },
+ {
+  "frame": "f081.png",
+  "deviation": 0.0695461
+ },
+ {
+  "frame": "f082.png",
+  "deviation": 0.0695334
+ },
+ {
+  "frame": "f083.png",
+  "deviation": 0.0695428
+ },
+ {
+  "frame": "f084.png",
+  "deviation": 0.0695385
+ },
+ {
+  "frame": "f085.png",
+  "deviation": 0.069585
+ },
+ {
+  "frame": "f086.png",
+  "deviation": 0.0695272
+ },
+ {
+  "frame": "f087.png",
+  "deviation": 0.0695198
+ },
+ {
+  "frame": "f088.png",
+  "deviation": 0.0695355
+ },
+ {
+  "frame": "f089.png",
+  "deviation": 0.0694721
+ },
+ {
+  "frame": "f090.png",
+  "deviation": 0.0695069
+ },
+ {
+  "frame": "f091.png",
+  "deviation": 0.0695159
+ },
+ {
+  "frame": "f092.png",
+  "deviation": 0.0695133
+ },
+ {
+  "frame": "f093.png",
+  "deviation": 0.0695158
+ },
+ {
+  "frame": "f094.png",
+  "deviation": 0.0695133
+ },
+ {
+  "frame": "f095.png",
+  "deviation": 0.0695031
+ },
+ {
+  "frame": "f096.png",
+  "deviation": 0.0695102
+ },
+ {
+  "frame": "f097.png",
+  "deviation": 0.0695185
+ },
+ {
+  "frame": "f098.png",
+  "deviation": 0.0695188
+ },
+ {
+  "frame": "f099.png",
+  "deviation": 0.0695086
+ },
+ {
+  "frame": "f100.png",
+  "deviation": 0.0695209
+ },
+ {
+  "frame": "f101.png",
+  "deviation": 0.0695082
+ },
+ {
+  "frame": "f102.png",
+  "deviation": 0.0695209
+ },
+ {
+  "frame": "f103.png",
+  "deviation": 0.0695257
+ },
+ {
+  "frame": "f104.png",
+  "deviation": 0.0695173
+ },
+ {
+  "frame": "f105.png",
+  "deviation": 0.0695151
+ },
+ {
+  "frame": "f106.png",
+  "deviation": 0.0695274
+ },
+ {
+  "frame": "f107.png",
+  "deviation": 0.0696464
+ },
+ {
+  "frame": "f108.png",
+  "deviation": 0.0696465
+ },
+ {
+  "frame": "f109.png",
+  "deviation": 0.0696493
+ },
+ {
+  "frame": "f110.png",
+  "deviation": 0.0696486
+ },
+ {
+  "frame": "f111.png",
+  "deviation": 0.0696238
+ },
+ {
+  "frame": "f112.png",
+  "deviation": 0.0696649
+ },
+ {
+  "frame": "f113.png",
+  "deviation": 0.0696602
+ },
+ {
+  "frame": "f114.png",
+  "deviation": 0.0696196
+ },
+ {
+  "frame": "f115.png",
+  "deviation": 0.0696196
+ },
+ {
+  "frame": "f116.png",
+  "deviation": 0.0696533
+ },
+ {
+  "frame": "f117.png",
+  "deviation": 0.0696473
+ },
+ {
+  "frame": "f118.png",
+  "deviation": 0.0696549
+ },
+ {
+  "frame": "f119.png",
+  "deviation": 0.069655
+ },
+ {
+  "frame": "f120.png",
+  "deviation": 0.0696265
+ },
+ {
+  "frame": "f121.png",
+  "deviation": 0.0696164
+ },
+ {
+  "frame": "f122.png",
+  "deviation": 0.0696165
+ },
+ {
+  "frame": "f123.png",
+  "deviation": 0.0696162
+ },
+ {
+  "frame": "f124.png",
+  "deviation": 0.0696162
+ },
+ {
+  "frame": "f125.png",
+  "deviation": 0.0693983
+ },
+ {
+  "frame": "f126.png",
+  "deviation": 0.0695159
+ },
+ {
+  "frame": "f127.png",
+  "deviation": 0.0694927
+ },
+ {
+  "frame": "f128.png",
+  "deviation": 0.0696153
+ },
+ {
+  "frame": "f129.png",
+  "deviation": 0.0696444
+ },
+ {
+  "frame": "f130.png",
+  "deviation": 0.0705155
+ },
+ {
+  "frame": "f131.png",
+  "deviation": 0.0712882
+ },
+ {
+  "frame": "f132.png",
+  "deviation": 0.0713029
+ },
+ {
+  "frame": "f133.png",
+  "deviation": 0.0712921
+ },
+ {
+  "frame": "f134.png",
+  "deviation": 0.0713156
+ },
+ {
+  "frame": "f135.png",
+  "deviation": 0.0713041
+ },
+ {
+  "frame": "f136.png",
+  "deviation": 0.0713036
+ },
+ {
+  "frame": "f137.png",
+  "deviation": 0.0712866
+ },
+ {
+  "frame": "f138.png",
+  "deviation": 0.0712726
+ },
+ {
+  "frame": "f139.png",
+  "deviation": 0.0712683
+ },
+ {
+  "frame": "f140.png",
+  "deviation": 0.0712623
+ },
+ {
+  "frame": "f141.png",
+  "deviation": 0.0712432
+ },
+ {
+  "frame": "f142.png",
+  "deviation": 0.0712301
+ },
+ {
+  "frame": "f143.png",
+  "deviation": 0.0712316
+ },
+ {
+  "frame": "f144.png",
+  "deviation": 0.0712028
+ },
+ {
+  "frame": "f145.png",
+  "deviation": 0.0711969
+ },
+ {
+  "frame": "f146.png",
+  "deviation": 0.0711878
+ },
+ {
+  "frame": "f147.png",
+  "deviation": 0.0715939
+ },
+ {
+  "frame": "f148.png",
+  "deviation": 0.071606
+ },
+ {
+  "frame": "f149.png",
+  "deviation": 0.0716089
+ },
+ {
+  "frame": "f150.png",
+  "deviation": 0.0716259
+ },
+ {
+  "frame": "f151.png",
+  "deviation": 0.0716243
+ },
+ {
+  "frame": "f152.png",
+  "deviation": 0.0716527
+ },
+ {
+  "frame": "f153.png",
+  "deviation": 0.0716421
+ },
+ {
+  "frame": "f154.png",
+  "deviation": 0.0716477
+ },
+ {
+  "frame": "f155.png",
+  "deviation": 0.0716424
+ },
+ {
+  "frame": "f156.png",
+  "deviation": 0.0716505
+ },
+ {
+  "frame": "f157.png",
+  "deviation": 0.0716434
+ },
+ {
+  "frame": "f158.png",
+  "deviation": 0.0716434
+ },
+ {
+  "frame": "f159.png",
+  "deviation": 0.0695655
+ },
+ {
+  "frame": "f160.png",
+  "deviation": 0.0521644
+ },
+ {
+  "frame": "f161.png",
+  "deviation": 0.024099
+ },
+ {
+  "frame": "f162.png",
+  "deviation": 0.0218234
+ },
+ {
+  "frame": "f163.png",
+  "deviation": 0.0472247
+ },
+ {
+  "frame": "f164.png",
+  "deviation": 0.0796796
+ },
+ {
+  "frame": "f165.png",
+  "deviation": 0.105905
+ },
+ {
+  "frame": "f166.png",
+  "deviation": 0.115389
+ },
+ {
+  "frame": "f167.png",
+  "deviation": 0.119946
+ },
+ {
+  "frame": "f168.png",
+  "deviation": 0.121595
+ },
+ {
+  "frame": "f169.png",
+  "deviation": 0.122144
+ },
+ {
+  "frame": "f170.png",
+  "deviation": 0.122456
+ },
+ {
+  "frame": "f171.png",
+  "deviation": 0.122594
+ },
+ {
+  "frame": "f172.png",
+  "deviation": 0.122821
+ },
+ {
+  "frame": "f173.png",
+  "deviation": 0.122763
+ },
+ {
+  "frame": "f174.png",
+  "deviation": 0.122849
+ },
+ {
+  "frame": "f175.png",
+  "deviation": 0.122896
+ },
+ {
+  "frame": "f176.png",
+  "deviation": 0.122947
+ },
+ {
+  "frame": "f177.png",
+  "deviation": 0.123035
+ },
+ {
+  "frame": "f178.png",
+  "deviation": 0.122999
+ },
+ {
+  "frame": "f179.png",
+  "deviation": 0.12302
+ },
+ {
+  "frame": "f180.png",
+  "deviation": 0.123104
+ },
+ {
+  "frame": "f181.png",
+  "deviation": 0.123033
+ },
+ {
+  "frame": "f182.png",
+  "deviation": 0.123111
+ },
+ {
+  "frame": "f183.png",
+  "deviation": 0.123094
+ },
+ {
+  "frame": "f184.png",
+  "deviation": 0.123152
+ },
+ {
+  "frame": "f185.png",
+  "deviation": 0.123183
+ },
+ {
+  "frame": "f186.png",
+  "deviation": 0.123159
+ },
+ {
+  "frame": "f187.png",
+  "deviation": 0.123173
+ },
+ {
+  "frame": "f188.png",
+  "deviation": 0.123252
+ },
+ {
+  "frame": "f189.png",
+  "deviation": 0.123206
+ },
+ {
+  "frame": "f190.png",
+  "deviation": 0.123108
+ },
+ {
+  "frame": "f191.png",
+  "deviation": 0.123178
+ },
+ {
+  "frame": "f192.png",
+  "deviation": 0.123065
+ },
+ {
+  "frame": "f193.png",
+  "deviation": 0.123122
+ },
+ {
+  "frame": "f194.png",
+  "deviation": 0.123167
+ },
+ {
+  "frame": "f195.png",
+  "deviation": 0.123231
+ },
+ {
+  "frame": "f196.png",
+  "deviation": 0.123269
+ },
+ {
+  "frame": "f197.png",
+  "deviation": 0.123348
+ },
+ {
+  "frame": "f198.png",
+  "deviation": 0.123254
+ },
+ {
+  "frame": "f199.png",
+  "deviation": 0.123244
+ },
+ {
+  "frame": "f200.png",
+  "deviation": 0.123341
+ },
+ {
+  "frame": "f201.png",
+  "deviation": 0.12326
+ },
+ {
+  "frame": "f202.png",
+  "deviation": 0.123312
+ },
+ {
+  "frame": "f203.png",
+  "deviation": 0.123257
+ },
+ {
+  "frame": "f204.png",
+  "deviation": 0.123213
+ },
+ {
+  "frame": "f205.png",
+  "deviation": 0.123232
+ },
+ {
+  "frame": "f206.png",
+  "deviation": 0.123242
+ },
+ {
+  "frame": "f207.png",
+  "deviation": 0.122622
+ },
+ {
+  "frame": "f208.png",
+  "deviation": 0.123108
+ },
+ {
+  "frame": "f209.png",
+  "deviation": 0.123089
+ }
+]
