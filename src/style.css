@@ -346,7 +346,7 @@ select {
   left: 5%;
   top: 62px;
   width: 39%;
-  max-width: 570px;
+  max-width: 590px;
   z-index: 2;
   pointer-events: none;
 }
@@ -361,8 +361,10 @@ select {
   text-transform: uppercase;
   line-height: 1.5;
 }
+/* The title keeps its three designed lines: "between here" (about 7.2 em) must fit the copy
+   column, which 5.2vw does inside 39% of the width. */
 .hero h1 {
-  font-size: clamp(56px, 5.5vw, 87px);
+  font-size: clamp(56px, 5.2vw, 82px);
   line-height: 1.045;
   margin: 22px 0;
 }
@@ -1392,9 +1394,10 @@ footer .footer-fine {
   }
   .hero-copy {
     top: 80px;
+    max-width: 650px;
   }
   .hero h1 {
-    font-size: 104px;
+    font-size: 88px;
   }
 }
 @media (max-width: 1100px) {
