@@ -639,6 +639,97 @@ export async function buildVegetation(context: VegetationContext) {
       tone: 1,
     });
   }
+  // Coastal milkwoods, the second species (after the studio's milkwood study): a short, flared
+  // trunk that splits low into several limbs under a broad, low, dense dome of small dark
+  // leaves; sheltering shapes against the pines' wind-combed height. Their own random stream,
+  // so the pines and scrub keep their exact forms.
+  const woodRandom = rng((context.seed ?? 311) + 1709);
+  const milkwoods: Plant[] = [];
+  // Room for a broad crown is scarce between the buildings: relax the margins in steps until
+  // three trees fit (strictest first, so the preferred spots win).
+  for (const k of [1, 0.8, 0.65, 0.5]) {
+    for (let tries = 0; milkwoods.length < 3 && tries < 3000; tries++) {
+      const x = -26 + woodRandom() * 52;
+      const z = -22 + woodRandom() * 40;
+      const y = ground(x, z);
+      if (
+        y > 3.4 &&
+        slope(x, z) < 0.4 &&
+        !blocked(x, z, 2.2 * k) &&
+        flatAround(x, z, 1.6 * k, 0.45) &&
+        canopyClear(x, z, 3.2 * k) &&
+        pines.every(([px, pz]) => Math.hypot(px - x, pz - z) > 5.5 * k) &&
+        milkwoods.every((m) => Math.hypot(m.x - x, m.z - z) > 6 * k)
+      )
+        milkwoods.push({
+          x,
+          y,
+          z,
+          scale: 0.85 + woodRandom() * 0.25,
+          yaw: woodRandom() * 6.3,
+          tone: 1,
+        });
+    }
+    if (milkwoods.length === 3) break;
+  }
+  const milkwoodClusters: BufferGeometry[] = [];
+  for (const p of milkwoods) {
+    const size = p.scale;
+    const base = new Vector3(p.x, ground(p.x, p.z) - 0.12, p.z);
+    const fork = base
+      .clone()
+      .add(new Vector3(lean.x * 0.3 * size, (1 + woodRandom() * 0.4) * size, lean.z * 0.3 * size));
+    const knee = base
+      .clone()
+      .lerp(fork, 0.5)
+      .add(new Vector3(0.06, 0, -0.05));
+    trunks.push(taperedTube([base, knee, fork], 0.3 * size, 0.2 * size, 12, 0.9));
+    const crown = (2 + woodRandom() * 0.6) * size;
+    const underside = fork.y + 0.5 * size;
+    const limbs = 4 + Math.floor(woodRandom() * 3);
+    for (let l = 0; l < limbs; l++) {
+      const a = p.yaw + (l / limbs) * Math.PI * 2 + (woodRandom() - 0.5) * 0.5;
+      const reach = crown * (0.45 + woodRandom() * 0.35);
+      const tip = new Vector3(
+        fork.x + Math.cos(a) * reach,
+        underside + (0.1 + woodRandom() * 0.4) * size,
+        fork.z + Math.sin(a) * reach,
+      );
+      const elbow = fork
+        .clone()
+        .lerp(tip, 0.45)
+        .add(new Vector3(0, 0.35 * size, 0));
+      trunks.push(taperedTube([fork, elbow, tip], 0.13 * size, 0.04 * size, 7));
+    }
+    // The dome, in tiers of dense lobes: a wide skirt low around the limbs, a shoulder ring and
+    // a crown, so the mass reads as one rounded, closed canopy rather than a flat umbrella.
+    const tiers = [
+      { lobes: 7, from: 0.7, to: 0.88, lift: 0.3, radius: 0.95, tone: 0.62 },
+      { lobes: 5, from: 0.32, to: 0.5, lift: 0.8, radius: 0.9, tone: 0.74 },
+      { lobes: 2, from: 0, to: 0.18, lift: 1.2, radius: 0.85, tone: 0.86 },
+    ];
+    for (const tier of tiers)
+      for (let c = 0; c < tier.lobes; c++) {
+        const a = p.yaw + ((c + woodRandom() * 0.6) / tier.lobes) * Math.PI * 2;
+        const d = crown * (tier.from + woodRandom() * (tier.to - tier.from));
+        const lobe = (0.9 + woodRandom() * 0.3) * size;
+        milkwoodClusters.push(
+          cardCluster(
+            new Vector3(
+              fork.x + Math.cos(a) * d,
+              underside + (tier.lift + (woodRandom() - 0.5) * 0.15) * size,
+              fork.z + Math.sin(a) * d,
+            ),
+            new Vector3(tier.radius, 0.55, tier.radius).multiplyScalar(lobe),
+            130,
+            0.3 * lobe,
+            woodRandom,
+            tier.tone + woodRandom() * 0.08,
+          ),
+        );
+      }
+    shade.strong.push([p.x, p.z, crown * 0.9]);
+  }
   const trunkGeometry = mergeGeometries(trunks, false);
   if (trunkGeometry) {
     const trunkMesh = new Mesh(trunkGeometry, barkMaterial);
@@ -665,6 +756,29 @@ export async function buildVegetation(context: VegetationContext) {
     add(foliageMesh, true);
   }
 
+  // Milkwood leaves are small, dark and leathery: the same leaf cards, deeper and glossier.
+  const milkwoodLeaves = new MeshStandardMaterial({
+    name: "milkwood-cards",
+    map: leafColour,
+    alphaMap: leafAlpha,
+    alphaTest: 0.45,
+    side: DoubleSide,
+    color: new Color(0.24, 0.36, 0.17),
+    // Glossy in life, but at card scale a low roughness turns the whole crown silver with sky.
+    roughness: 0.74,
+    vertexColors: true,
+  });
+  prepareFoliage(milkwoodLeaves, { swayAttribute: true, translucency: 0.45 });
+  const milkwoodGeometry = milkwoodClusters.length
+    ? mergeGeometries(milkwoodClusters, false)
+    : null;
+  if (milkwoodGeometry) {
+    const milkwoodMesh = new Mesh(milkwoodGeometry, milkwoodLeaves);
+    milkwoodMesh.castShadow = milkwoodMesh.receiveShadow = true;
+    milkwoodMesh.userData.visualFamily = "vegetation:milkwood crowns (leaf cards)";
+    add(milkwoodMesh, true);
+  }
+
   // Contact darkening where plants meet the turf (the cut-outs get no ambient occlusion).
   const decals = [
     contactShade("strong", shade.strong, 0.55, ground),
@@ -678,6 +792,7 @@ export async function buildVegetation(context: VegetationContext) {
     fern.material,
     barkMaterial,
     foliage,
+    milkwoodLeaves,
     ...decals.map((d) => d.mesh.material as Material),
   ]);
   return {
@@ -689,6 +804,7 @@ export async function buildVegetation(context: VegetationContext) {
       scrub: scrub.length,
       ferns: ferns.length,
       pines: pines.length,
+      milkwoods: milkwoods.length,
     },
     update(time: number, animated: boolean) {
       windUniforms.time.value = time;
