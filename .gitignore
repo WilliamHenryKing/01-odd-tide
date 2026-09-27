@@ -30,3 +30,7 @@ docs/visual/batch/film.stdout.txt
 docs/visual/batch/film.stderr.txt
 docs/visual/batch/*/reveal-video/
 docs/visual/captures/c9-draft/
+
+# Review evidence stays local (removed from history 27 Sep 2026; full history in .workspace/repo-backups)
+docs/visual/captures/
+docs/visual/perf/
