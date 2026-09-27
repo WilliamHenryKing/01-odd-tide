@@ -606,11 +606,54 @@ input[type="range"] {
 .stay-card {
   min-width: 0;
 }
-.stay-card svg {
-  width: 100%;
+/* Stay portraits are rendered from the island. Hover, focus or (on touch) scrolling a card
+   into view crossfades to the same camera with the roof open. */
+.portrait {
+  position: relative;
   display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #56787a;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.5) inset,
+    0 18px 40px -22px rgb(22 49 44 / 0.55);
+  isolation: isolate;
 }
-.sketch-button {
+.portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    opacity 0.8s cubic-bezier(0.33, 0, 0.2, 1),
+    transform 1.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.portrait-open {
+  opacity: 0;
+}
+.stay-card:hover .portrait img,
+.stay-card:focus-within .portrait img,
+.stay-card.in-view .portrait img {
+  transform: scale(1.035);
+}
+.stay-card:hover .portrait-open,
+.stay-card:focus-within .portrait-open,
+.stay-card.in-view .portrait-open {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait img {
+    transition: opacity 0.4s linear;
+  }
+  .stay-card:hover .portrait img,
+  .stay-card:focus-within .portrait img,
+  .stay-card.in-view .portrait img {
+    transform: none;
+  }
+}
+.portrait-button {
   display: block;
   width: 100%;
   background: transparent;
@@ -618,11 +661,12 @@ input[type="range"] {
   padding: 0;
   position: relative;
   margin-bottom: 22px;
+  border-radius: 16px;
 }
-.sketch-button > span {
+.portrait-button > .step-chip {
   position: absolute;
-  right: 10px;
-  bottom: 4px;
+  right: 12px;
+  bottom: 12px;
   background: var(--shell);
   padding: 9px 14px;
   border-radius: 30px;
@@ -630,11 +674,11 @@ input[type="range"] {
   opacity: 0;
   transform: translateY(5px);
   transition:
-    opacity 0.2s,
-    transform 0.2s;
+    opacity 0.25s,
+    transform 0.25s;
 }
-.sketch-button:hover > span,
-.sketch-button:focus-visible > span {
+.portrait-button:hover > span,
+.portrait-button:focus-visible > span {
   opacity: 1;
   transform: none;
 }
@@ -681,36 +725,31 @@ input[type="range"] {
 .discovery .button {
   margin-top: 23px;
 }
+/* The lighthouse, rendered at twilight: dark until all three lens pieces are found. */
 .lens-art {
-  min-height: 340px;
   position: relative;
-  display: grid;
-  place-items: center;
+  aspect-ratio: 1;
+  max-width: 460px;
+  width: 100%;
+  justify-self: end;
+  border-radius: 50% 50% 18px 18px / 36% 36% 18px 18px;
+  overflow: hidden;
+  background: #c9c3bd;
+  box-shadow: 0 30px 60px -34px rgb(60 40 20 / 0.6);
 }
-.lens-art i {
+.lens-art img {
   position: absolute;
-  width: 170px;
-  height: 170px;
-  border: 14px solid #cba064;
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 0 2px #7d814f,
-    inset 0 0 40px #42848133,
-    6px 10px 0 #8f834327;
-  background: #aac6aa88;
-  transform: translate(-50px, -30px) rotate(-20deg);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 1.6s ease;
 }
-.lens-art i:nth-child(2) {
-  width: 115px;
-  height: 115px;
-  transform: translate(75px, 22px) rotate(15deg);
-  border-width: 10px;
+.lens-art .lens-lit {
+  opacity: 0;
 }
-.lens-art i:nth-child(3) {
-  width: 72px;
-  height: 72px;
-  transform: translate(-47px, 105px);
-  border-width: 6px;
+.lens-art.lit .lens-lit {
+  opacity: 1;
 }
 .lens-art > span {
   position: absolute;
@@ -720,8 +759,12 @@ input[type="range"] {
   border: 1px solid;
   border-radius: 50%;
   padding: 20px;
-  bottom: 0;
-  right: 5%;
+  bottom: 22px;
+  right: 22px;
+  color: #f7eed8;
+  background: rgb(35 57 50 / 0.72);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   transform: rotate(-12deg);
   text-align: center;
 }
@@ -851,9 +894,91 @@ div.page-intro > p {
 .page-section .stay-card .button {
   margin-top: 20px;
 }
-.page-section .stay-card svg {
-  background: #e9e9db;
+.page-section .stay-card .portrait {
   margin-bottom: 25px;
+}
+/* A stay, three ways: afternoon, opened up, lamps on at dusk. */
+.stay-gallery {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 22px;
+  padding-top: 0;
+}
+.stay-gallery figure {
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 22px 50px -30px rgb(22 49 44 / 0.6);
+}
+.stay-gallery figure:first-child {
+  grid-row: span 2;
+}
+.stay-gallery img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 3 / 2;
+}
+.stay-gallery figcaption {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 7px 12px;
+  border-radius: 30px;
+  font-size: 11px;
+  color: #f7eed8;
+  background: rgb(22 42 38 / 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+/* The payoff: the chosen stay at dusk as a postcard. */
+.postcard {
+  position: relative;
+  width: min(760px, 100%);
+  margin: 38px auto 34px;
+  padding: 14px 14px 46px;
+  background: #fbf8ef;
+  border-radius: 4px;
+  box-shadow:
+    0 1px 1px rgb(0 0 0 / 0.08),
+    0 26px 60px -28px rgb(40 30 20 / 0.55);
+  transform: rotate(-1.2deg);
+}
+.postcard img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.postcard-stamp {
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  width: 64px;
+  padding: 10px 0;
+  font-family: "Young Serif", Georgia, serif;
+  font-size: 13px;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  color: #234939;
+  background: #f4e4c8;
+  border: 3px dotted #fbf8ef;
+  outline: 1px solid #d7c49b;
+  transform: rotate(4deg);
+}
+.postcard-mark {
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6c6a5e;
 }
 .planner-layout {
   display: grid;
@@ -1427,8 +1552,8 @@ footer .footer-fine {
     grid-template-columns: 1fr;
     gap: 48px;
   }
-  .stay-card svg {
-    max-width: 430px;
+  .stay-card .portrait {
+    max-width: 560px;
     margin-inline: auto;
   }
   .stay-card h3,
@@ -1439,9 +1564,24 @@ footer .footer-fine {
     flex-direction: row;
     font-size: 11px;
   }
-  .sketch-button > span {
+  .portrait-button > .step-chip {
     opacity: 1;
     transform: none;
+  }
+  .stay-gallery {
+    grid-template-columns: 1fr;
+  }
+  .stay-gallery figure:first-child {
+    grid-row: auto;
+  }
+  .postcard {
+    padding: 8px 8px 34px;
+  }
+  .postcard-stamp {
+    top: 16px;
+    right: 16px;
+    width: 50px;
+    font-size: 11px;
   }
   .discovery {
     grid-template-columns: 1fr;
@@ -1451,7 +1591,8 @@ footer .footer-fine {
     font-size: 39px;
   }
   .lens-art {
-    min-height: 320px;
+    justify-self: center;
+    max-width: 380px;
   }
   .clue-list {
     grid-template-columns: 1fr;

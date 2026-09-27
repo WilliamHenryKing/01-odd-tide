@@ -11,11 +11,17 @@ import {
 } from "three";
 
 export type VisualBookmark = { id: string; purpose: string; hero: boolean };
+type Shot = {
+  state: unknown;
+  camera: { position: [number, number, number]; target: [number, number, number]; fov?: number };
+};
 type Adapter = {
   renderer: WebGLRenderer;
   scene: Scene;
   camera: Camera;
   bookmarks: VisualBookmark[];
+  plates?: (Shot & { id: string; file: string; width: number; height: number })[];
+  shot?(shot: Shot, width: number, height: number): Promise<string>;
   apply(id: string): Promise<void>;
   freeze(): void;
   render(): void;
@@ -27,6 +33,10 @@ export type VisualTest = {
   bookmarks: VisualBookmark[];
   tiers: string[];
   setBookmark(id: string): Promise<{ bookmark: string }>;
+  /** Stills for the page (tools/visual/plates.mjs): ids, output files and sizes. */
+  plates: { id: string; file: string; width: number; height: number }[];
+  /** Render a plate offscreen at 'scale' × its size; returns a PNG data URL. */
+  renderPlate(id: string, scale?: number): Promise<string>;
   setTier(tier: string): { tier: string };
   setLightingState(state: string): Promise<{ lighting: string }>;
   setSeed(seed: number): { seed: number; mode: string };
@@ -211,6 +221,17 @@ export function installInspection(adapter: Adapter): () => void {
     ]).then(() => undefined),
     bookmarks: adapter.bookmarks.map(({ id, purpose, hero }) => ({ id, purpose, hero })),
     tiers: ["existing"],
+    plates: (adapter.plates ?? []).map(({ id, file, width, height }) => ({
+      id,
+      file,
+      width,
+      height,
+    })),
+    async renderPlate(id, scale = 2) {
+      const plate = adapter.plates?.find((item) => item.id === id);
+      if (!plate || !adapter.shot) throw new Error(`Unknown plate: ${id}`);
+      return adapter.shot(plate, Math.round(plate.width * scale), Math.round(plate.height * scale));
+    },
     async setBookmark(id) {
       if (!adapter.bookmarks.some((item) => item.id === id))
         throw new Error(`Unknown bookmark: ${id}`);

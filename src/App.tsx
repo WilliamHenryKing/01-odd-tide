@@ -37,46 +37,40 @@ function Mark({ small = false }: { small?: boolean }) {
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
-function Sketch({ stay }: { stay: StayId }) {
+/** How each stay opens, for the portrait's second still and the gallery caption. */
+const OPENING: Record<StayId, string> = {
+  "weather-house": "The roof slope lifted on its gas struts",
+  "nap-observatory": "The dome folded back to the sky",
+  "lantern-lodge": "The roof raised on its brass screw jacks",
+};
+
+/**
+ * A stay's portrait, rendered from the island itself: the closed still, with the open one
+ * crossfading in on hover or focus (or, on touch screens, as the card scrolls into view).
+ */
+function StayPortrait({ stay }: { stay: StayId }) {
   return (
-    <svg viewBox="0 0 400 240" role="img" aria-label={`Illustrated view of ${stayFor(stay).name}`}>
-      <path d="M30 174q54-28 98-23t83-5q109-11 159 28l-10 24q-117 48-310-3Z" fill="#d7c49b" />
-      <path d="M31 173q80-37 154-24t184 22q-117 50-338 2Z" fill="#84936b" />
-      <path
-        d="m51 194 29 3m213 12 28-3m-256 16 76 4m-62-92 29-5"
-        fill="none"
-        stroke="#82afa1"
-        strokeWidth="2"
+    <span className="portrait">
+      <img
+        className="portrait-closed"
+        src={`/plates/${stay}-portrait.webp`}
+        width={1500}
+        height={1000}
+        alt={`${stayFor(stay).name} in afternoon light`}
+        loading="lazy"
+        decoding="async"
       />
-      {stay === "nap-observatory" ? (
-        <>
-          <path d="M132 144V97h136v54q-61 28-136-7" fill="#e8dec3" />
-          <path d="M124 102a75 67 0 0 1 151 0Z" fill="#517c7a" />
-          <path d="M193 35q-20 32-10 68h27q-13-41-4-68" fill="#e0c788" />
-          <path d="M151 123h39v32h-39m62-32h37v32h-37" fill="#b99b60" />
-        </>
-      ) : (
-        <>
-          <path
-            d={stay === "weather-house" ? "m107 155 86-127 92 127Z" : "m89 99 105-55 119 54Z"}
-            fill={stay === "weather-house" ? "#cb7653" : "#3e7077"}
-          />
-          <path
-            d={stay === "weather-house" ? "m137 154 57-85 59 86Z" : "M104 99h193v66H104Z"}
-            fill="#e9dfc2"
-          />
-          <path d="M172 113h45v56h-45Z" fill="#31554a" />
-          <path d="M194 117v50m-18-22h37" stroke="#c6b99c" strokeWidth="3" />
-          <path d="M111 178h174m-159 9h139" stroke="#836c51" strokeWidth="4" />
-        </>
-      )}
-      <path
-        d="M323 158v-48m-12 18 12-38 14 38m-26-7 12-37 14 37"
-        stroke="#4c6c49"
-        fill="#779359"
-        strokeWidth="4"
+      <img
+        className="portrait-open"
+        src={`/plates/${stay}-open.webp`}
+        width={1500}
+        height={1000}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
       />
-    </svg>
+    </span>
   );
 }
 
@@ -188,9 +182,39 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
     if (configured) history.replaceState(null, "", `${path}?${planQuery(plan)}`);
     document.title = pageTitle(path);
   }, [path, plan, configured]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Each route renders its own cards.
+  useEffect(() => {
+    // Touch screens have no hover: a portrait opens its roof as its card scrolls into view.
+    if (!window.matchMedia("(hover: none)").matches) return;
+    const cards = content.current?.querySelectorAll(".stay-card");
+    if (!cards?.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          entry.target.classList.toggle("in-view", entry.intersectionRatio > 0.65);
+      },
+      { threshold: [0, 0.65, 1] },
+    );
+    for (const card of cards) observer.observe(card);
+    return () => observer.disconnect();
+  }, [path]);
   // biome-ignore lint/correctness/useExhaustiveDependencies: A route change introduces new arrival elements to animate.
   useEffect(() => {
     const context = gsap.context(() => {
+      const card = content.current?.querySelector(".postcard");
+      if (card)
+        gsap.fromTo(
+          card,
+          { y: reduced ? 0 : 60, rotation: reduced ? -1.2 : -7, opacity: 0 },
+          {
+            y: 0,
+            rotation: -1.2,
+            opacity: 1,
+            duration: reduced ? 0 : 1.1,
+            delay: reduced ? 0 : 0.25,
+            ease: "back.out(1.4)",
+          },
+        );
       const targets = content.current?.querySelectorAll(
         ".arrival-line, .page-section > h1, .page-section > .eyebrow",
       );
@@ -256,7 +280,8 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
       ctx.fillRect(0, 0, 1600, 1100);
       {
         const image = new Image();
-        image.src = capture.current ? capture.current() : "/plates/island-day.jpg";
+        // The chosen stay at dusk, rendered from the island (the art direction's payoff frame).
+        image.src = `/plates/${plan.stay}-dusk.webp`;
         await image.decode();
         const scale = Math.min(1528 / image.width, 750 / image.height);
         ctx.drawImage(
@@ -495,12 +520,12 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
                   <article className={`stay-card card-${i}`} key={item.id}>
                     <button
                       type="button"
-                      className="sketch-button"
+                      className="portrait-button"
                       onClick={() => onSelect(item.id)}
                       aria-label={`Explore ${item.name}`}
                     >
-                      <Sketch stay={item.id} />
-                      <span>
+                      <StayPortrait stay={item.id} />
+                      <span className="step-chip">
                         Step inside <Arrow />
                       </span>
                     </button>
@@ -542,11 +567,30 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
                   {discover ? "Put the clues away" : "Follow a little curiosity"} <Arrow />
                 </button>
               </div>
-              <div className="lens-art" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-                <span>
+              <div className={`lens-art${found.length === 3 ? " lit" : ""}`}>
+                <img
+                  className="lens-dark"
+                  src="/plates/lighthouse-dark.webp"
+                  width={1100}
+                  height={1100}
+                  alt={
+                    found.length === 3
+                      ? ""
+                      : "The island's little lighthouse at twilight, its lamp dark"
+                  }
+                  loading="lazy"
+                  decoding="async"
+                />
+                <img
+                  className="lens-lit"
+                  src="/plates/lighthouse-lit.webp"
+                  width={1100}
+                  height={1100}
+                  alt={found.length === 3 ? "The little lighthouse, lit again at twilight" : ""}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span aria-hidden="true">
                   LOST & FOUND
                   <br />
                   ISLAND DEPARTMENT
@@ -661,7 +705,7 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
             <div className="stay-grid">
               {STAYS.map((item) => (
                 <article className="stay-card" key={item.id}>
-                  <Sketch stay={item.id} />
+                  <StayPortrait stay={item.id} />
                   <p className="eyebrow">{item.mood}</p>
                   <h2>{item.name}</h2>
                   <p>{item.detail}</p>
@@ -728,6 +772,43 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
                 Compare all three stays
               </Link>
             </aside>
+          </section>
+        )}
+        {selected && path !== "/summary" && (
+          <section className="section-pad stay-gallery" aria-label={`${stay.name}, three ways`}>
+            <figure>
+              <img
+                src={`/plates/${stay.id}-portrait.webp`}
+                width={1500}
+                height={1000}
+                alt={`${stay.name} in afternoon light, closed up`}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Afternoon, all tucked in</figcaption>
+            </figure>
+            <figure>
+              <img
+                src={`/plates/${stay.id}-open.webp`}
+                width={1500}
+                height={1000}
+                alt={`${stay.name} opened up: ${OPENING[stay.id].toLowerCase()}`}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{OPENING[stay.id]}</figcaption>
+            </figure>
+            <figure>
+              <img
+                src={`/plates/${stay.id}-dusk.webp`}
+                width={1500}
+                height={1000}
+                alt={`${stay.name} at dusk with its lamps on`}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Lamps on at dusk</figcaption>
+            </figure>
           </section>
         )}
         {path === "/plan" && (
@@ -998,6 +1079,23 @@ export function App({ initialPath = "/" }: { initialPath?: string }) {
               </>
             ) : (
               <>
+                <figure className="postcard">
+                  <img
+                    src={`/plates/${plan.stay}-dusk.webp`}
+                    width={1500}
+                    height={1000}
+                    alt={`${stayFor(plan.stay).name} at dusk, lamps on`}
+                    decoding="async"
+                  />
+                  <span className="postcard-stamp" aria-hidden="true">
+                    ODD
+                    <br />
+                    TIDE
+                  </span>
+                  <span className="postcard-mark" aria-hidden="true">
+                    Island post · {plan.arrival}
+                  </span>
+                </figure>
                 <p>
                   {stayFor(plan.stay).name} · {plan.arrival} to {plan.departure}
                   <br />

@@ -394,61 +394,108 @@ export function createIsland(
       );
     }
     if (import.meta.env.DEV || import.meta.env.MODE === "visual-test") {
-      void Promise.all([import("../visual/inspection"), import("../visual/bookmarks")]).then(
-        ([{ installInspection }, { BOOKMARKS }]) => {
-          if (disposed || !world) return;
-          world.labelFamilies();
-          let currentBookmark = BOOKMARKS[0];
-          const freeze = () => {
-            state = { ...state, paused: true, reduced: true };
-            elapsed = 0;
-            gsap.killTweensOf(values);
+      void Promise.all([
+        import("../visual/inspection"),
+        import("../visual/bookmarks"),
+        import("../visual/plates"),
+      ]).then(([{ installInspection }, { BOOKMARKS }, { PLATES }]) => {
+        if (disposed || !world) return;
+        world.labelFamilies();
+        let currentBookmark = BOOKMARKS[0];
+        const freeze = () => {
+          state = { ...state, paused: true, reduced: true };
+          elapsed = 0;
+          gsap.killTweensOf(values);
+          gsap.killTweensOf(camera.position);
+          gsap.killTweensOf(target);
+          values.hour = state.hour;
+          values.open = state.opened ? 1 : 0;
+          cancelAnimationFrame(frame);
+          frame = 0;
+        };
+        const apply = async (id: string) => {
+          const item = BOOKMARKS.find((bookmark) => bookmark.id === id);
+          if (!item) throw new Error(`Unknown bookmark: ${id}`);
+          currentBookmark = item;
+          window.dispatchEvent(new CustomEvent("odd-tide-visual-state", { detail: item.state }));
+          await new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          );
+          state = { ...item.state };
+          freeze();
+          pose(true);
+          if (item.camera) {
             gsap.killTweensOf(camera.position);
             gsap.killTweensOf(target);
-            values.hour = state.hour;
-            values.open = state.opened ? 1 : 0;
-            cancelAnimationFrame(frame);
-            frame = 0;
-          };
-          const apply = async (id: string) => {
-            const item = BOOKMARKS.find((bookmark) => bookmark.id === id);
-            if (!item) throw new Error(`Unknown bookmark: ${id}`);
-            currentBookmark = item;
-            window.dispatchEvent(new CustomEvent("odd-tide-visual-state", { detail: item.state }));
-            await new Promise<void>((resolve) =>
-              requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-            );
-            state = { ...item.state };
-            freeze();
-            pose(true);
-            if (item.camera) {
-              gsap.killTweensOf(camera.position);
-              gsap.killTweensOf(target);
-              camera.position.set(...item.camera.position);
-              target.set(...item.camera.target);
-            }
+            camera.position.set(...item.camera.position);
+            target.set(...item.camera.target);
+          }
+          draw(performance.now(), true);
+        };
+        /** Render one still offscreen at width × height, then restore the live view. */
+        const shot = async (
+          spec: {
+            state: unknown;
+            camera: {
+              position: [number, number, number];
+              target: [number, number, number];
+              fov?: number;
+            };
+          },
+          shotWidth: number,
+          shotHeight: number,
+        ) => {
+          await new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          );
+          state = { ...(spec.state as IslandState) };
+          freeze();
+          pose(true);
+          gsap.killTweensOf(camera.position);
+          gsap.killTweensOf(target);
+          camera.position.set(...spec.camera.position);
+          target.set(...spec.camera.target);
+          const previousSize = renderer.getSize(new Vector2());
+          const previousRatio = renderer.getPixelRatio();
+          const previousAspect = camera.aspect;
+          const previousFov = camera.fov;
+          try {
+            pipeline.setSize(shotWidth, shotHeight, 1);
+            camera.aspect = shotWidth / shotHeight;
+            if (spec.camera.fov) camera.fov = spec.camera.fov;
+            camera.updateProjectionMatrix();
+            // Several frames so the environment bake, shadows and AO history are settled.
+            for (let i = 0; i < 6; i++) draw(performance.now(), true);
+            return renderer.domElement.toDataURL("image/png");
+          } finally {
+            pipeline.setSize(previousSize.x, previousSize.y, previousRatio);
+            camera.aspect = previousAspect;
+            camera.fov = previousFov;
+            camera.updateProjectionMatrix();
             draw(performance.now(), true);
-          };
-          detachInspection = installInspection({
-            renderer,
-            scene,
-            camera,
-            bookmarks: BOOKMARKS,
-            apply,
-            freeze,
-            render: () => draw(performance.now(), true),
-            current: () => ({ ...state, elapsed, inspectionCamera: !!currentBookmark?.camera }),
-            lighting: async (name) => {
-              const hour = { day: 9, dusk: 18.5, night: 21 }[name];
-              if (hour === undefined) throw new Error(`Unknown lighting state: ${name}`);
-              state = { ...state, hour };
-              freeze();
-              draw(performance.now(), true);
-              window.dispatchEvent(new CustomEvent("odd-tide-visual-state", { detail: state }));
-            },
-          });
-        },
-      );
+          }
+        };
+        detachInspection = installInspection({
+          renderer,
+          scene,
+          camera,
+          bookmarks: BOOKMARKS,
+          plates: PLATES,
+          shot,
+          apply,
+          freeze,
+          render: () => draw(performance.now(), true),
+          current: () => ({ ...state, elapsed, inspectionCamera: !!currentBookmark?.camera }),
+          lighting: async (name) => {
+            const hour = { day: 9, dusk: 18.5, night: 21 }[name];
+            if (hour === undefined) throw new Error(`Unknown lighting state: ${name}`);
+            state = { ...state, hour };
+            freeze();
+            draw(performance.now(), true);
+            window.dispatchEvent(new CustomEvent("odd-tide-visual-state", { detail: state }));
+          },
+        });
+      });
     }
   }
 
@@ -852,7 +899,8 @@ async function buildWorld(context: WorldContext): Promise<World> {
       for (const lantern of lanternGlows) lantern.state.on = 0.02 + walkOn(lantern.order);
       const found = state.found.length === 3;
       beacon.on = found ? 1 : 0;
-      beaconGlow.on = found ? 1 : 0.03;
+      // Unlit until the lens is whole: even a faint glow read as a working lamp at twilight.
+      beaconGlow.on = found ? 1 : 0;
       for (const fragment of fragments) {
         fragment.group.visible =
           state.discover &&
