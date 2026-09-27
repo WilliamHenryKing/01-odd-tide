@@ -1,0 +1,151 @@
+{
+ "run": "journeys-01",
+ "started": "2026-09-27T12:01:36.559Z",
+ "steps": [
+  {
+   "journey": "booking",
+   "step": "arrival: loader shows, then reveals a ready island",
+   "ok": true,
+   "ms": 39728,
+   "detail": {
+    "sawLoader": true
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "find your little escape → stays",
+   "ok": true,
+   "ms": 516,
+   "detail": {
+    "cards": 3
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "explore the Weather House",
+   "ok": true,
+   "ms": 5008
+  },
+  {
+   "journey": "booking",
+   "step": "take a peek inside (roof opens)",
+   "ok": true,
+   "ms": 1922
+  },
+  {
+   "journey": "booking",
+   "step": "make this your little place → plan",
+   "ok": true,
+   "ms": 387
+  },
+  {
+   "journey": "booking",
+   "step": "plan: guests, a day of activities",
+   "ok": false,
+   "ms": 30062,
+   "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^add/i }).first()\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"button\">Added ✓</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visib"
+  },
+  {
+   "journey": "booking",
+   "step": "see your island plan → summary",
+   "ok": true,
+   "ms": 981,
+   "detail": {
+    "postcard": 1500
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "take a postcard with you (download)",
+   "ok": true,
+   "ms": 3188,
+   "detail": {
+    "suggested": "my-odd-tide-postcard.png"
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "open the island",
+   "ok": true,
+   "ms": 7602
+  },
+  {
+   "journey": "discovery",
+   "step": "follow a little curiosity (clues appear)",
+   "ok": true,
+   "ms": 281,
+   "detail": {
+    "clues": 4
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "collect all three lens pieces at their hours",
+   "ok": true,
+   "ms": 30125,
+   "detail": {
+    "collected": [
+     0
+    ]
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "the lighthouse is restored",
+   "ok": false,
+   "ms": 10011,
+   "error": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText(/lighthouse restored/i).first() to be visible\u001b[22m\n"
+  },
+  {
+   "journey": "timelapse",
+   "step": "open the island",
+   "ok": true,
+   "ms": 6655
+  },
+  {
+   "journey": "timelapse",
+   "step": "watch the day go by (hour advances)",
+   "ok": true,
+   "ms": 4828,
+   "detail": {
+    "before": "09:00",
+    "during": "11:45",
+    "url": "out=2026-10-22&guests=2&time=12&day=bath%409%2Clanterns%4018"
+   }
+  },
+  {
+   "journey": "mobile",
+   "step": "arrival on a phone",
+   "ok": true,
+   "ms": 6551
+  },
+  {
+   "journey": "mobile",
+   "step": "menu opens and reaches the planner",
+   "ok": true,
+   "ms": 656
+  },
+  {
+   "journey": "status",
+   "step": "preview: unknown route answers 404",
+   "ok": true,
+   "ms": 391,
+   "detail": {
+    "status": 200
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a stay route answers 200",
+   "ok": true,
+   "ms": 54,
+   "detail": {
+    "status": 200
+   }
+  }
+ ],
+ "errors": [],
+ "finished": "2026-09-27T12:04:18.418Z",
+ "passed": 16,
+ "failed": 2
+}

@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import tailwind from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -16,8 +18,12 @@ export default defineConfig({
           if (path !== "/" && ROUTES.includes(path))
             request.url = `${path}/index.html${query ? `?${query}` : ""}`;
           else if (path !== "/" && !path.includes(".")) {
-            request.url = "/404/index.html";
-            response.statusCode = 404;
+            // Static serving would answer 200; a wrong turn must say 404, as hosts do with 404.html.
+            response.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
+            response.end(
+              readFileSync(resolve(server.config.root, server.config.build.outDir, "404.html")),
+            );
+            return;
           }
           next();
         });

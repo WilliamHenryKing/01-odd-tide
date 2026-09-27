@@ -23,6 +23,8 @@ try {
       );
     if (!html.includes('data-rendered="true"')) throw new Error("Prerender root marker missing");
     await writeFile(join(folder, "index.html"), html);
+    // Static hosts answer unknown paths from /404.html with a real 404 status.
+    if (route === "/404") await writeFile(join("dist", "404.html"), html);
   }
   console.log(`Rendered ${ROUTES.length} meaningful HTML entry points.`);
 } finally {
