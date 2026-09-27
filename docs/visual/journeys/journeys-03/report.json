@@ -1,0 +1,181 @@
+{
+ "run": "journeys-03",
+ "started": "2026-09-27T13:26:48.177Z",
+ "steps": [
+  {
+   "journey": "booking",
+   "step": "arrival: loader shows, then reveals a ready island",
+   "ok": true,
+   "ms": 46101,
+   "detail": {
+    "sawLoader": true
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "find your little escape → stays",
+   "ok": true,
+   "ms": 621,
+   "detail": {
+    "cards": 3
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "explore the Weather House",
+   "ok": true,
+   "ms": 34221
+  },
+  {
+   "journey": "booking",
+   "step": "take a peek inside (roof opens)",
+   "ok": true,
+   "ms": 1920
+  },
+  {
+   "journey": "booking",
+   "step": "make this your little place → plan",
+   "ok": true,
+   "ms": 479
+  },
+  {
+   "journey": "booking",
+   "step": "plan: too many guests is explained and blocks the summary",
+   "ok": true,
+   "ms": 93
+  },
+  {
+   "journey": "booking",
+   "step": "plan: dates, guests, one more activity",
+   "ok": true,
+   "ms": 254,
+   "detail": {
+    "query": "stay=weather-house&in=2026-10-14&out=2026-10-17&guests=2&time=9&day=bath%409%2Clanterns%4018%2Cpools%409"
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "see your island plan → summary",
+   "ok": false,
+   "ms": 30019,
+   "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /see your island plan/i }).first()\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"button\" class=\"button primary\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 "
+  },
+  {
+   "journey": "booking",
+   "step": "take a postcard with you (download)",
+   "ok": false,
+   "ms": 20003,
+   "error": "TimeoutError: page.waitForEvent: Timeout 20000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================"
+  },
+  {
+   "journey": "discovery",
+   "step": "open the island",
+   "ok": true,
+   "ms": 28428
+  },
+  {
+   "journey": "discovery",
+   "step": "follow a little curiosity (clues appear)",
+   "ok": true,
+   "ms": 383,
+   "detail": {
+    "clues": 4
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "collect the three lens pieces, each at its moment",
+   "ok": true,
+   "ms": 365,
+   "detail": {
+    "weather": 8,
+    "stars": 20,
+    "bath": 6.5
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "the lighthouse is restored",
+   "ok": true,
+   "ms": 17
+  },
+  {
+   "journey": "timelapse",
+   "step": "open the island",
+   "ok": true,
+   "ms": 26002
+  },
+  {
+   "journey": "timelapse",
+   "step": "watch the day go by (hour advances)",
+   "ok": true,
+   "ms": 5179,
+   "detail": {
+    "before": "09:00",
+    "during": "11:48",
+    "url": "out=2026-10-22&guests=2&time=12&day=bath%409%2Clanterns%4018"
+   }
+  },
+  {
+   "journey": "mobile",
+   "step": "arrival on a phone",
+   "ok": true,
+   "ms": 8579
+  },
+  {
+   "journey": "mobile",
+   "step": "menu opens and reaches the planner",
+   "ok": true,
+   "ms": 1035
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown route answers 404 with the wrong-turn page",
+   "ok": true,
+   "ms": 421,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown stay answers 404",
+   "ok": true,
+   "ms": 49,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a missing file answers 404",
+   "ok": true,
+   "ms": 39,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a stay route answers 200",
+   "ok": true,
+   "ms": 138,
+   "detail": {
+    "status": 200
+   }
+  },
+  {
+   "journey": "status",
+   "step": "dev: an unknown route shows the wrong-turn page",
+   "ok": true,
+   "ms": 540,
+   "detail": {
+    "status": 200
+   }
+  }
+ ],
+ "errors": [],
+ "finished": "2026-09-27T13:30:24.118Z",
+ "passed": 20,
+ "failed": 2
+}

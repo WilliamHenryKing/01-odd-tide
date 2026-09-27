@@ -1,5 +1,5 @@
 {
- "started": "2026-09-27T05:17:32.553Z",
+ "started": "2026-09-27T12:22:22.965Z",
  "films": {
   "island-day-landscape": {
    "frames": 480,
@@ -10,27 +10,27 @@
   "island-day-portrait": {
    "frames": 480,
    "rendered": 480,
-   "minutes": 14,
+   "minutes": 13,
    "encoded": "C:\\Users\\William King\\Documents\\Money Making Project\\experiences\\01-odd-tide\\assets-src\\film\\island-day-portrait.mp4"
   },
   "weather-house-evening": {
    "frames": 240,
    "rendered": 240,
-   "minutes": 8,
+   "minutes": 7,
    "encoded": "C:\\Users\\William King\\Documents\\Money Making Project\\experiences\\01-odd-tide\\assets-src\\film\\weather-house-evening.mp4"
   },
   "nap-observatory-evening": {
    "frames": 240,
    "rendered": 240,
-   "minutes": 7,
+   "minutes": 6,
    "encoded": "C:\\Users\\William King\\Documents\\Money Making Project\\experiences\\01-odd-tide\\assets-src\\film\\nap-observatory-evening.mp4"
   },
   "lantern-lodge-evening": {
    "frames": 240,
    "rendered": 240,
-   "minutes": 8,
+   "minutes": 7,
    "encoded": "C:\\Users\\William King\\Documents\\Money Making Project\\experiences\\01-odd-tide\\assets-src\\film\\lantern-lodge-evening.mp4"
   }
  },
- "finished": "2026-09-27T06:09:39.812Z"
+ "finished": "2026-09-27T13:11:21.690Z"
 }

@@ -1,0 +1,169 @@
+{
+ "run": "journeys-02",
+ "started": "2026-09-27T13:14:42.128Z",
+ "steps": [
+  {
+   "journey": "booking",
+   "step": "arrival: loader shows, then reveals a ready island",
+   "ok": true,
+   "ms": 19653,
+   "detail": {
+    "sawLoader": true
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "find your little escape → stays",
+   "ok": true,
+   "ms": 232,
+   "detail": {
+    "cards": 3
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "explore the Weather House",
+   "ok": true,
+   "ms": 2027
+  },
+  {
+   "journey": "booking",
+   "step": "take a peek inside (roof opens)",
+   "ok": true,
+   "ms": 1591
+  },
+  {
+   "journey": "booking",
+   "step": "make this your little place → plan",
+   "ok": true,
+   "ms": 214
+  },
+  {
+   "journey": "booking",
+   "step": "plan: dates, guests, one more activity",
+   "ok": true,
+   "ms": 121,
+   "detail": {
+    "query": "stay=weather-house&in=2026-10-14&out=2026-10-17&guests=3&time=9&day=bath%409%2Clanterns%4018%2Cpools%409"
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "see your island plan → summary",
+   "ok": false,
+   "ms": 30015,
+   "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /see your island plan/i }).first()\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"button\" class=\"button primary\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 "
+  },
+  {
+   "journey": "booking",
+   "step": "take a postcard with you (download)",
+   "ok": false,
+   "ms": 20012,
+   "error": "TimeoutError: page.waitForEvent: Timeout 20000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================"
+  },
+  {
+   "journey": "discovery",
+   "step": "open the island",
+   "ok": true,
+   "ms": 4500
+  },
+  {
+   "journey": "discovery",
+   "step": "follow a little curiosity (clues appear)",
+   "ok": true,
+   "ms": 91,
+   "detail": {
+    "clues": 4
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "collect the three lens pieces, each at its moment",
+   "ok": true,
+   "ms": 178,
+   "detail": {
+    "weather": 8,
+    "stars": 20,
+    "bath": 6.5
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "the lighthouse is restored",
+   "ok": true,
+   "ms": 10
+  },
+  {
+   "journey": "timelapse",
+   "step": "open the island",
+   "ok": true,
+   "ms": 4485
+  },
+  {
+   "journey": "timelapse",
+   "step": "watch the day go by (hour advances)",
+   "ok": true,
+   "ms": 4239,
+   "detail": {
+    "before": "09:00",
+    "during": "11:42",
+    "url": "=2026-10-22&guests=2&time=11.75&day=bath%409%2Clanterns%4018"
+   }
+  },
+  {
+   "journey": "mobile",
+   "step": "arrival on a phone",
+   "ok": true,
+   "ms": 4531
+  },
+  {
+   "journey": "mobile",
+   "step": "menu opens and reaches the planner",
+   "ok": true,
+   "ms": 416
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown route answers 404 with the wrong-turn page",
+   "ok": true,
+   "ms": 170,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown stay answers 404",
+   "ok": true,
+   "ms": 25,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a stay route answers 200",
+   "ok": true,
+   "ms": 49,
+   "detail": {
+    "status": 200
+   }
+  },
+  {
+   "journey": "status",
+   "step": "dev: an unknown route shows the wrong-turn page",
+   "ok": true,
+   "ms": 310,
+   "detail": {
+    "status": 200
+   }
+  }
+ ],
+ "errors": [
+  "status: console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "status: console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "finished": "2026-09-27T13:16:20.601Z",
+ "passed": 18,
+ "failed": 2
+}

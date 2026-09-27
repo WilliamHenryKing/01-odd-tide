@@ -1,0 +1,187 @@
+{
+ "run": "journeys-04",
+ "started": "2026-09-27T13:31:04.382Z",
+ "steps": [
+  {
+   "journey": "booking",
+   "step": "arrival: loader shows, then reveals a ready island",
+   "ok": true,
+   "ms": 39484,
+   "detail": {
+    "sawLoader": true
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "find your little escape → stays",
+   "ok": true,
+   "ms": 384,
+   "detail": {
+    "cards": 3
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "explore the Weather House",
+   "ok": true,
+   "ms": 3701
+  },
+  {
+   "journey": "booking",
+   "step": "take a peek inside (roof opens)",
+   "ok": true,
+   "ms": 1723
+  },
+  {
+   "journey": "booking",
+   "step": "make this your little place → plan",
+   "ok": true,
+   "ms": 287
+  },
+  {
+   "journey": "booking",
+   "step": "plan: too many guests is explained and blocks the summary",
+   "ok": true,
+   "ms": 44
+  },
+  {
+   "journey": "booking",
+   "step": "plan: unavailable dates are explained and block the summary",
+   "ok": true,
+   "ms": 108
+  },
+  {
+   "journey": "booking",
+   "step": "plan: open dates, two guests, one more activity",
+   "ok": true,
+   "ms": 142,
+   "detail": {
+    "query": "stay=weather-house&in=2026-10-19&out=2026-10-22&guests=2&time=9&day=bath%409%2Clanterns%4018%2Cpools%409"
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "see your island plan → summary",
+   "ok": false,
+   "ms": 30009,
+   "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /see your island plan/i }).first()\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"button\" class=\"button primary\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 "
+  },
+  {
+   "journey": "booking",
+   "step": "take a postcard with you (download)",
+   "ok": false,
+   "ms": 20005,
+   "error": "TimeoutError: page.waitForEvent: Timeout 20000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================"
+  },
+  {
+   "journey": "discovery",
+   "step": "open the island",
+   "ok": true,
+   "ms": 6339
+  },
+  {
+   "journey": "discovery",
+   "step": "follow a little curiosity (clues appear)",
+   "ok": true,
+   "ms": 280,
+   "detail": {
+    "clues": 4
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "collect the three lens pieces, each at its moment",
+   "ok": true,
+   "ms": 291,
+   "detail": {
+    "weather": 8,
+    "stars": 20,
+    "bath": 6.5
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "the lighthouse is restored",
+   "ok": true,
+   "ms": 13
+  },
+  {
+   "journey": "timelapse",
+   "step": "open the island",
+   "ok": true,
+   "ms": 6598
+  },
+  {
+   "journey": "timelapse",
+   "step": "watch the day go by (hour advances)",
+   "ok": true,
+   "ms": 4836,
+   "detail": {
+    "before": "09:00",
+    "during": "11:45",
+    "url": "out=2026-10-22&guests=2&time=12&day=bath%409%2Clanterns%4018"
+   }
+  },
+  {
+   "journey": "mobile",
+   "step": "arrival on a phone",
+   "ok": true,
+   "ms": 6127
+  },
+  {
+   "journey": "mobile",
+   "step": "menu opens and reaches the planner",
+   "ok": true,
+   "ms": 657
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown route answers 404 with the wrong-turn page",
+   "ok": true,
+   "ms": 259,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown stay answers 404",
+   "ok": true,
+   "ms": 36,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a missing file answers 404",
+   "ok": true,
+   "ms": 27,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a stay route answers 200",
+   "ok": true,
+   "ms": 73,
+   "detail": {
+    "status": 200
+   }
+  },
+  {
+   "journey": "status",
+   "step": "dev: an unknown route shows the wrong-turn page",
+   "ok": true,
+   "ms": 409,
+   "detail": {
+    "status": 200
+   }
+  }
+ ],
+ "errors": [],
+ "finished": "2026-09-27T13:33:15.013Z",
+ "passed": 21,
+ "failed": 2
+}

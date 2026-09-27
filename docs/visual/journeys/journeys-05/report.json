@@ -1,0 +1,192 @@
+{
+ "run": "journeys-05",
+ "started": "2026-09-27T13:33:56.017Z",
+ "steps": [
+  {
+   "journey": "booking",
+   "step": "arrival: loader shows, then reveals a ready island",
+   "ok": true,
+   "ms": 26228,
+   "detail": {
+    "sawLoader": true
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "find your little escape → stays",
+   "ok": true,
+   "ms": 285,
+   "detail": {
+    "cards": 3
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "explore the Weather House",
+   "ok": true,
+   "ms": 3316
+  },
+  {
+   "journey": "booking",
+   "step": "take a peek inside (roof opens)",
+   "ok": true,
+   "ms": 1685
+  },
+  {
+   "journey": "booking",
+   "step": "make this your little place → plan",
+   "ok": true,
+   "ms": 245
+  },
+  {
+   "journey": "booking",
+   "step": "plan: too many guests is explained and blocks the summary",
+   "ok": true,
+   "ms": 39
+  },
+  {
+   "journey": "booking",
+   "step": "plan: unavailable dates are explained and block the summary",
+   "ok": true,
+   "ms": 100
+  },
+  {
+   "journey": "booking",
+   "step": "plan: open dates, two guests, one more activity",
+   "ok": true,
+   "ms": 214,
+   "detail": {
+    "clashed": true,
+    "query": "stay=weather-house&in=2026-10-19&out=2026-10-22&guests=2&time=9&day=pools%408%2Cbath%409%2Clanterns%4018"
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "see your island plan → summary",
+   "ok": true,
+   "ms": 750,
+   "detail": {
+    "postcard": 1500
+   }
+  },
+  {
+   "journey": "booking",
+   "step": "take a postcard with you (download)",
+   "ok": true,
+   "ms": 3054,
+   "detail": {
+    "suggested": "my-odd-tide-postcard.png"
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "open the island",
+   "ok": true,
+   "ms": 6286
+  },
+  {
+   "journey": "discovery",
+   "step": "follow a little curiosity (clues appear)",
+   "ok": true,
+   "ms": 216,
+   "detail": {
+    "clues": 4
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "collect the three lens pieces, each at its moment",
+   "ok": true,
+   "ms": 249,
+   "detail": {
+    "weather": 8,
+    "stars": 20,
+    "bath": 6.5
+   }
+  },
+  {
+   "journey": "discovery",
+   "step": "the lighthouse is restored",
+   "ok": true,
+   "ms": 24
+  },
+  {
+   "journey": "timelapse",
+   "step": "open the island",
+   "ok": true,
+   "ms": 6183
+  },
+  {
+   "journey": "timelapse",
+   "step": "watch the day go by (hour advances)",
+   "ok": true,
+   "ms": 4890,
+   "detail": {
+    "before": "09:00",
+    "during": "11:45",
+    "url": "out=2026-10-22&guests=2&time=12&day=bath%409%2Clanterns%4018"
+   }
+  },
+  {
+   "journey": "mobile",
+   "step": "arrival on a phone",
+   "ok": true,
+   "ms": 6887
+  },
+  {
+   "journey": "mobile",
+   "step": "menu opens and reaches the planner",
+   "ok": true,
+   "ms": 722
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown route answers 404 with the wrong-turn page",
+   "ok": true,
+   "ms": 319,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: an unknown stay answers 404",
+   "ok": true,
+   "ms": 43,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a missing file answers 404",
+   "ok": true,
+   "ms": 39,
+   "detail": {
+    "status": 404
+   }
+  },
+  {
+   "journey": "status",
+   "step": "preview: a stay route answers 200",
+   "ok": true,
+   "ms": 75,
+   "detail": {
+    "status": 200
+   }
+  },
+  {
+   "journey": "status",
+   "step": "dev: an unknown route shows the wrong-turn page",
+   "ok": true,
+   "ms": 629,
+   "detail": {
+    "status": 200
+   }
+  }
+ ],
+ "errors": [],
+ "finished": "2026-09-27T13:35:08.650Z",
+ "passed": 23,
+ "failed": 0
+}

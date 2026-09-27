@@ -1,0 +1,68 @@
+2026-09-27T13:12:24.394Z ■ reveal: {"ok":true,"frames":138,"firstIslandFrame":94,"blankFramesAfterReveal":0,"seconds":33}
+2026-09-27T13:12:24.396Z ▶ captures: node tools/visual/capture.mjs --run cycle-03-captures --target app
+22 captures → C:\Users\William King\Documents\Money Making Project\experiences\01-odd-tide\docs\visual\captures\cycle-03-captures
+console errors/warnings:
+warning: THREE.WebGLProgram: Program Info Log: (210,81-129): warning X4122: sum of 0.996094 and -2.98545e-017 cannot be represented accurately in double precision
+(209,37-61): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision
+(210,82-106): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision
+(209,37-61): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision
+(210,82-106): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision
+
+2026-09-27T13:13:12.692Z ■ captures: exit 0 in 48s
+2026-09-27T13:13:12.693Z ▶ plates: node tools/visual/plates.mjs
+lantern-lodge-dusk → public/plates/lantern-lodge-dusk.webp (253 KiB)
+lighthouse-dark → public/plates/lighthouse-dark.webp (38 KiB)
+lighthouse-lit → public/plates/lighthouse-lit.webp (38 KiB)
+island-day → public/plates/island-day.jpg (173 KiB)
+island-night → public/plates/island-night.jpg (125 KiB)
+island-day-phone → public/plates/island-day-phone.jpg (92 KiB)
+island-night-phone → public/plates/island-night-phone.jpg (69 KiB)
+weather-house-day → public/plates/weather-house-day.jpg (274 KiB)
+nap-observatory-day → public/plates/nap-observatory-day.jpg (199 KiB)
+lantern-lodge-day → public/plates/lantern-lodge-day.jpg (234 KiB)
+18 plates written
+
+2026-09-27T13:13:59.470Z ■ plates: exit 0 in 47s
+2026-09-27T13:13:59.470Z ▶ build: bun run build
+dist/assets/index-DG9lOm8t.js   333.47 kB │ gzip: 109.69 kB
+dist/assets/island-V5p_PaWr.js  867.98 kB │ gzip: 232.58 kB
+
+[32m✓ built in 548ms[39m
+Rendered 9 meaningful HTML entry points.
+$ vite build && bun tools/prerender.ts
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+
+2026-09-27T13:14:08.010Z ■ build: exit 0 in 9s
+2026-09-27T13:14:08.011Z ▶ perf-build: bunx --no-install vite build --mode performance --outDir dist-perf
+dist-perf/assets/bookmarks-qx9qHGIf.js    1.51 kB │ gzip:   0.66 kB
+dist-perf/assets/perf-C46dKuhD.js        10.16 kB │ gzip:   4.73 kB
+dist-perf/assets/index-DmbX05TG.js      333.57 kB │ gzip: 109.73 kB
+dist-perf/assets/island-C0SDs7dm.js     869.32 kB │ gzip: 233.13 kB
+
+[32m✓ built in 560ms[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+
+2026-09-27T13:14:09.104Z ■ perf-build: exit 0 in 1s
+2026-09-27T13:14:09.104Z ▶ perf: node tools/perf/run.mjs C:/Users/William King/AppData/Local/npm-cache/_npx/81fb41e6b6793dc6/node_modules/playwright/index.mjs tools/perf/scene.json cycle-03-scene
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 30000ms exceeded.
+    at C:\Users\William King\Documents\Money Making Project\experiences\01-odd-tide\tools\perf\run.mjs:137:14 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
+
+2026-09-27T13:14:41.724Z ■ perf: exit 1 in 33s
+2026-09-27T13:14:41.725Z cycle finished

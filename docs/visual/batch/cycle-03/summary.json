@@ -1,0 +1,40 @@
+{
+ "cycle": "cycle-03",
+ "started": "2026-09-27T13:11:51.800Z",
+ "steps": {
+  "reveal": {
+   "ok": true,
+   "frames": 138,
+   "firstIslandFrame": 94,
+   "blankFramesAfterReveal": 0,
+   "seconds": 33
+  },
+  "captures": {
+   "ok": true,
+   "status": 0,
+   "seconds": 48
+  },
+  "plates": {
+   "ok": true,
+   "status": 0,
+   "seconds": 47
+  },
+  "build": {
+   "ok": true,
+   "status": 0,
+   "seconds": 9,
+   "distEntries": 15
+  },
+  "perf-build": {
+   "ok": true,
+   "status": 0,
+   "seconds": 1
+  },
+  "perf": {
+   "ok": false,
+   "status": 1,
+   "seconds": 33
+  }
+ },
+ "finished": "2026-09-27T13:14:41.724Z"
+}
