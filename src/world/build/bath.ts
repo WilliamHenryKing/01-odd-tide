@@ -251,7 +251,7 @@ export function buildBath(mats: Materials, seed = 41): Building & { water: Mesh 
     ],
     emissive: [
       { material: fireMaterial, luminance: 2200 },
-      { material: lanternGlass, luminance: 5000 },
+      { material: lanternGlass, luminance: 26_000 },
     ],
     focus: new Vector3(0, 0.8, 0),
   };

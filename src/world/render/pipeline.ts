@@ -66,6 +66,9 @@ export type PipelineOptions = {
   maxPixelRatio?: number;
 };
 
+/** Drawing-buffer pixels the scene may use (~2560 × 1440). */
+const PIXEL_BUDGET = 3.7e6;
+
 export class Pipeline {
   readonly renderer: WebGLRenderer;
   readonly composer: EffectComposer;
@@ -88,7 +91,7 @@ export class Pipeline {
       preserveDrawingBuffer: true,
       stencil: false,
     });
-    this.maxPixelRatio = options.maxPixelRatio ?? 1.6;
+    this.maxPixelRatio = options.maxPixelRatio ?? 3;
     this.pixelRatio = Math.min(window.devicePixelRatio || 1, this.maxPixelRatio);
     this.renderer.setPixelRatio(this.pixelRatio);
     this.renderer.outputColorSpace = SRGBColorSpace;
@@ -174,7 +177,10 @@ export class Pipeline {
   }
   setSize(width: number, height: number, pixelRatio = this.pixelRatio) {
     this.size.set(width, height);
-    this.pixelRatio = Math.min(pixelRatio, this.maxPixelRatio);
+    // Fidelity first (D08): render at the device's full density up to a pixel budget, so a
+    // phone's small canvas is as sharp as its screen while a large retina canvas stays bounded.
+    const budget = Math.sqrt(PIXEL_BUDGET / Math.max(1, width * height));
+    this.pixelRatio = Math.max(1, Math.min(pixelRatio, this.maxPixelRatio, budget));
     this.renderer.setPixelRatio(this.pixelRatio);
     this.renderer.setSize(width, height, false);
     this.renderer.domElement.style.width = `${width}px`;

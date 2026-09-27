@@ -445,7 +445,7 @@ export function buildLodge(mats: Materials, seed = 29): Building {
     ],
     emissive: [
       ...pendantMaterials.map((material) => ({ material, luminance: 1100 })),
-      { material: lanternGlass, luminance: 4200 },
+      { material: lanternGlass, luminance: 24_000 },
     ],
     focus: new Vector3(0, 1.5, 0.6),
   };

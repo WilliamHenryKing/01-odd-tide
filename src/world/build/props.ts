@@ -160,7 +160,8 @@ export function buildLanterns(
     light.position.set(hx, hy, z);
     group.add(light);
     practicals.push({ light, candela: 14, order });
-    glows.push({ material: glass, luminance: 4200, order });
+    // A lantern's glass is the brightest thing in a dusk frame (a flame reads ~10⁴ cd/m²).
+    glows.push({ material: glass, luminance: 24_000, order });
   }
   for (const batch of [posts, metal]) {
     const mesh = batch.build();

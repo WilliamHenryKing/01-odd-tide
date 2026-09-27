@@ -577,6 +577,20 @@ export function buildWeatherHouse(mats: Materials, seed = 7): Building {
     const rod = new Mesh(new CylinderGeometry(0.02, 0.02, 1, 12), mats.brass);
     body.castShadow = rod.castShadow = true;
     group.add(body, rod);
+    // Brass brackets at both ends: a plate on the wall plate, and one under the lid that
+    // moves with it, so each strut visibly bolts to something.
+    brass.box([0.07, 0.035, 0.06], [-W.halfWidth + 0.12, W.kneeWall + 0.065, z], [0, 0, 0], {
+      radius: 0.006,
+    });
+    const lidBracket = new Mesh(new RoundedBoxGeometry(0.07, 0.03, 0.06, 1, 0.006), mats.brass);
+    lidBracket.position.set(
+      -Math.cos(roofAngle) * mountU + Math.sin(roofAngle) * 0.2,
+      -Math.sin(roofAngle) * mountU - Math.cos(roofAngle) * 0.2,
+      z,
+    );
+    lidBracket.rotation.z = roofAngle;
+    lidBracket.castShadow = true;
+    hatch.add(lidBracket);
     struts.push({
       body,
       rod,

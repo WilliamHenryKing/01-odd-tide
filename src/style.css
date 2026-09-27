@@ -437,6 +437,14 @@ select {
   font-size: 37px;
   line-height: 1;
 }
+/* The hand-written note sits over bright sky: give it the same frosted teal as the eyebrow. */
+.island-note > span:not(.note-star) {
+  padding: 6px 12px 7px;
+  border-radius: 14px;
+  background: rgb(10 32 38 / 0.5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
 .island-note svg {
   width: 70px;
   position: absolute;
@@ -453,12 +461,15 @@ select {
   display: flex;
   gap: 15px;
 }
+/* Near-opaque cream so the labels hold 4.5:1 over any sea, sky or roof behind them. */
 .scene-tools button {
   border: 0;
-  background: #f4f0e4b0;
+  background: #f4f0e4f0;
+  color: var(--ink);
   padding: 7px 12px;
   border-radius: 20px;
-  font-size: 10px;
+  font-size: 11px;
+  box-shadow: 0 2px 10px rgb(8 26 30 / 0.18);
 }
 .scene-status {
   position: absolute;
