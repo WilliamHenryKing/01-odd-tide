@@ -1026,7 +1026,8 @@
         "gltf-transform dedup",
         "gltf-transform prune",
         "gltf-transform simplify --ratio 0.35 --error 0.001",
-        "gltf-transform meshopt --level medium"
+        "gltf-transform meshopt --level medium",
+        "Alpha-bled colour map (tools/assets/bleed-foliage.mjs): transparent areas filled with nearest leaf colour"
       ],
       "outputFiles": [
         {
@@ -1038,6 +1039,11 @@
           "path": "public/models/grass_medium_02_alpha_1k.png",
           "bytes": 110617,
           "sha256": "15976877b3dbd22cd496a9549f1eb7d86710846a3631fb87eedbf046519e339f"
+        },
+        {
+          "path": "public/textures/grass_medium_02/grass_medium_02_diff_bled_1k.jpg",
+          "bytes": 109374,
+          "sha256": "9bcf31944648a7484179977e499dc6decd2805148bed1dea806fb89a5b7500a6"
         }
       ],
       "bytesPerTier": {
@@ -1102,7 +1108,8 @@
       },
       "processingSteps": [
         "Downloaded glTF, shared binary, 1k textures and alpha from the Poly Haven download host",
-        "Shipped only the colour map and alpha mask (unmodified) for procedural leaf cards; geometry not shipped"
+        "Shipped only the colour map and alpha mask (unmodified) for procedural leaf cards; geometry not shipped",
+        "Alpha-bled colour map (tools/assets/bleed-foliage.mjs): transparent areas filled with nearest leaf colour"
       ],
       "outputFiles": [
         {
@@ -1114,6 +1121,11 @@
           "path": "public/textures/shrub_02/shrub_02_alpha_1k.png",
           "bytes": 91741,
           "sha256": "5c2c31bac311051db77443e1780078403c2df0a832c40fe6ed7bcd982695cdf0"
+        },
+        {
+          "path": "public/textures/shrub_02/shrub_02_diff_bled_1k.jpg",
+          "bytes": 137668,
+          "sha256": "2b5813b05b83d56a42d76dd3b0f28486f2fc73f843966dc19e63abc4aa6c0dce"
         }
       ],
       "bytesPerTier": {

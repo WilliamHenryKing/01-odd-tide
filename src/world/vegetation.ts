@@ -309,14 +309,22 @@ export async function buildVegetation(context: VegetationContext) {
     return texture;
   };
   // Scan variants: grass_medium_02 a–e are clumps 0.16–0.43 m tall; fern_02 a–d 0.6–1.0 m.
-  const [grassScan, grassAlpha, fernScan, fernAlpha, leafColour, leafAlpha] = await Promise.all([
-    loadScan(loader, "grass_medium_02"),
-    alpha("grass_medium_02"),
-    loadScan(loader, "fern_02"),
-    alpha("fern_02"),
-    textures.loadAsync("/textures/shrub_02/shrub_02_diff_1k.jpg"),
-    textures.loadAsync("/textures/shrub_02/shrub_02_alpha_1k.png"),
-  ]);
+  // Colour maps are alpha-bled (tools/assets/bleed-foliage.mjs): card edges filter into leaf
+  // colour rather than the scans' background.
+  const [grassScan, grassAlpha, grassColour, fernScan, fernAlpha, leafColour, leafAlpha] =
+    await Promise.all([
+      loadScan(loader, "grass_medium_02"),
+      alpha("grass_medium_02"),
+      textures.loadAsync("/textures/grass_medium_02/grass_medium_02_diff_bled_1k.jpg"),
+      loadScan(loader, "fern_02"),
+      alpha("fern_02"),
+      textures.loadAsync("/textures/shrub_02/shrub_02_diff_bled_1k.jpg"),
+      textures.loadAsync("/textures/shrub_02/shrub_02_alpha_1k.png"),
+    ]);
+  grassColour.flipY = false;
+  grassColour.colorSpace = SRGBColorSpace;
+  grassColour.anisotropy = 4;
+  grassColour.needsUpdate = true;
   leafColour.colorSpace = SRGBColorSpace;
   leafColour.anisotropy = leafAlpha.anisotropy = 4;
   // Turf tufts are built from cards below, so the turf species only needs the scan's material.
@@ -329,7 +337,9 @@ export async function buildVegetation(context: VegetationContext) {
   // The scanned blades are lit flat and read far paler than living grass: bring their albedo
   // down to the turf's olive so they read as its blades, not as straw laid on it.
   grass.material.color.setRGB(0.44, 0.5, 0.3);
+  grass.material.map = grassColour;
   const tussock = species(grassScan, grassAlpha, 0.55, { stiffness: 0.5 });
+  tussock.material.map = grassColour;
   const fern = species(fernScan, fernAlpha, 0.4, { stiffness: 0.25, translucency: 0.5 });
   // The fern scan is a saturated spring green; pull it toward the island's olive.
   fern.material.color.setRGB(0.92, 0.8, 0.86);
@@ -694,7 +704,8 @@ export async function buildVegetation(context: VegetationContext) {
         decal.mesh.geometry.dispose();
         decal.texture.dispose();
       }
-      for (const texture of [grassAlpha, fernAlpha, leafColour, leafAlpha]) texture.dispose();
+      for (const texture of [grassAlpha, grassColour, fernAlpha, leafColour, leafAlpha])
+        texture.dispose();
     },
   };
 }
