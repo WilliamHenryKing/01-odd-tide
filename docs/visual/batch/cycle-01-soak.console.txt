@@ -1,0 +1,2 @@
+START scene-soak-720
+{"id":"scene-soak-720","aborted":false,"seconds":720.0131999999285,"raf":{"count":56567,"p50":13.899999999965075,"p95":16,"p99":20.900000000023283,"max":439.79999999993015,"mean":12.728244382768857,"over16_67":1978,"over33_33":3,"over50":1},"cpu":5.899999976158142,"gpu":15.064704,"calls":444,"triangles":2343754,"gpuCoverage":1,"temp":84,"vram":1995,"ramFreeMiB":3068}
