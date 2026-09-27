@@ -117,10 +117,11 @@ const ARRIVAL_POSTER = {
   position: [22.51, 19.12, 51.01] as Vec3,
   target: [-9.42, 1.2, 6.05] as Vec3,
 };
-// The portrait arrival camera at the phone hero's aspect (~1:1.03), where it pulls in to 85%.
+// The portrait arrival camera for a 390×844 phone (C11): the canvas is 390×519 (its window
+// row plus the overhang), where the arrival pulls back to 1.145× (island.ts, pose).
 const PHONE_POSTER = {
-  position: [41.12, 46.08, 66.3] as Vec3,
-  target: [2.1, 1.2, 0] as Vec3,
+  position: [51.44, 61.63, 91.18] as Vec3,
+  target: [-1.1, 1.2, 1.9] as Vec3,
 };
 const posterFor = (id: StayId) => {
   const site = STAY_SITES[id].position;
@@ -173,7 +174,7 @@ export const PLATES: Plate[] = [
     id: "island-day-phone",
     file: "plates/island-day-phone.jpg",
     width: 780,
-    height: 802,
+    height: 1038,
     state: { ...base, hour: 9 },
     camera: PHONE_POSTER,
   },
@@ -181,7 +182,7 @@ export const PLATES: Plate[] = [
     id: "island-night-phone",
     file: "plates/island-night-phone.jpg",
     width: 780,
-    height: 802,
+    height: 1038,
     state: { ...base, hour: 21, found: ["bath", "weather", "stars"] },
     camera: PHONE_POSTER,
   },

@@ -64,8 +64,10 @@ const FILMS = [
     height: 1920,
     frames: 480,
     hours: [6, 22],
+    // A 9:16 frame sees under 20° across: the ~43 m island needs 140-160 m to fit whole (film-02
+    // at 84 m cut the observatory off at the right edge). A slow push-in over the day.
     camera: (t) => ({
-      position: orbit([0.5, 1.2, -1], 84, 34, 78, 32, t),
+      position: orbit([0.5, 1.2, -1], 160 - 20 * ease(t), 64 - 8 * ease(t), 78, 32, t),
       target: [0.5, 1.5, -1],
       fov: 34,
     }),

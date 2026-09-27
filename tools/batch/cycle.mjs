@@ -2,7 +2,7 @@
 // idle; results and a log land in docs/visual/batch/<cycle>/ for review on waking.
 // Usage (dev server on 4511, perf preview on 4611): node tools/batch/cycle.mjs <cycle-id> [steps]
 // Steps (default all, in order): reveal, captures, plates, build, perf
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { appendFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -27,6 +27,29 @@ const ffmpeg =
   process.env.ODD_TIDE_FFMPEG ??
   "C:/Users/William King/.bun/install/cache/@remotion/compositor-win32-x64-msvc@4.0.500@@@1/ffmpeg.exe";
 const summary = { cycle, started: new Date().toISOString(), steps: {} };
+// Port 4611 is this project's preview: stop whatever serves it, then serve the given build.
+async function preview(outDir) {
+  if (process.platform === "win32")
+    spawnSync("powershell", [
+      "-NoProfile",
+      "-Command",
+      "Get-NetTCPConnection -LocalPort 4611 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }",
+    ]);
+  const child = spawn("bunx", ["--no-install", "vite", "preview", "--outDir", outDir], {
+    shell: true,
+    detached: true,
+    stdio: "ignore",
+  });
+  child.unref();
+  for (let i = 0; i < 60; i++) {
+    try {
+      if ((await fetch("http://127.0.0.1:4611/")).ok)
+        return log(`preview on 4611 serves ${outDir}`);
+    } catch {}
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  throw new Error(`preview of ${outDir} did not start on 4611`);
+}
 const run = (name, command, args, options = {}) => {
   log(`▶ ${name}: ${command} ${args.join(" ")}`);
   const started = Date.now();
@@ -149,12 +172,18 @@ try {
         shell: true,
       },
     );
-    run("perf", "node", [
-      "tools/perf/run.mjs",
-      playwright,
-      "tools/perf/scene.json",
-      `${cycle}-scene`,
-    ]);
+    // The harness measures the performance build on 4611; the ordinary preview returns after.
+    await preview("dist-perf");
+    try {
+      run("perf", "node", [
+        "tools/perf/run.mjs",
+        playwright,
+        "tools/perf/scene.json",
+        `${cycle}-scene`,
+      ]);
+    } finally {
+      await preview("dist");
+    }
   }
 } catch (error) {
   log(`✖ ${error?.stack ?? error}`);

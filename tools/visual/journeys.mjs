@@ -27,6 +27,8 @@ async function journey(name, viewport, fn) {
   const page = await context.newPage();
   page.on("pageerror", (e) => report.errors.push(`${name}: ${e.message}`));
   page.on("console", (m) => {
+    // The status journey requests wrong turns on purpose; their 404s are the expected answer.
+    if (name === "status" && /status of 404/.test(m.text())) return;
     if (m.type() === "error") report.errors.push(`${name}: console: ${m.text().slice(0, 200)}`);
   });
   let n = 0;
@@ -104,16 +106,49 @@ await journey("booking", { width: 1440, height: 900 }, async (page, step) => {
       .click();
     await page.waitForURL(/\/plan/);
   });
-  await step("plan: dates, guests, one more activity", async () => {
+  await step("plan: too many guests is explained and blocks the summary", async () => {
+    await page.getByLabel("Guests").selectOption("3");
+    await page
+      .getByText(/sleeps 2\. Choose fewer guests/i)
+      .first()
+      .waitFor({ timeout: 5000 });
+    const next = page.getByRole("button", { name: /see your island plan/i }).first();
+    if (await next.isEnabled())
+      throw new Error("summary reachable with 3 guests in a 2-guest stay");
+  });
+  await step("plan: unavailable dates are explained and block the summary", async () => {
+    await page.getByLabel("Guests").selectOption("2");
     await page.getByLabel("Arrive").fill("2026-10-14");
     await page.getByLabel("Leave").fill("2026-10-17");
-    await page.getByLabel("Guests").selectOption("3");
+    await page
+      .getByText(/unavailable for part of those sample dates/i)
+      .first()
+      .waitFor({ timeout: 5000 });
+    const next = page.getByRole("button", { name: /see your island plan/i }).first();
+    if (await next.isEnabled()) throw new Error("summary reachable on blocked dates");
+  });
+  await step("plan: open dates, two guests, one more activity", async () => {
+    await page.getByLabel("Arrive").fill("2026-10-19");
+    await page.getByLabel("Leave").fill("2026-10-22");
     const add = page.getByRole("button", { name: /^add \+$/i }).first();
     await add.click();
+    // A new activity lands at the hour on the dial and may clash with the day; the planner
+    // explains the clash and offers to fit everything around the tide and each other.
+    const repair = page.getByRole("button", { name: /find a time that works/i });
+    const clashed = await repair.isVisible();
+    if (clashed) {
+      await repair.click();
+      await page
+        .getByText(/fitted around the tide and each other/i)
+        .first()
+        .waitFor({ timeout: 5000 });
+    }
+    const next = page.getByRole("button", { name: /see your island plan/i }).first();
+    if (!(await next.isEnabled())) throw new Error("plan still blocked after repair");
     const query = new URL(page.url()).searchParams;
-    if (query.get("guests") !== "3" || query.get("in") !== "2026-10-14")
+    if (query.get("guests") !== "2" || query.get("in") !== "2026-10-19")
       throw new Error(`plan not kept: ${query}`);
-    return { query: String(query).slice(0, 140) };
+    return { clashed, query: String(query).slice(0, 140) };
   });
   await step("see your island plan → summary", async () => {
     await page
@@ -121,7 +156,7 @@ await journey("booking", { width: 1440, height: 900 }, async (page, step) => {
       .first()
       .click();
     await page.waitForURL(/\/summary/);
-    if (!/guests=3/.test(page.url())) throw new Error("summary lost the plan");
+    if (!/guests=2/.test(page.url())) throw new Error("summary lost the plan");
     await page.locator(".postcard img").first().waitFor({ timeout: 15_000 });
     return {
       postcard: await page
@@ -240,6 +275,9 @@ await journey("status", { width: 1280, height: 800 }, async (page, step) => {
   );
   await step("preview: an unknown stay answers 404", () =>
     expect(`${preview}/stays/the-lost-hut`, 404),
+  );
+  await step("preview: a missing file answers 404", () =>
+    expect(`${preview}/plates/no-such-plate.webp`, 404),
   );
   await step("preview: a stay route answers 200", () =>
     expect(`${preview}/stays/nap-observatory`, 200),
