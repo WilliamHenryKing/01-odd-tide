@@ -1,10 +1,10 @@
 {
- "started": "2026-09-27T12:22:22.965Z",
+ "started": "2026-09-27T15:59:09.724Z",
  "films": {
   "island-day-landscape": {
    "frames": 480,
    "rendered": 480,
-   "minutes": 15,
+   "minutes": 13,
    "encoded": "C:\\Users\\William King\\Documents\\Money Making Project\\experiences\\01-odd-tide\\assets-src\\film\\island-day-landscape.mp4"
   },
   "island-day-portrait": {
@@ -32,5 +32,5 @@
    "encoded": "C:\\Users\\William King\\Documents\\Money Making Project\\experiences\\01-odd-tide\\assets-src\\film\\lantern-lodge-evening.mp4"
   }
  },
- "finished": "2026-09-27T13:11:21.690Z"
+ "finished": "2026-09-27T16:46:23.169Z"
 }
