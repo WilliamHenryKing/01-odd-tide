@@ -205,6 +205,17 @@ export function createTerrainMaterial(
         "#include <lights_fragment_end>",
         `#include <lights_fragment_end>
         float underwater = waterLevel - P.y;
+        #if defined( USE_SHADOWMAP ) && NUM_DIR_LIGHT_SHADOWS > 0 && NUM_DIR_LIGHTS > 0
+        if (underwater > 0.0) {
+          // Light scattered in the water column fills shadows on the seabed, more with depth:
+          // a cliff's shadow seen through several metres of water is soft and shallow.
+          DirectionalLightShadow keyShadowInfo = directionalLightShadows[ 0 ];
+          float keyShadow = receiveShadow ? getShadow( directionalShadowMap[ 0 ], keyShadowInfo.shadowMapSize, keyShadowInfo.shadowIntensity, keyShadowInfo.shadowBias, keyShadowInfo.shadowRadius, vDirectionalShadowCoord[ 0 ] ) : 1.0;
+          float fill = (1.0 - keyShadow) * 0.7 * (1.0 - exp(-underwater / 2.0));
+          float fillNdotL = saturate(dot(normal, directionalLights[ 0 ].direction));
+          reflectedLight.directDiffuse += directionalLights[ 0 ].color * fillNdotL * fill * BRDF_Lambert(diffuseColor.rgb);
+        }
+        #endif
         if (underwater > 0.0) {
           float c = caustic(P.xz, terrainTime);
           reflectedLight.directDiffuse *= mix(1.0, 0.45 + c, smoothstep(0.0, 0.35, underwater) * exp(-underwater * 0.3));
@@ -234,6 +245,6 @@ export function createTerrainMaterial(
       );
   };
   material.customProgramCacheKey = () =>
-    flatSand ? "odd-tide-terrain-v1-flat-sand" : "odd-tide-terrain-v1";
+    flatSand ? "odd-tide-terrain-v2-flat-sand" : "odd-tide-terrain-v2";
   return material;
 }
