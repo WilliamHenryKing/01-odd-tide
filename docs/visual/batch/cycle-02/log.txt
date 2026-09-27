@@ -1,0 +1,39 @@
+2026-09-27T11:35:51.097Z ▶ captures: node tools/visual/capture.mjs --run cycle-02-captures --target app
+22 captures → C:\Users\William King\Documents\Money Making Project\experiences\01-odd-tide\docs\visual\captures\cycle-02-captures
+console errors/warnings:
+warning: THREE.WebGLProgram: Program Info Log: (210,81-129): warning X4122: sum of 0.996094 and -2.98545e-017 cannot be represented accurately in double precision
+(209,37-61): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision
+(210,82-106): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision
+(209,37-61): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision
+(210,82-106): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision
+
+2026-09-27T11:36:39.438Z ■ captures: exit 0 in 48s
+2026-09-27T11:36:39.439Z ▶ plates: node tools/visual/plates.mjs
+lantern-lodge-dusk → public/plates/lantern-lodge-dusk.webp (252 KiB)
+lighthouse-dark → public/plates/lighthouse-dark.webp (38 KiB)
+lighthouse-lit → public/plates/lighthouse-lit.webp (38 KiB)
+island-day → public/plates/island-day.jpg (173 KiB)
+island-night → public/plates/island-night.jpg (125 KiB)
+island-day-phone → public/plates/island-day-phone.jpg (92 KiB)
+island-night-phone → public/plates/island-night-phone.jpg (69 KiB)
+weather-house-day → public/plates/weather-house-day.jpg (274 KiB)
+nap-observatory-day → public/plates/nap-observatory-day.jpg (199 KiB)
+lantern-lodge-day → public/plates/lantern-lodge-day.jpg (234 KiB)
+18 plates written
+
+2026-09-27T11:37:26.638Z ■ plates: exit 0 in 47s
+2026-09-27T11:37:26.639Z ▶ build: bun run build
+dist/assets/index-CldJTMhr.js   333.47 kB │ gzip: 109.69 kB
+dist/assets/island-DsAK1uMi.js  867.77 kB │ gzip: 232.48 kB
+
+✓ built in 1.16s
+Rendered 9 meaningful HTML entry points.
+$ vite build && bun tools/prerender.ts
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+2026-09-27T11:37:37.778Z ■ build: exit 0 in 11s
+2026-09-27T11:37:37.779Z cycle finished

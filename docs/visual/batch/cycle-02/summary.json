@@ -1,0 +1,23 @@
+{
+ "cycle": "cycle-02",
+ "started": "2026-09-27T11:35:51.096Z",
+ "steps": {
+  "captures": {
+   "ok": true,
+   "status": 0,
+   "seconds": 48
+  },
+  "plates": {
+   "ok": true,
+   "status": 0,
+   "seconds": 47
+  },
+  "build": {
+   "ok": true,
+   "status": 0,
+   "seconds": 11,
+   "distEntries": 14
+  }
+ },
+ "finished": "2026-09-27T11:37:37.779Z"
+}
