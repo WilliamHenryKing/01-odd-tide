@@ -20,3 +20,4 @@ assets-src/
 !docs/visual/perf/build-snapshots/final-pre-soak/dist-perf/**
 !docs/visual/perf/build-snapshots/thermal/dist-perf/
 !docs/visual/perf/build-snapshots/thermal/dist-perf/**
+assets-src/studio/
