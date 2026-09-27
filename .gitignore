@@ -21,3 +21,12 @@ assets-src/
 !docs/visual/perf/build-snapshots/thermal/dist-perf/
 !docs/visual/perf/build-snapshots/thermal/dist-perf/**
 assets-src/studio/
+
+# Batch job console logs, markers and raw frames (the summaries and logs that matter are committed)
+docs/visual/batch/*.console.txt
+docs/visual/batch/*-finished.txt
+docs/visual/batch/*-chain.txt
+docs/visual/batch/film.stdout.txt
+docs/visual/batch/film.stderr.txt
+docs/visual/batch/*/reveal-video/
+docs/visual/captures/c9-draft/
