@@ -13,6 +13,8 @@ import {
 export type VisualBookmark = { id: string; purpose: string; hero: boolean };
 type Shot = {
   state: unknown;
+  /** Animation clock in seconds (sea, clouds); stills use 0. */
+  time?: number;
   camera: { position: [number, number, number]; target: [number, number, number]; fov?: number };
 };
 type Adapter = {
@@ -37,6 +39,8 @@ export type VisualTest = {
   plates: { id: string; file: string; width: number; height: number }[];
   /** Render a plate offscreen at 'scale' × its size; returns a PNG data URL. */
   renderPlate(id: string, scale?: number): Promise<string>;
+  /** Render any shot offscreen (films); returns a PNG data URL. */
+  renderShot(shot: Shot, width: number, height: number): Promise<string>;
   setTier(tier: string): { tier: string };
   setLightingState(state: string): Promise<{ lighting: string }>;
   setSeed(seed: number): { seed: number; mode: string };
@@ -231,6 +235,10 @@ export function installInspection(adapter: Adapter): () => void {
       const plate = adapter.plates?.find((item) => item.id === id);
       if (!plate || !adapter.shot) throw new Error(`Unknown plate: ${id}`);
       return adapter.shot(plate, Math.round(plate.width * scale), Math.round(plate.height * scale));
+    },
+    async renderShot(shot, width, height) {
+      if (!adapter.shot) throw new Error("Shots are unavailable");
+      return adapter.shot(shot, width, height);
     },
     async setBookmark(id) {
       if (!adapter.bookmarks.some((item) => item.id === id))

@@ -487,6 +487,7 @@ export function createIsland(
         const shot = async (
           spec: {
             state: unknown;
+            time?: number;
             camera: {
               position: [number, number, number];
               target: [number, number, number];
@@ -501,6 +502,7 @@ export function createIsland(
           );
           state = { ...(spec.state as IslandState) };
           freeze();
+          if (typeof spec.time === "number") elapsed = spec.time;
           pose(true);
           gsap.killTweensOf(camera.position);
           gsap.killTweensOf(target);
