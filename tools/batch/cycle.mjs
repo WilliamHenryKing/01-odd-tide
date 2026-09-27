@@ -178,7 +178,7 @@ try {
       run("perf", "node", [
         "tools/perf/run.mjs",
         playwright,
-        "tools/perf/scene.json",
+        process.env.CYCLE_PERF_SPEC ?? "tools/perf/scene.json",
         `${cycle}-scene`,
       ]);
     } finally {
