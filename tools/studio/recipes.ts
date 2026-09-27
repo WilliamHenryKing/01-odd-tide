@@ -138,7 +138,7 @@ const milkwood: Build = (seed) => {
     const s = range(r, 0.45, 0.8);
     leaves.push(move(ellipsoid(s, s * 0.6, s, mat(pick(r, [0x3f5a2c, 0x4a6634, 0x566f3a]), 0.85)), [lean + Math.cos(a) * d, y, Math.sin(a) * d]));
   }
-  const canopy = paint(displace(blend(0.25, ...leaves), 0.1, 4.5, 4, seed), (x, y, z, base) => {
+  const canopy = paint(displace(blend(0.25, ...leaves), 0.1, 4.5, 4, seed), (_x, y, _z, base) => {
     const shade = y < h + 1.3 ? 0.72 : 1;
     return { ...base, c: [base.c[0] * shade, base.c[1] * shade, base.c[2] * shade] };
   });
