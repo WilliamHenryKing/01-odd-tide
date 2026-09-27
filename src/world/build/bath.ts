@@ -1,10 +1,13 @@
 import {
   CircleGeometry,
   Color,
+  CustomBlending,
   CylinderGeometry,
   Group,
   Mesh,
   MeshPhysicalMaterial,
+  OneFactor,
+  OneMinusSrcAlphaFactor,
   PointLight,
   TorusGeometry,
   Vector3,
@@ -16,7 +19,7 @@ import type { Building } from "./weather-house";
 
 // The Borrowed Bath: a round cedar hot tub on a small deck at the end of the tidal causeway.
 // Staves bound with two steel hoops, an inside bench, a wood-fired stove with a flue, timber
-// steps, a towel rail and a lantern. The water is a small physical surface with slow ripples.
+// steps, a towel rail and a lantern. The water reflects by Fresnel and ripples slowly.
 
 export const BATH = { radius: 0.95, height: 0.98, stave: 0.11, deck: 2.1 };
 
@@ -159,17 +162,72 @@ export function buildBath(mats: Materials, seed = 41): Building & { water: Mesh 
   group.add(lanternLight);
   void glass;
 
-  // Bath water: small physical surface (tinted, clear) that ripples slowly.
+  // Bath water: almost no diffuse colour of its own. It reflects sky and rim by Fresnel, lets
+  // the tub show through darkened by ~0.5 m of depth, and carries slow ripples from the jets.
+  const bathTime = { value: 0 };
   const waterMaterial = new MeshPhysicalMaterial({
     name: "bath-water",
-    color: new Color(0.55, 0.72, 0.68),
-    roughness: 0.04,
-    transmission: 0,
-    transparent: true,
-    opacity: 0.82,
+    color: new Color(0.03, 0.07, 0.065),
+    roughness: 0.05,
     metalness: 0,
     ior: 1.333,
+    transparent: true,
+    depthWrite: false,
   });
+  waterMaterial.blending = CustomBlending;
+  waterMaterial.blendSrc = OneFactor;
+  waterMaterial.blendDst = OneMinusSrcAlphaFactor;
+  waterMaterial.onBeforeCompile = (shader) => {
+    shader.uniforms.bathTime = bathTime;
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        "#include <common>",
+        `#include <common>
+        varying vec2 vBathLocal;
+        varying vec3 vBathX;
+        varying vec3 vBathY;
+        varying vec3 vBathZ;`,
+      )
+      .replace(
+        "#include <begin_vertex>",
+        `#include <begin_vertex>
+        vBathLocal = position.xy;
+        vBathX = normalize(normalMatrix * vec3(1.0, 0.0, 0.0));
+        vBathY = normalize(normalMatrix * vec3(0.0, 1.0, 0.0));
+        vBathZ = normalize(normalMatrix * vec3(0.0, 0.0, 1.0));`,
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        "#include <common>",
+        `#include <common>
+        uniform float bathTime;
+        varying vec2 vBathLocal;
+        varying vec3 vBathX;
+        varying vec3 vBathY;
+        varying vec3 vBathZ;`,
+      )
+      .replace(
+        "#include <normal_fragment_begin>",
+        `#include <normal_fragment_begin>
+        {
+          // Ring ripples out from the centre jet plus a slow cross-chop, as a height gradient.
+          vec2 p = vBathLocal;
+          float r = max(length(p), 1e-3);
+          vec2 grad = (p / r) * cos(r * 34.0 - bathTime * 2.1) * 0.014;
+          grad += vec2(cos(p.x * 21.0 + bathTime * 1.3), cos(p.y * 17.0 - bathTime * 1.1)) * 0.007;
+          normal = normalize(vBathX * -grad.x + vBathY * -grad.y + vBathZ);
+        }`,
+      )
+      .replace(
+        "#include <opaque_fragment>",
+        `float waterCos = saturate(dot(normal, normalize(vViewPosition)));
+        float waterFresnel = 0.02 + 0.98 * pow(1.0 - waterCos, 5.0);
+        // Alpha is how much of the tub behind is hidden: reflection at grazing angles, and
+        // absorption through the water's depth at any angle.
+        gl_FragColor = vec4(outgoingLight, clamp(max(waterFresnel, 0.55), 0.0, 1.0));`,
+      );
+  };
+  waterMaterial.customProgramCacheKey = () => "odd-tide-bath-water-v1";
   const water = new Mesh(new CircleGeometry(B.radius - 0.01, 48), waterMaterial);
   water.rotation.x = -Math.PI / 2;
   water.position.y = B.height - 0.16;
@@ -184,6 +242,9 @@ export function buildBath(mats: Materials, seed = 41): Building & { water: Mesh 
     group,
     water,
     setOpen() {},
+    update(time: number) {
+      bathTime.value = time;
+    },
     lights: [
       { light: fire, candela: 8 },
       { light: lanternLight, candela: 18 },

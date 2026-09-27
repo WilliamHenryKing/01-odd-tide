@@ -18,9 +18,10 @@ import { Batch, catenary, compose, instances, metricUVs, rng, type Vec3 } from "
 import { scaleTile } from "./tiles";
 import type { Building } from "./weather-house";
 
-// The Nap Observatory: a round limewashed room under a rotating dome clad in blue-green
-// glazed scale tiles. The dome carries a meridian slot; `open` turns the dome toward the sea
-// and slides the curved shutter up over the crown on its rails.
+// The Nap Observatory: a round limewashed room under a rotating clamshell dome clad in
+// blue-green glazed scale tiles. The dome is two quarter-shells split on a meridian; `open`
+// turns the seam toward the sea, then folds the front shell back over the rear one on two
+// brass pivots, so the room lies open to the sky.
 
 export const OBSERVATORY = {
   radius: 2.2,
@@ -30,7 +31,11 @@ export const OBSERVATORY = {
   floorLift: 0.5,
 };
 
-export function buildObservatory(mats: Materials, seed = 19): Building {
+/**
+ * 'facing' is the local yaw the dome's seam turns to when open (the direction the room opens
+ * toward); the closed dome rests 2.4 rad away from it.
+ */
+export function buildObservatory(mats: Materials, seed = 19, facing = 0): Building {
   const O = OBSERVATORY;
   const random = rng(seed);
   const group = new Group();
@@ -159,7 +164,7 @@ export function buildObservatory(mats: Materials, seed = 19): Building {
     glass.add(pane, compose(p, [0, Math.PI / 2 - a, 0]));
   }
 
-  // ---- dome: rotating group with scale tiles, a meridian slot and a sliding shutter
+  // ---- dome: a rotating group carrying two quarter-shells; the front one folds back
   const dome = new Group();
   dome.name = "dome";
   dome.position.y = O.wall + 0.06;
@@ -177,16 +182,18 @@ export function buildObservatory(mats: Materials, seed = 19): Building {
       { radius: 0.01 },
     );
   }
-  const slotHalf = 0.34; // metres, half the slot width
-  const scales: { position: Vec3; rotation: Vec3; tone: Color }[] = [];
-  const shutterScales: { position: Vec3; rotation: Vec3; tone: Color }[] = [];
+  const R = O.domeRadius;
+  // The front shell is 7 cm larger so it nests over the rear one when folded back.
+  const FRONT_SCALE = (R + 0.07) / R;
+  type Place = { position: Vec3; rotation: Vec3; tone: Color };
+  const rearScales: Place[] = [];
+  const frontScales: Place[] = [];
   const glaze = () =>
     new Color().setHSL(
       0.47 + (random() - 0.5) * 0.04,
       0.42 + (random() - 0.5) * 0.12,
       0.34 + (random() - 0.5) * 0.08,
     );
-  const R = O.domeRadius;
   // Rows of scales from the base ring toward the crown; circumference sets how many per row.
   for (let row = 0; row < 15; row++) {
     const phi = (row / 15) * (Math.PI / 2 - 0.12); // elevation angle
@@ -197,7 +204,6 @@ export function buildObservatory(mats: Materials, seed = 19): Building {
       const x = Math.cos(theta) * ring;
       const z = Math.sin(theta) * ring;
       const y = Math.sin(phi) * R;
-      const inSlot = Math.abs(z) < slotHalf && x > 0;
       const normal = new Vector3(x, y, z).normalize();
       // Tile frame: +Y out of the dome, +Z down the dome (toward the base).
       const down = new Vector3(
@@ -213,45 +219,83 @@ export function buildObservatory(mats: Materials, seed = 19): Building {
         rotation: [e.x, e.y, e.z] as Vec3,
         tone: glaze(),
       };
-      (inSlot ? shutterScales : scales).push(place);
+      (x > 0 ? frontScales : rearScales).push(place);
     }
   }
-  const domeShell = new LatheGeometry(
-    Array.from({ length: 24 }, (_, i) => {
-      const phi = (i / 23) * (Math.PI / 2);
-      return new Vector2(Math.cos(phi) * (R - 0.03), Math.sin(phi) * (R - 0.03));
-    }),
-    64,
-  );
-  metricUVs(domeShell, 1.2, 1, [0, 0]);
-  const shellBatch = new Batch("dome-shell", mats.lining, 1.2, seed + 13);
-  shellBatch.add(domeShell, new Matrix4(), { tone: 0.92 });
-  // Slot: two brass-capped ribs along the meridian and a crown ring.
-  const ribs = new Batch("dome-ribs", mats.brass, 0.4, seed + 14);
-  for (const s of [-1, 1]) {
-    const points = Array.from({ length: 20 }, (_, i) => {
-      const phi = (i / 19) * (Math.PI / 2 - 0.05);
-      return new Vector3(Math.cos(phi) * (R + 0.03), Math.sin(phi) * (R + 0.03), s * slotHalf);
+  const shell = (half: "front" | "rear") => {
+    const lining = new LatheGeometry(
+      Array.from({ length: 24 }, (_, i) => {
+        const phi = (i / 23) * (Math.PI / 2);
+        return new Vector2(Math.cos(phi) * (R - 0.03), Math.sin(phi) * (R - 0.03));
+      }),
+      32,
+      half === "front" ? 0 : Math.PI,
+      Math.PI,
+    );
+    metricUVs(lining, 1.2, 1, [0, 0]);
+    const shellBatch = new Batch(`dome-shell-${half}`, mats.lining, 1.2, seed + 13);
+    shellBatch.add(lining, new Matrix4(), { tone: 0.92 });
+    // Brass edge rib along the seam meridian (the YZ plane), over the crown.
+    const ribs = new Batch(`dome-ribs-${half}`, mats.brass, 0.4, seed + 14);
+    const points = Array.from({ length: 33 }, (_, i) => {
+      const t = (i / 32) * Math.PI;
+      return new Vector3(
+        half === "front" ? 0.02 : -0.02,
+        Math.sin(t) * (R + 0.04),
+        Math.cos(t) * (R + 0.04),
+      );
     });
     for (let i = 0; i < points.length - 1; i++) {
       const a = points[i] as Vector3;
       const b = points[i + 1] as Vector3;
-      ribs.rod([a.x, a.y, a.z], [b.x, b.y, b.z], 0.028, { segments: 8 });
+      ribs.rod([a.x, a.y, a.z], [b.x, b.y, b.z], 0.032, { segments: 8 });
     }
-  }
-  const crown = new TorusGeometry(0.5, 0.035, 8, 40);
-  crown.rotateX(Math.PI / 2);
-  metricUVs(crown, 0.4, 0, [0, 0]);
-  ribs.add(crown, compose([0, R - 0.02, 0]));
-  const domeMeshes = [shellBatch.build(), ribs.build()].filter(Boolean) as Mesh[];
-  dome.add(...domeMeshes);
+    // Brass skirt along the shell's base: a half ring at the rim.
+    const skirt = new TorusGeometry(R + 0.03, 0.03, 8, 36, Math.PI);
+    skirt.rotateX(Math.PI / 2);
+    if (half === "front") skirt.rotateY(Math.PI / 2);
+    else skirt.rotateY(-Math.PI / 2);
+    metricUVs(skirt, 0.4, 0, [0, 0]);
+    ribs.add(skirt, compose([0, 0.02, 0]));
+    // The scale rows stop short of the crown; a brass cap closes each shell's half of it.
+    const cap = new LatheGeometry(
+      Array.from({ length: 6 }, (_, i) => {
+        const phi = 1.3 + (i / 5) * (Math.PI / 2 - 1.3);
+        return new Vector2(Math.cos(phi) * (R + 0.035), Math.sin(phi) * (R + 0.035));
+      }),
+      16,
+      half === "front" ? 0 : Math.PI,
+      Math.PI,
+    );
+    metricUVs(cap, 0.4, 1, [0, 0]);
+    ribs.add(cap);
+    const meshes = [shellBatch.build(), ribs.build()].filter(Boolean) as Mesh[];
+    return meshes;
+  };
   const scaleGeometry = scaleTile();
-  dome.add(instances("dome-scales", scaleGeometry, mats.tileGlaze, scales));
-  // Shutter: the slot's own scales on a pivoting carrier that slides up and over the crown.
-  const shutter = new Group();
-  shutter.name = "shutter";
-  shutter.add(instances("shutter-scales", scaleGeometry, mats.tileGlaze, shutterScales));
-  dome.add(shutter);
+  const rear = new Group();
+  rear.name = "dome-rear";
+  rear.add(
+    ...shell("rear"),
+    instances("dome-scales-rear", scaleGeometry, mats.tileGlaze, rearScales),
+  );
+  const front = new Group();
+  front.name = "dome-front";
+  front.scale.setScalar(FRONT_SCALE);
+  front.add(
+    ...shell("front"),
+    instances("dome-scales-front", scaleGeometry, mats.tileGlaze, frontScales),
+  );
+  // Pivot bosses at both ends of the fold axis (the Z axis at the dome's base).
+  for (const s of [-1, 1]) {
+    const boss = new CylinderGeometry(0.11, 0.11, 0.12, 20);
+    boss.rotateX(Math.PI / 2);
+    brass.add(boss, compose([0, O.wall + 0.1, s * (R + 0.1)]));
+    const pin = new CylinderGeometry(0.035, 0.035, 0.3, 12);
+    pin.rotateX(Math.PI / 2);
+    steel.add(pin, compose([0, O.wall + 0.1, s * (R + 0.06)]));
+  }
+  dome.add(rear, front);
   group.add(dome);
 
   // ---- interior: round daybed, telescope on a pier, lamp, rug, star chart
@@ -275,7 +319,7 @@ export function buildObservatory(mats: Materials, seed = 19): Building {
     new RoundedBoxGeometry(1.3, 0.035, 0.7, 2, 0.015),
     compose([0.2, 0.54, -0.2], [0.03, 0.4, -0.05]),
   );
-  // Telescope: brass tube on a timber pier, aimed up through the slot.
+  // Telescope: brass tube on a timber pier, aimed up through the opening.
   const scope = new Group();
   scope.position.set(0.95, 0, 0.55);
   const scopeBatch = new Batch("telescope", mats.brass, 0.3, seed + 15);
@@ -338,10 +382,15 @@ export function buildObservatory(mats: Materials, seed = 19): Building {
     }
   }
 
+  const smooth = (edge0: number, edge1: number, x: number) => {
+    const t = Math.min(1, Math.max(0, (x - edge0) / (edge1 - edge0)));
+    return t * t * (3 - 2 * t);
+  };
   const setOpen = (amount: number) => {
-    // Turn the slot toward the sea (+X local faces the view), then slide the shutter over.
-    dome.rotation.y = 2.4 - amount * 2.4;
-    shutter.rotation.z = amount * 1.35;
+    // Turn the seam to face the sea (+X local faces the view), then fold the front shell
+    // back over the rear one about the pivot axis.
+    dome.rotation.y = facing + 2.4 * (1 - smooth(0, 0.45, amount));
+    front.rotation.z = smooth(0.35, 1, amount) * (Math.PI / 2) * 0.985;
   };
   setOpen(0);
   return {

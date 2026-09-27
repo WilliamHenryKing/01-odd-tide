@@ -22,6 +22,7 @@ import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { type LensId, lensReady, type StayId, waterHeight } from "../domain";
 import { buildBath } from "./build/bath";
+import { buildGull } from "./build/gull";
 import { buildLodge } from "./build/lodge";
 import { buildObservatory } from "./build/observatory";
 import {
@@ -46,7 +47,7 @@ import {
   TIDE_SCALE,
 } from "./layout";
 import { createMaterials, disposeMaterials } from "./materials";
-import { gull, cabin as legacyCabin, tree as legacyTree, materialKit, random } from "./objects";
+import { cabin as legacyCabin, tree as legacyTree, materialKit, random } from "./objects";
 import { Pipeline } from "./render/pipeline";
 import { LightingRig } from "./render/rig";
 import { createTerrainMaterial, type TerrainUniforms } from "./terrain-material";
@@ -655,7 +656,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
   const stays: Record<StayId, Building> = STAGE.architecture
     ? {
         "weather-house": buildWeatherHouse(materials),
-        "nap-observatory": buildObservatory(materials),
+        "nap-observatory": buildObservatory(materials, 19, openFacing("nap-observatory")),
         "lantern-lodge": buildLodge(materials),
       }
     : legacyStays(kit);
@@ -791,8 +792,9 @@ async function buildWorld(context: WorldContext): Promise<World> {
     vegetation.scale.setScalar(LEGACY);
   }
   root.add(vegetation);
-  const bird = gull(kit);
-  bird.scale.setScalar(LEGACY);
+  // A herring gull at true size circling over the home islet.
+  const gull = buildGull();
+  const bird = gull.group;
   root.add(bird);
 
   const tmp = new Vector3();
@@ -838,6 +840,7 @@ async function buildWorld(context: WorldContext): Promise<World> {
         interiorShadowKey = interiorKey;
       }
       legacyGlow.on = 0.03 + interior;
+      bath.update?.(time);
       for (const light of bathLights) light.on = interior;
       for (const glow of bathGlows) glow.on = 0.02 + interior;
       for (const lantern of lanternPracticals) lantern.state.on = walkOn(lantern.order);
@@ -860,7 +863,10 @@ async function buildWorld(context: WorldContext): Promise<World> {
         14 + Math.sin(time * 0.5) * 0.4,
         -0.6 + Math.cos(time * 0.22) * 2.2,
       );
-      bird.rotation.y = -time * 0.22;
+      // Head along the path (forward is +Z), banked into the turn.
+      bird.rotation.y = Math.atan2(Math.cos(time * 0.22) * 4, -Math.sin(time * 0.22) * 2.2);
+      bird.rotation.z = -0.15;
+      gull.update(time, animated);
     },
     afterLighting() {
       seaSun.direction.value.copy(rig.key.position).sub(rig.key.target.position).normalize();
@@ -894,6 +900,12 @@ async function buildWorld(context: WorldContext): Promise<World> {
       for (const t of kit.textures) t.dispose();
     },
   };
+}
+
+/** Local yaw that turns a stay's +X axis toward its open-state camera. */
+function openFacing(id: StayId) {
+  const [dx, , dz] = STAY_CAMERAS[id].open.offset;
+  return Math.atan2(-dz, dx) - STAY_SITES[id].rotation;
 }
 
 function clamp01(value: number) {

@@ -129,8 +129,10 @@ export async function createMaterials(load = loadPbrSet): Promise<Materials> {
       color: 0xffffff,
       roughness: 0.55,
       metalness: 0,
-      clearcoat: 1,
-      clearcoatRoughness: 0.12,
+      // A worn glaze: at full strength and 0.12 roughness every tile threw a pinpoint under
+      // night lamps and grazing views mirrored the sky until the colour was lost.
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.28,
       side: DoubleSide,
     });
   const materials: Omit<Materials, "all"> = {

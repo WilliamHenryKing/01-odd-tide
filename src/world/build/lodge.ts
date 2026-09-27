@@ -290,13 +290,15 @@ export function buildLodge(mats: Materials, seed = 29): Building {
   }
   roof.add(instances("lodge-tiles", flatTile(), mats.tileSlate, tilePlacements));
   group.add(roof);
-  // Four screw-jack posts that extend as the roof rises.
+  // Four screw-jack posts that extend as the roof rises. Closed, the brass sleeves sit inside
+  // the room's corners below the wall plate (above it they pierced the roof at the eaves).
   const jacks: { sleeve: Mesh; screw: Mesh; base: Vector3 }[] = [];
+  const jackDrop = 0.53;
   for (const sx of [-1, 1])
     for (const sz of [-1, 1]) {
       const base = new Vector3(
         sx * (L.halfLength - 0.15),
-        L.wall + 0.08,
+        L.wall + 0.08 - jackDrop,
         sz * (L.halfWidth - 0.15),
       );
       const sleeve = new Mesh(new CylinderGeometry(0.05, 0.05, 0.4, 16), mats.brass);
@@ -366,6 +368,37 @@ export function buildLodge(mats: Materials, seed = 29): Building {
   }
   rug.add(new RoundedBoxGeometry(3.2, 0.012, 1.8, 1, 0.004), compose([0, 0.006, 0.2]));
 
+  // ---- the lodge's lantern: a ship's lantern on a bracket over the terrace's seaward corner
+  const railZ = L.halfWidth + L.terrace - 0.04;
+  const postX = 2.45;
+  structure.box([0.09, 1.45, 0.09], [postX, 1.0 + 0.72, railZ], [0, 0, 0], { radius: 0.012 });
+  structure.box([0.5, 0.07, 0.07], [postX + 0.21, 2.36, railZ], [0, 0, 0], { radius: 0.008 });
+  structure.box([0.05, 0.3, 0.05], [postX + 0.1, 2.2, railZ], [0, 0, -0.75], { radius: 0.006 });
+  const lx = postX + 0.4;
+  const ly = 1.98;
+  brass.rod([lx, ly + 0.2, railZ], [lx, 2.33, railZ], 0.008, { segments: 6 });
+  const hook = new CylinderGeometry(0.035, 0.035, 0.012, 16);
+  brass.add(hook, compose([lx, ly + 0.2, railZ]));
+  brass.add(new CylinderGeometry(0.03, 0.14, 0.11, 20), compose([lx, ly + 0.14, railZ]));
+  brass.add(new CylinderGeometry(0.12, 0.12, 0.025, 20), compose([lx, ly + 0.08, railZ]));
+  brass.add(new CylinderGeometry(0.1, 0.11, 0.05, 20), compose([lx, ly - 0.13, railZ]));
+  for (let k = 0; k < 4; k++) {
+    const a = (k / 4) * Math.PI * 2 + Math.PI / 4;
+    brass.rod(
+      [lx + Math.cos(a) * 0.1, ly - 0.11, railZ + Math.sin(a) * 0.1],
+      [lx + Math.cos(a) * 0.11, ly + 0.08, railZ + Math.sin(a) * 0.11],
+      0.008,
+      { segments: 6 },
+    );
+  }
+  const lanternGlass = mats.bulb.clone();
+  const lanternChimney = new Mesh(new CylinderGeometry(0.085, 0.085, 0.19, 20), lanternGlass);
+  lanternChimney.position.set(lx, ly - 0.01, railZ);
+  group.add(lanternChimney);
+  const lanternLight = new PointLight(0xffb070, 1);
+  lanternLight.position.set(lx, ly - 0.01, railZ);
+  group.add(lanternLight);
+
   for (const batch of [
     painted,
     structure,
@@ -395,7 +428,7 @@ export function buildLodge(mats: Materials, seed = 29): Building {
     const rise = amount * L.lift;
     roof.position.y = rise;
     for (const jack of jacks) {
-      const length = 0.35 + rise;
+      const length = 0.35 + jackDrop + rise;
       jack.screw.scale.set(1, length, 1);
       jack.screw.position.copy(jack.base).add(new Vector3(0, length / 2 + 0.05, 0));
       jack.screw.visible = amount > 0.01;
@@ -405,8 +438,14 @@ export function buildLodge(mats: Materials, seed = 29): Building {
   return {
     group,
     setOpen,
-    lights: pendantLights.map((light) => ({ light, candela: 28 })),
-    emissive: pendantMaterials.map((material) => ({ material, luminance: 1100 })),
+    lights: [
+      ...pendantLights.map((light) => ({ light, candela: 28 })),
+      { light: lanternLight, candela: 30 },
+    ],
+    emissive: [
+      ...pendantMaterials.map((material) => ({ material, luminance: 1100 })),
+      { material: lanternGlass, luminance: 4200 },
+    ],
     focus: new Vector3(0, 1.5, 0.6),
   };
 }

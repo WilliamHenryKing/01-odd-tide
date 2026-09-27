@@ -171,7 +171,8 @@ export function buildPontoon(mats: Materials, seed = 83) {
   const float = new Group();
   const deck = new Batch("pontoon-deck", mats.deck, 1.4, seed);
   const structure = new Batch("pontoon-frame", mats.structural, 1.4, seed + 1);
-  const drums = new Batch("pontoon-drums", mats.concrete, 0.8, seed + 2);
+  // Black plastic drums: pale ones read as milky blobs through the water.
+  const drums = new Batch("pontoon-drums", mats.steel, 0.8, seed + 2);
   for (let x = -1.3; x <= 1.31; x += 0.146)
     deck.box([0.138, 0.03, 2.6], [x, 0.3, 0], [0, 0, 0], { radius: 0.003, vary: 0.12 });
   for (const z of [-1.2, 0, 1.2])

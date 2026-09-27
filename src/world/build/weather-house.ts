@@ -355,21 +355,43 @@ export function buildWeatherHouse(mats: Materials, seed = 7): Building {
     instances("ridge", ridgeTile(), mats.tileCoral, ridgeCaps),
   );
   group.add(hatch, fixed);
-  // Brass hinge knuckles along the ridge.
-  for (let v = -roofHalfDepth + 0.4; v < roofHalfDepth; v += 1.25) {
-    const knuckle = new CylinderGeometry(0.03, 0.03, 0.16, 12);
+  // The hatch's hinge: a continuous brass pin along the ridge with knuckles every 0.9 m, big
+  // enough to read from the stay cameras as the line the roof turns on.
+  brass.rod(
+    [0, ridgeY + 0.03, -roofHalfDepth + 0.1],
+    [0, ridgeY + 0.03, roofHalfDepth - 0.1],
+    0.02,
+    {
+      segments: 10,
+    },
+  );
+  for (let v = -roofHalfDepth + 0.3; v < roofHalfDepth; v += 0.9) {
+    const knuckle = new CylinderGeometry(0.05, 0.05, 0.22, 14);
     knuckle.rotateX(Math.PI / 2);
     metricUVs(knuckle, 0.2, 2, [0, 0]);
-    brass.add(knuckle, compose([0, ridgeY + 0.02, v]));
+    brass.add(knuckle, compose([0, ridgeY + 0.03, v]));
   }
 
   // ---- stove flue through the fixed slope, weather vane on the front of the ridge
   const flueX = 1.45;
   const flueZ = -1.55;
-  steel.rod([flueX, 0.62, flueZ], [flueX, gableTop(flueX) + 0.9, flueZ], 0.065, { segments: 16 });
-  const cap = new CylinderGeometry(0.02, 0.14, 0.1, 16);
+  steel.rod([flueX, 0.62, flueZ], [flueX, gableTop(flueX) + 0.9, flueZ], 0.075, { segments: 16 });
+  // Rain cowl held clear of the pipe on three legs, and a storm collar above the flashing.
+  const cap = new CylinderGeometry(0.03, 0.2, 0.12, 20);
   metricUVs(cap, 0.3, 1, [0, 0]);
-  steel.add(cap, compose([flueX, gableTop(flueX) + 0.97, flueZ]));
+  steel.add(cap, compose([flueX, gableTop(flueX) + 1.06, flueZ]));
+  for (let k = 0; k < 3; k++) {
+    const a = (k / 3) * Math.PI * 2;
+    steel.rod(
+      [flueX + Math.cos(a) * 0.07, gableTop(flueX) + 0.9, flueZ + Math.sin(a) * 0.07],
+      [flueX + Math.cos(a) * 0.12, gableTop(flueX) + 1.02, flueZ + Math.sin(a) * 0.12],
+      0.008,
+      { segments: 6 },
+    );
+  }
+  const collar = new CylinderGeometry(0.11, 0.11, 0.05, 20);
+  metricUVs(collar, 0.3, 1, [0, 0]);
+  steel.add(collar, compose([flueX, gableTop(flueX) + 0.2, flueZ]));
   const flashing = new CylinderGeometry(0.2, 0.2, 0.02, 16);
   metricUVs(flashing, 0.3, 1, [0, 0]);
   steel.add(flashing, compose([flueX, gableTop(flueX) + 0.1, flueZ], [0, 0, -W.pitch * 0.62]));
@@ -478,7 +500,12 @@ export function buildWeatherHouse(mats: Materials, seed = 7): Building {
         tableZ + 0.06,
       ]),
     );
-  // Bookshelf along the fixed knee wall, three shelves of real book sizes.
+  // Bookshelf along the fixed knee wall, three shelves of real book sizes. Spines come from
+  // a cloth-binding palette (sRGB): random hues read through the glazing as rainbow flecks.
+  const BINDINGS = [
+    0x6b2a26, 0x8a4a2b, 0xa37b3b, 0x5d6038, 0x2f4a3a, 0x2b3a55, 0x4d5561, 0xd8cfb8, 0x9c8467,
+    0x2e2c2b, 0x3e6461, 0x4b3145,
+  ];
   const books: { position: Vec3; rotation: Vec3; scale: Vec3; tone: Color }[] = [];
   const shelfX = W.halfWidth - 0.3;
   for (let s = 0; s < 3; s++) {
@@ -498,7 +525,9 @@ export function buildWeatherHouse(mats: Materials, seed = 7): Building {
         position: [shelfX + 0.02, y + 0.012 + height / 2, z + thickness / 2],
         rotation: [lean, 0, 0],
         scale: [depth, height, thickness],
-        tone: new Color().setHSL(random(), 0.25 + random() * 0.35, 0.2 + random() * 0.35),
+        tone: new Color(
+          BINDINGS[Math.floor(random() * BINDINGS.length)] ?? 0x9c8467,
+        ).multiplyScalar(0.85 + random() * 0.3),
       });
       z += thickness + 0.002;
     }
@@ -544,8 +573,8 @@ export function buildWeatherHouse(mats: Materials, seed = 7): Building {
   const struts: { body: Mesh; rod: Mesh; anchor: Vector3; mount: Vector3 }[] = [];
   const mountU = 1.9;
   for (const z of [-1.6, 1.6]) {
-    const body = new Mesh(new CylinderGeometry(0.03, 0.03, 1, 14), mats.steel);
-    const rod = new Mesh(new CylinderGeometry(0.013, 0.013, 1, 12), mats.brass);
+    const body = new Mesh(new CylinderGeometry(0.045, 0.045, 1, 16), mats.steel);
+    const rod = new Mesh(new CylinderGeometry(0.02, 0.02, 1, 12), mats.brass);
     body.castShadow = rod.castShadow = true;
     group.add(body, rod);
     struts.push({
@@ -589,7 +618,9 @@ export function buildWeatherHouse(mats: Materials, seed = 7): Building {
   const direction = new Vector3();
   const up = new Vector3(0, 1, 0);
   const setOpen = (amount: number) => {
-    hatch.rotation.z = -amount * 0.95;
+    // 0.72 rad leaves the lid pitched ~17° below level, so it reads as a hinged roof slope
+    // rather than a flat slab floating over the room.
+    hatch.rotation.z = -amount * 0.72;
     hatch.updateMatrix();
     for (const strut of struts) {
       mountPoint.copy(strut.mount).applyMatrix4(hatch.matrix);
