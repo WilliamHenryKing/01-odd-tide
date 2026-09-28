@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" width="1280" height="360" role="img" aria-label="ODD TIDE: Turn the tide instrument, watch a route drown, plan a day that works.">
+<title>ODD TIDE</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08202c"/><stop offset="1" stop-color="#12404c"/></linearGradient>
+<radialGradient id="glow" cx="0.78" cy="0.45" r="0.55"><stop offset="0" stop-color="#e8c07a" stop-opacity="0.42"/><stop offset="1" stop-color="#e8c07a" stop-opacity="0"/></radialGradient>
+<linearGradient id="scan" x1="0" x2="1"><stop offset="0" stop-color="#e8c07a" stop-opacity="0"/><stop offset="0.5" stop-color="#e8c07a" stop-opacity="0.18"/><stop offset="1" stop-color="#e8c07a" stop-opacity="0"/></linearGradient>
+</defs>
+<style>
+.t{font-family:Georgia, 'Times New Roman', serif;font-weight:700;fill:#f4efe6;letter-spacing:-0.01em;animation:rise 1.1s ease-out both}
+.e{font-family:'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-weight:700;font-size:17px;letter-spacing:0.28em;fill:#e8c07a;animation:rise 0.9s ease-out both}
+.g{font-family:'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:24px;fill:#f4efe6;opacity:0.82;animation:rise 1.3s ease-out 0.45s both}
+.u{animation:grow 1.4s ease-out 0.6s both;transform-origin:72px 0}
+.glow{animation:breathe 7s ease-in-out infinite;transform-origin:1000px 160px}
+.p{animation:drift linear infinite}
+.ring{transform-origin:1010px 180px;animation:spin linear infinite}
+.wave{animation:slide linear infinite}
+.scan{animation:sweep 6s linear infinite}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes breathe{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+@keyframes drift{0%{transform:translateY(0);opacity:0}15%{opacity:.9}100%{transform:translateY(-190px);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slide{to{transform:translateX(-160px)}}
+@keyframes sweep{to{transform:translateX(1520px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<rect width="1280" height="360" fill="url(#bg)"/>
+<rect class="glow" width="1280" height="360" fill="url(#glow)"/>
+<path class="wave" d="M-160 282 Q -120 268 -80 282 Q -40 268 0 282 Q 40 268 80 282 Q 120 268 160 282 Q 200 268 240 282 Q 280 268 320 282 Q 360 268 400 282 Q 440 268 480 282 Q 520 268 560 282 Q 600 268 640 282 Q 680 268 720 282 Q 760 268 800 282 Q 840 268 880 282 Q 920 268 960 282 Q 1000 268 1040 282 Q 1080 268 1120 282 Q 1160 268 1200 282 Q 1240 268 1280 282 Q 1320 268 1360 282 Q 1400 268 1440 282 Q 1480 268 1520 282" fill="none" stroke="#7fb7c2" stroke-width="2" style="animation-duration:9s"/><path class="wave" d="M-160 310 Q -120 324 -80 310 Q -40 324 0 310 Q 40 324 80 310 Q 120 324 160 310 Q 200 324 240 310 Q 280 324 320 310 Q 360 324 400 310 Q 440 324 480 310 Q 520 324 560 310 Q 600 324 640 310 Q 680 324 720 310 Q 760 324 800 310 Q 840 324 880 310 Q 920 324 960 310 Q 1000 324 1040 310 Q 1080 324 1120 310 Q 1160 324 1200 310 Q 1240 324 1280 310 Q 1320 324 1360 310 Q 1400 324 1440 310 Q 1480 324 1520 310" fill="none" stroke="#e8c07a" stroke-width="1.6" style="animation-duration:13s"/><path class="wave" d="M-160 338 Q -120 324 -80 338 Q -40 324 0 338 Q 40 324 80 338 Q 120 324 160 338 Q 200 324 240 338 Q 280 324 320 338 Q 360 324 400 338 Q 440 324 480 338 Q 520 324 560 338 Q 600 324 640 338 Q 680 324 720 338 Q 760 324 800 338 Q 840 324 880 338 Q 920 324 960 338 Q 1000 324 1040 338 Q 1080 324 1120 338 Q 1160 324 1200 338 Q 1240 324 1280 338 Q 1320 324 1360 338 Q 1400 324 1440 338 Q 1480 324 1520 338" fill="none" stroke="#7fb7c2" stroke-width="1.2" style="animation-duration:17s"/>
+<text x="72" y="89.60000000000001" class="e">AN ISLAND THAT CHANGES ITS MIND TWICE A DAY</text>
+<text x="72" y="196" font-size="112" class="t" style="animation-delay:0.15s">ODD TIDE</text>
+<rect class="u" x="72" y="218" width="520" height="3" fill="#e8c07a"/>
+<text x="72" y="254" class="g">Turn the tide instrument, watch a route drown, plan a day that works.</text>
+</svg>

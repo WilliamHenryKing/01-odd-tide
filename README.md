@@ -1,29 +1,63 @@
-# ODD TIDE
+<p align="center"><img src="docs/readme/banner.svg" alt="ODD TIDE: turn the tide instrument, watch a route drown, plan a day that works." width="100%"></p>
 
-> **Visual acceptance withdrawn, 26 September 2026.** William rejected this output. The records below describe historical implementation/testing, not an accepted visual result. Follow `docs/visual/AUDIT.md` and the collection Visual Quality Directive.
+<p align="center">
+  <a href="https://01-odd-tide.williamking.workers.dev"><img alt="Visit the live site" src="https://img.shields.io/badge/Visit_live_site-%E2%86%97-e8c07a?style=for-the-badge&labelColor=08202c"></a>
+  <img alt="Three.js" src="https://img.shields.io/badge/Three.js-e8c07a?style=for-the-badge&logo=threedotjs&logoColor=08202c&labelColor=08202c">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-e8c07a?style=for-the-badge&logo=typescript&logoColor=08202c&labelColor=08202c">
+  <img alt="React" src="https://img.shields.io/badge/React-e8c07a?style=for-the-badge&logo=react&logoColor=08202c&labelColor=08202c">
+  <img alt="GSAP" src="https://img.shields.io/badge/GSAP-e8c07a?style=for-the-badge&logo=greensock&logoColor=08202c&labelColor=08202c">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-e8c07a?style=for-the-badge&logo=tailwindcss&logoColor=08202c&labelColor=08202c">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-e8c07a?style=for-the-badge&logo=vite&logoColor=08202c&labelColor=08202c">
+</p>
 
-Status: v1 complete, 27 September 2026 (D13 delivery sprint). Visual reset changes C1–C13 are recorded in `docs/visual/changes/`; journeys 23/23 (`docs/visual/journeys/README.md`), breakpoint sweep of 91 shots with no overflow, perf at 1920×1080 GPU p95 13.6–14.2 ms. Deploy with `bun run deploy` (checks, build, `wrangler deploy` to `01-odd-tide.<account>.workers.dev`) after `bun run cloudflare:login`. Deferred to v2: the sky pass (cumulus, bluer zenith). An original fictional coastal stay planner; no real booking or payment.
+**An island that changes its mind twice a day.** Turn the island's time instrument, watch a real route disappear beneath the water, choose a small place to stay and arrange a day that actually works. An experiential 3D website for a fictional coastal stay.
 
-Working checkout: `experiences/01-odd-tide`. Repository anchor: `.repositories/01-odd-tide`. Branch: `work/experience`. Preserve both directories.
+<p align="center"><img src="docs/readme/preview.gif" alt="Scrolling from the island arrival into the stays and the day planner" width="800"></p>
 
-## Development
+## What you can do
 
-```powershell
+- **Turn the tide instrument** and watch the causeway and coves flood and drain across the island in real time.
+- **Choose a place to stay**, each with its own portrait of the island.
+- **Plan a day** around the tide: the planner explains clashes, blocked dates and capacity, then helps you repair them.
+- **Share it:** your plan lives in the URL.
+
+## What's inside
+
+- **A hand-built 3D island:** coastal milkwood trees, turf and planting, buildings and mechanisms, a living sea surface and a lighthouse, lit by one physical lighting setup.
+- **Honest rules:** calendar, price, availability, tide, scheduling and URL rules live in a pure domain module with unit tests.
+- **Choreographed camera moves** with GSAP between the island's viewpoints, and a considered arrival loader.
+- **Nine prerendered pages** that read before JavaScript loads, with a real 404.
+- **Verified in the browser:** 23 of 23 scripted journeys and a 91-shot breakpoint sweep with no overflow; GPU frame time about 14 ms at 1920×1080 on a desktop RTX 2060.
+- **Optional original sound** that only starts on a deliberate press; every task works with sound off.
+
+## Screenshots
+
+| Desktop | Phone |
+| --- | --- |
+| <img src="docs/readme/desktop.png" alt="The island arrival on desktop" width="560"> | <img src="docs/readme/phone.png" alt="The island on a phone" width="220"> |
+
+## Built with
+
+Direct Three.js for the island; React for the visitor's choices; GSAP for camera, roof and day choreography; Tailwind CSS with Lightning CSS; TypeScript throughout; Vite and Bun for the build.
+
+- **One lighting model:** a physical sky, sun and haze drive the environment, with GTAO, bloom and SMAA in the post chain.
+- **Separation of concerns:** the domain module owns tide and itinerary rules, React owns discrete choices, three.js owns the scene.
+
+## Run it locally
+
+```sh
 bun install --frozen-lockfile
-bun run dev
-bun run check
-bun run preview
+bun run dev      # http://127.0.0.1:4511/
+bun run check    # strict types, lint, domain tests and the production build
+bun run preview  # http://127.0.0.1:4611/
 ```
 
-Development: http://127.0.0.1:4511/
-Preview: http://127.0.0.1:4611/
+Design intent is in [DESIGN.md](DESIGN.md); the working and verification history is in [docs/PROJECT-NOTES.md](docs/PROJECT-NOTES.md).
 
-The production app lives in `src/`. `bun run build` creates `dist/` and prerenders nine HTML entry points. `bun run test` checks calendar/price/availability/tide/scheduling/URL rules. `bun run check` combines strict types, lint, these tests and the production build. The earlier developer smoke harness remains available with `dev:smoke` / `build:smoke` and is excluded from production.
+## Credits
 
-Each project owns its dependencies and lockfile. Tailwind uses its Vite plugin; Lightning CSS performs final CSS minification. No shared visual runtime or sibling imports.
+Every sourced texture, model and sound is listed with its source, author and licence in [CREDITS.md](CREDITS.md) and [assets.manifest.json](assets.manifest.json). The stay, prices and bookings are fictional; there is no real booking or payment.
 
-Read DESIGN.md and ASSET-REGISTER.md for creative intent and provenance. The domain module owns all tide and itinerary rules; React owns the visitor's discrete choices; Three owns the scene; GSAP owns camera/roof/day choreography. No external services, forms, accounts or asset CDNs are required at runtime. Optional original sound starts only after a deliberate press.
+---
 
-Historical journey evidence is in `output/playwright/` (not committed). The current visual-reset frames and metadata are committed in `docs/visual/captures/`; performance evidence is in `docs/visual/perf/`. Reproducible browser procedures under `tools/browser/*.txt` run through the installed Playwright CLI's `run-code --filename` command. These are function expressions because that CLI wraps its input; do not append a semicolon or turn them into a test runner suite.
-
-The old, explicitly unaccepted local delivery package lives at `../../portfolio-packages/01-odd-tide/`: build, selected actual captures and factual case study. Hosting needs directory-index routing for the prerendered pages and a custom 404 document; the preview middleware's unknown-route status still needs verification (see HANDOFF). No host is configured. Chrome desktop and touch emulation were exercised, not physical phones or cross-browser compatibility. Audio controls were instrumented, not auditioned. All planner tasks are available with sound off.
+<p align="center"><sub>Part of William King's portfolio collection.</sub></p>
