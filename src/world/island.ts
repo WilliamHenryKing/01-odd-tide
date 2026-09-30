@@ -364,7 +364,20 @@ export function createIsland(
       }
       world = built;
       reportLoading("assets", 1);
-      await renderer.compileAsync(scene, camera);
+      // Compile every shader in parallel before the first frame, against the render target the
+      // frames really draw into: a shader's variant depends on it (tone mapping and output
+      // colour space happen in the output pass, not in each material), so compiling for the
+      // screen left every program to be compiled again, one at a time and blocking, at the
+      // first real frame (about 12 s on this machine).
+      // Light the scene as the first frame will (the sky is baked into the environment map there,
+      // which changes every material's shader), so the programs compiled now are the ones used.
+      built.frame(values.hour, elapsed, false);
+      pipeline.setNight(rig.apply(values.hour, elapsed, camera, true).night);
+      built.afterLighting();
+      renderer.setRenderTarget(pipeline.composer.readBuffer);
+      const compiling = renderer.compileAsync(scene, camera);
+      renderer.setRenderTarget(null);
+      await compiling;
       if (disposed) return;
       reportLoading("compile", 1);
       ready = true;
