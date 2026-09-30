@@ -16,6 +16,7 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import type { Tier } from "./quality";
 
 // One renderer setup for the island, the look-dev route and captures. Scene values arrive
 // pre-exposed (see sky-model.ts); tone mapping and the sRGB transfer happen once, in OutputPass.
@@ -63,11 +64,9 @@ type VisibilityPatched = {
 export type PipelineOptions = {
   /** Objects the ambient-occlusion G-buffer must ignore (sky, water, effects). */
   aoHidden: () => Object3D[];
-  maxPixelRatio?: number;
+  /** The quality tier's settings (quality.ts). */
+  tier: Tier;
 };
-
-/** Drawing-buffer pixels the scene may use (~2560 × 1440). */
-const PIXEL_BUDGET = 3.7e6;
 
 export class Pipeline {
   readonly renderer: WebGLRenderer;
@@ -78,6 +77,10 @@ export class Pipeline {
   private readonly size = new Vector2(1, 1);
   private pixelRatio = 1;
   private readonly maxPixelRatio: number;
+  private readonly pixelBudget: number;
+  /** Render resolution as a share of the tier's (the frame governor turns it down). */
+  private scale = 1;
+  private deviceRatio = 1;
 
   constructor(
     readonly scene: Scene,
@@ -91,7 +94,8 @@ export class Pipeline {
       preserveDrawingBuffer: true,
       stencil: false,
     });
-    this.maxPixelRatio = options.maxPixelRatio ?? 3;
+    this.maxPixelRatio = options.tier.maxPixelRatio;
+    this.pixelBudget = options.tier.pixelBudget;
     this.pixelRatio = Math.min(window.devicePixelRatio || 1, this.maxPixelRatio);
     this.renderer.setPixelRatio(this.pixelRatio);
     this.renderer.outputColorSpace = SRGBColorSpace;
@@ -102,7 +106,10 @@ export class Pipeline {
     // Count every pass of a frame (scene, shadows, AO G-buffer, post), not just the last one.
     this.renderer.info.autoReset = false;
 
-    const target = new WebGLRenderTarget(1, 1, { type: HalfFloatType, samples: 4 });
+    const target = new WebGLRenderTarget(1, 1, {
+      type: HalfFloatType,
+      samples: options.tier.msaa,
+    });
     target.texture.name = "OddTide.hdr";
     this.composer = new EffectComposer(this.renderer, target);
     this.composer.addPass(new RenderPass(scene, camera));
@@ -148,6 +155,7 @@ export class Pipeline {
           patched._visibilityCache.push(object);
         }
     };
+    this.ao.enabled = options.tier.ao;
     this.composer.addPass(this.ao);
 
     // Bloom models lens glare: only energy above the threshold contributes, clamped so a
@@ -175,12 +183,24 @@ export class Pipeline {
   get drawingSize() {
     return { width: this.size.x, height: this.size.y, pixelRatio: this.pixelRatio };
   }
-  setSize(width: number, height: number, pixelRatio = this.pixelRatio) {
+  /** Render resolution as a share of the tier's, 0.6 … 1 (from the frame governor). */
+  setScale(scale: number) {
+    const s = Math.max(0.6, Math.min(1, scale));
+    if (Math.abs(s - this.scale) < 0.02) return;
+    this.scale = s;
+    this.setSize(this.size.x, this.size.y, this.deviceRatio);
+  }
+  get renderScale() {
+    return this.scale;
+  }
+  setSize(width: number, height: number, pixelRatio = this.deviceRatio) {
     this.size.set(width, height);
-    // Fidelity first (D08): render at the device's full density up to a pixel budget, so a
-    // phone's small canvas is as sharp as its screen while a large retina canvas stays bounded.
-    const budget = Math.sqrt(PIXEL_BUDGET / Math.max(1, width * height));
-    this.pixelRatio = Math.max(1, Math.min(pixelRatio, this.maxPixelRatio, budget));
+    this.deviceRatio = pixelRatio;
+    // Fidelity first (D08): render at the device's full density up to the tier's pixel budget,
+    // so a phone's small canvas is as sharp as its screen while a large canvas stays bounded;
+    // below that, the governor's scale.
+    const budget = Math.sqrt(this.pixelBudget / Math.max(1, width * height));
+    this.pixelRatio = Math.max(0.5, Math.min(pixelRatio, this.maxPixelRatio, budget)) * this.scale;
     this.renderer.setPixelRatio(this.pixelRatio);
     this.renderer.setSize(width, height, false);
     this.renderer.domElement.style.width = `${width}px`;

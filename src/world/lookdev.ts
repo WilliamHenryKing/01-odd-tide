@@ -16,6 +16,7 @@ import {
   Vector3,
 } from "three";
 import { Pipeline } from "./render/pipeline";
+import { TIERS } from "./render/quality";
 import { LightingRig } from "./render/rig";
 import { celestial } from "./render/sky-model";
 
@@ -99,7 +100,11 @@ export function mountLookdev(
   const scene = new Scene();
   const camera = new PerspectiveCamera(32, 1, 0.05, 40_000);
   const aoHidden: Object3D[] = [];
-  const pipeline: Pipeline = new Pipeline(scene, camera, { aoHidden: () => aoHidden });
+  // Look-dev always judges the full-fidelity image.
+  const pipeline: Pipeline = new Pipeline(scene, camera, {
+    aoHidden: () => aoHidden,
+    tier: TIERS.high,
+  });
   host.append(pipeline.domElement);
   const rig: LightingRig = new LightingRig(pipeline.renderer, scene, {
     shadowCentre: new Vector3(5, 0, -9),

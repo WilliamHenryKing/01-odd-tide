@@ -2,6 +2,9 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import { App } from "./App";
 import { startLoader } from "./loader";
 
+// Read the quality overrides (?quality=…) before the app rewrites the address.
+import "./world/render/quality";
+
 if (import.meta.env.MODE === "performance" && new URLSearchParams(location.search).has("perf"))
   document.documentElement.dataset.perf = "true";
 

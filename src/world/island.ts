@@ -52,6 +52,7 @@ import {
 import { createMaterials, disposeMaterials } from "./materials";
 import { cabin as legacyCabin, tree as legacyTree, materialKit, random } from "./objects";
 import { Pipeline } from "./render/pipeline";
+import { detectQuality, FrameGovernor, tierSettings } from "./render/quality";
 import { LightingRig } from "./render/rig";
 import { createTerrainMaterial, type TerrainUniforms } from "./terrain-material";
 import { disposeTextureCache, loadPbrSet } from "./textures";
@@ -110,7 +111,21 @@ export function createIsland(
   const target = ARRIVAL.desktop.target.clone();
   camera.position.copy(ARRIVAL.desktop.position);
   const aoHidden: Object3D[] = [];
-  const pipeline: Pipeline = new Pipeline(scene, camera, { aoHidden: () => aoHidden });
+  // Quality for this machine (full fidelity on a capable GPU); the governor keeps it smooth.
+  const quality = detectQuality();
+  const tier = tierSettings(quality);
+  const pipeline: Pipeline = new Pipeline(scene, camera, { aoHidden: () => aoHidden, tier });
+  const governor = new FrameGovernor(
+    1 / 50,
+    (s) => pipeline.setScale(s),
+    () => pipeline.renderScale,
+    () => {
+      if (!pipeline.ao.enabled) return false;
+      pipeline.ao.enabled = false;
+      return true;
+    },
+  );
+  document.documentElement.dataset.quality = quality;
   const renderer = pipeline.renderer;
   renderer.domElement.setAttribute("aria-label", "Interactive miniature of the Odd Tide island");
   renderer.domElement.style.touchAction = "pan-y";
@@ -118,7 +133,7 @@ export function createIsland(
   const rig: LightingRig = new LightingRig(renderer, scene, {
     shadowCentre: new Vector3(-1, 0, -1),
     shadowRadius: 30,
-    shadowMapSize: 4096,
+    shadowMapSize: tier.shadow,
   });
   aoHidden.push(rig.sky.mesh);
 
@@ -218,10 +233,19 @@ export function createIsland(
 
   function draw(now: number, captureFrame = false) {
     if (perfActive && !captureFrame) return;
+    // Exactly one frame may be pending. This call is the frame, however it was reached (the
+    // animation frame, a resize, a settle, a capture), so any other pending one is dropped; a
+    // wake() during the draw below then schedules the next, and the end of the draw does not
+    // schedule a second. (Two such chains once ran side by side, drawing the island four times
+    // a frame.)
+    cancelAnimationFrame(frame);
     frame = 0;
     if (disposed || !world || (!captureFrame && (!visible || document.hidden))) return;
-    const delta = Math.min((now - last) / 1000, 0.05);
+    const raw = (now - last) / 1000;
+    const delta = Math.min(raw, 0.05);
     last = now;
+    // Frames after a rest arrive late; the governor ignores gaps of more than a quarter second.
+    if (!captureFrame) governor.sample(raw);
     const animated = !state.paused && !state.reduced;
     if (animated && !perfActive) elapsed += delta;
     const visualHour = captureFrame ? state.hour : values.hour;
@@ -232,7 +256,8 @@ export function createIsland(
     camera.lookAt(target);
     pipeline.render();
     dirty = false;
-    if (animated && !perfActive && visible && !document.hidden) frame = requestAnimationFrame(draw);
+    if (animated && !perfActive && visible && !document.hidden && !frame)
+      frame = requestAnimationFrame(draw);
   }
 
   const resize = () => {
