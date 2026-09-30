@@ -21,6 +21,31 @@ import type { Tier } from "./quality";
 // One renderer setup for the island, the look-dev route and captures. Scene values arrive
 // pre-exposed (see sky-model.ts); tone mapping and the sRGB transfer happen once, in OutputPass.
 
+/**
+ * Zeroes NaN and infinity (all exponent bits set: immune to fast-math) and caps HDR values
+ * before bloom. Some GPUs (Apple's) make NaN where others quietly don't, and bloom's blur
+ * would spread one bad pixel over the whole frame.
+ */
+const FiniteShader = {
+  name: "FiniteShader",
+  uniforms: { tDiffuse: { value: null } },
+  vertexShader: /* glsl */ `
+    varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
+  `,
+  fragmentShader: /* glsl */ `
+    uniform sampler2D tDiffuse;
+    varying vec2 vUv;
+    float finite(float x) {
+      return (floatBitsToUint(x) & 0x7f800000u) == 0x7f800000u ? 0.0 : clamp(x, 0.0, 16384.0);
+    }
+    void main() {
+      vec4 c = texture2D(tDiffuse, vUv);
+      gl_FragColor = vec4(finite(c.r), finite(c.g), finite(c.b), 1.0);
+    }
+  `,
+};
+
 /** Linear-light grade: mesopic/scotopic shift at night, and a restrained vignette. */
 const GradeShader = {
   name: "OddTideGrade",
@@ -157,6 +182,7 @@ export class Pipeline {
     };
     this.ao.enabled = options.tier.ao;
     this.composer.addPass(this.ao);
+    this.composer.addPass(new ShaderPass(FiniteShader));
 
     // Bloom models lens glare: only energy above the threshold contributes, clamped so a
     // physically bright lamp (thousands of cd/m² at night exposure) cannot flood the frame.
