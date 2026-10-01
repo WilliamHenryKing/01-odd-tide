@@ -1,0 +1,38 @@
+{
+  "slug": "01-odd-tide",
+  "sourceCommit": "d52e6b41e80a2b1e88a5a0eaf446c801126fbcc4",
+  "url": "https://01-odd-tide.williamking.workers.dev",
+  "capturedAt": "2026-10-01T06:11:14.462Z",
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F15) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "errors": [],
+  "desktop": {
+    "width": 1440,
+    "height": 900
+  },
+  "phone": {
+    "width": 390,
+    "height": 844
+  },
+  "frames": 48,
+  "browser": "154.0.8037.58",
+  "assets": [
+    "/assets/index-DhzkwSZZ.js"
+  ],
+  "matchesLocalBuild": true,
+  "phoneOverflow": false,
+  "gifBytes": 2988234,
+  "description": "Live island arrival and scroll through the coastal stay website",
+  "phoneIsEmulated": true,
+  "loop": {
+    "frames": 48,
+    "delayCentiseconds": 16,
+    "width": 720,
+    "disposal": "None"
+  },
+  "media": [
+    "preview.gif",
+    "desktop.jpg",
+    "detail.jpg",
+    "phone.jpg"
+  ]
+}

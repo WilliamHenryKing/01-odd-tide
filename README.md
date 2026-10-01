@@ -1,58 +1,69 @@
-<p align="center"><img src="docs/readme/banner.svg" alt="ODD TIDE: turn the tide instrument, watch a route drown, plan a day that works." width="100%"></p>
+# ODD TIDE
 
-<p align="center">
-  <a href="https://01-odd-tide.williamking.workers.dev"><img alt="Visit the live site" src="https://img.shields.io/badge/Visit_live_site-%E2%86%97-e8c07a?style=for-the-badge&labelColor=08202c"></a>
-  <img alt="Three.js" src="https://img.shields.io/badge/Three.js-e8c07a?style=for-the-badge&logo=threedotjs&logoColor=08202c&labelColor=08202c">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-e8c07a?style=for-the-badge&logo=typescript&logoColor=08202c&labelColor=08202c">
-  <img alt="React" src="https://img.shields.io/badge/React-e8c07a?style=for-the-badge&logo=react&logoColor=08202c&labelColor=08202c">
-  <img alt="GSAP" src="https://img.shields.io/badge/GSAP-e8c07a?style=for-the-badge&logo=greensock&logoColor=08202c&labelColor=08202c">
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-e8c07a?style=for-the-badge&logo=tailwindcss&logoColor=08202c&labelColor=08202c">
-  <img alt="Vite" src="https://img.shields.io/badge/Vite-e8c07a?style=for-the-badge&logo=vite&logoColor=08202c&labelColor=08202c">
-</p>
+<p align="center"><img src="docs/readme/banner.svg" alt="ODD TIDE" width="100%"></p>
 
-**An island that changes its mind twice a day.** Turn the island's time instrument, watch a real route disappear beneath the water, choose a small place to stay and arrange a day that actually works. An experiential 3D website for a fictional coastal stay.
+An island that changes its mind twice a day. Move the tide, watch the causeway disappear, choose a small place to stay and build a day that works around the water. ODD TIDE combines an explorable coastal miniature with a working fictional stay and itinerary planner.
 
-<p align="center"><img src="docs/readme/preview.gif" alt="Scrolling from the island arrival into the stays and the day planner" width="800"></p>
+**[Visit the island →](https://01-odd-tide.williamking.workers.dev)** · [Run locally](#run-locally) · [Credits](#credits)
 
-## What you can do
+<p align="center"><img src="docs/readme/preview.gif" alt="Live island arrival and scroll through the coastal stay website" width="800"></p>
 
-- **Turn the tide instrument** and watch the causeway and coves flood and drain across the island in real time.
-- **Choose a place to stay**, each with its own portrait of the island.
-- **Plan a day** around the tide: the planner explains clashes, blocked dates and capacity, then helps you repair them.
-- **Share it:** your plan lives in the URL.
+## Explore the island
 
-## What's inside
+- **Move the tide instrument.** The water changes the landscape and the routes available to your itinerary. A flooded crossing is a constraint the planner understands, not just a visual effect.
+- **Compare the stays.** Browse the small island properties and their individual pages, choose dates and party size, and see the corresponding availability and price rules.
+- **Make a workable day.** Add island activities, inspect timing and capacity conflicts, and repair a plan before taking it to the summary.
+- **Keep the result.** Save the plan in this browser, share its URL, print the summary or download a postcard. The URL restores the meaningful choices rather than a screenshot of the interface.
+- **Restore the lighthouse.** An optional search for lens pieces at different times of day adds a small island story alongside the planner.
 
-- **A hand-built 3D island:** coastal milkwood trees, turf and planting, buildings and mechanisms, a living sea surface and a lighthouse, lit by one physical lighting setup.
-- **Honest rules:** calendar, price, availability, tide, scheduling and URL rules live in a pure domain module with unit tests.
-- **Choreographed camera moves** with GSAP between the island's viewpoints, and a considered arrival loader.
-- **Nine prerendered pages** that read before JavaScript loads, with a real 404.
-- **Verified in the browser:** 23 of 23 scripted journeys and a 91-shot breakpoint sweep with no overflow; GPU frame time about 14 ms at 1920×1080 on a desktop RTX 2060.
-- **Optional original sound** that only starts on a deliberate press; every task works with sound off.
+The island, accommodation, prices and availability are fictional. There is no real booking, payment or reservation service.
 
-## Screenshots
+## Experience and implementation
+
+The continuous Three.js island contains coastal planting, small buildings, a lighthouse and a moving sea. GSAP coordinates camera and architectural transitions with the visitor's choices. React owns the forms and navigation; pure TypeScript owns calendar, pricing, capacity, tide and scheduling decisions.
+
+Nine HTML entry points are prerendered, including stay details, the planner, summary and a real 404. Readable page content is available before the interactive scene starts. Optional sound begins only after a deliberate interaction, and the site offers motion controls and a reduced-motion path.
+
+The current renderer uses GPU-dependent quality tiers, a pixel budget and a frame-time governor. It can shed expensive effects and resolution on slower hardware. Shader warm-up happens behind the arrival screen, and a finite-colour pass protects bloom from invalid pixel values.
+
+## Project map
+
+- [src/domain.ts](src/domain.ts): calendar, pricing, itinerary and URL rules.
+- [src/App.tsx](src/App.tsx): routes, forms, saved plans and postcard export.
+- [src/World.tsx](src/World.tsx) and [src/world/](src/world/): scene, island structures, materials and render pipeline.
+- [tools/prerender.ts](tools/prerender.ts): static route generation.
+- [tools/perf/README.md](tools/perf/README.md): optional performance-build workflow.
+
+## Recorded verification
+
+The visual-reset release recorded 23 completed browser journeys and a 91-image breakpoint sweep without overflow. The later performance release is `d52e6b4`. These are recorded release checks, not a new physical-device certification. See [project notes](docs/PROJECT-NOTES.md), [verification](VERIFICATION.md) and [design](DESIGN.md) for scope and history.
+
+## Current screenshots
 
 | Desktop | Phone |
 | --- | --- |
-| <img src="docs/readme/desktop.png" alt="The island arrival on desktop" width="560"> | <img src="docs/readme/phone.png" alt="The island on a phone" width="220"> |
+| <img src="docs/readme/desktop.jpg" alt="ODD TIDE: current desktop opening" width="600"> | <img src="docs/readme/phone.jpg" alt="ODD TIDE: current phone interface" width="240"> |
 
-## Built with
+<img src="docs/readme/detail.jpg" alt="ODD TIDE: the experience after the opening" width="800">
 
-Direct Three.js for the island; React for the visitor's choices; GSAP for camera, roof and day choreography; Tailwind CSS with Lightning CSS; TypeScript throughout; Vite and Bun for the build.
+The opening loop and three main screenshots were captured from the live site on **1 October 2026**, using Chrome on this workstation; the phone image is a 390 × 844 browser viewport. The animated preview is a short loop, not a full playthrough. [Capture details](docs/readme/capture.json).
 
-- **One lighting model:** a physical sky, sun and haze drive the environment, with GTAO, bloom and SMAA in the post chain.
-- **Separation of concerns:** the domain module owns tide and itinerary rules, React owns discrete choices, three.js owns the scene.
+## Run locally
 
-## Run it locally
+Use **Bun 1.3.10** (the version pinned in `package.json`) and Node.js 22.12 or newer. From this repository:
 
 ```sh
 bun install --frozen-lockfile
 bun run dev      # http://127.0.0.1:4511/
-bun run check    # strict types, lint, domain tests and the production build
-bun run preview  # http://127.0.0.1:4611/
+bun run check    # strict types, Biome, unit tests and production build
+bun run preview  # http://127.0.0.1:4611/ after the build
 ```
 
-Design intent is in [DESIGN.md](DESIGN.md); the working and verification history is in [docs/PROJECT-NOTES.md](docs/PROJECT-NOTES.md).
+Development and preview are separate long-running commands; run one at a time or use separate terminals. `bun run build` writes the static production output to `dist/`. Dependencies and the lockfile are local to this project.
+
+## Stack and release
+
+Direct Three.js 0.186 · React 19.3 · strict TypeScript · Vite 8.3 · GSAP 3.15 · Tailwind CSS 4.3 · Bun 1.3.10 · Biome. The public website is served by Cloudflare Workers. This README describes [application revision d52e6b4](https://github.com/WilliamHenryKing/01-odd-tide/commit/d52e6b41e80a2b1e88a5a0eaf446c801126fbcc4); the documentation refresh changes no application behaviour.
 
 ## Credits
 
@@ -60,4 +71,4 @@ Every sourced texture, model and sound is listed with its source, author and lic
 
 ---
 
-<p align="center"><sub>Part of William King's portfolio collection.</sub></p>
+Part of [William King's portfolio collection](https://github.com/WilliamHenryKing).

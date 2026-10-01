@@ -1,5 +1,17 @@
 # Browser journeys (`tools/visual/journeys.mjs`)
 
+## What this record covers
+
+This is the historical browser acceptance record for the implemented coastal-stay and planner journeys. It is separate from the later renderer/performance changes and from the 1 October README media refresh. The public experience and current local commands are described in the [main README](../../../README.md).
+
+The final run below reaches all 23 scripted journeys, including booking guards, planner repairs, postcard download and the optional lighthouse story. Earlier failures are retained so a harness mistake is distinguishable from a product defect. Passing these scripts is evidence for their declared paths, not an assertion that every possible interaction has been tested.
+
+## Running the journeys
+
+Use [tools/visual/journeys.mjs](../../../tools/visual/journeys.mjs) with the project's assigned servers and the browser setup declared by the script. Inspect its local output and browser-module configuration before running it on another machine; those paths are not general-purpose installation requirements. Keep the dev and production-preview roles distinct when checking real HTTP status codes.
+
+## Recorded runs
+
 Headed Chrome through the real interface: dev server 4511 for the journeys, the production preview 4611 for status codes. Each run writes `report.json` (steps, timings, details, page and console errors) and a screenshot per step. These are sampled interactions, not continuous viewing.
 
 | Run | Date (UTC) | Result | Findings |
